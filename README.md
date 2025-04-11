@@ -1,34 +1,73 @@
-#techin 510 learning project
+#  MeowMatch – Personalized Cat Food Recommendation Platform
 
-##Project objective:
-MeowMatch is a platform that provides personalized cat food and canned meal recommendations based on each cat’s physical condition—such as age, weight, activity level, and health status. It helps cat owners make informed feeding choices by analyzing nutritional requirements and offering tailored suggestions.
-The platform also features a detailed ingredient explorer, allowing users to view and compare nutritional content across various cat food brands. To enhance the personalization experience, MeowMatch enables users to log their cat’s preferences, especially canned food flavors their cat dislikes, ensuring future recommendations avoid those options.
+##  Project Scope
 
-##Target users:
--Cat owners, especially new or health-conscious ones.
--Owners of cats with special dietary needs (e.g., sensitive stomachs, obesity, chronic illnesses).
+**MeowMatch** is a data-driven platform designed to provide personalized cat food and canned meal recommendations. The system evaluates nutritional content, compares ingredients across brands, and tracks each cat’s taste preferences and health needs. By combining these insights, MeowMatch tailors suggestions to fit the unique dietary requirements of cats based on their age, weight, health condition, and activity level.
 
-##User Needs:
--Personalized food recommendations based on the cat’s health, age, weight, and activity level.
--Clear, trustworthy ingredient and nutritional information for each product.
--A way to track and avoid flavors their cat refuses to eat.
--Easy, intuitive browsing and comparison between products.
+The project aims to empower cat owners—especially those new to feline care or dealing with dietary challenges—to make informed feeding decisions with ease and confidence.
 
-##key deliverables:
--A cat profile creation and customization feature.
--Smart recommendation system based on physical data and preference logs.
--Ingredient and nutrition database with comparison tools.
--A flavor rejection tracker that filters out disliked options in future suggestions.
+---
 
-##Special constraints (e.g., regulatory compliance):
--Ingredient and nutritional data must comply with AAFCO (Association of American Feed Control Officials) standards or local equivalents for pet food labeling.
--Ensure data privacy and security when storing user and pet profiles.
--Accessibility compliance (e.g., WCAG 2.1) for inclusive design.
--Consider region-specific food availability and labeling differences if targeting multiple markets.
+##  Target Users
 
-##Expected outcome
-A fully functional prototype or MVP (Minimum Viable Product) of the MeowMatch platform with accurate food recommendations based on abundant food nutrition information.
+- **Cat Owners:**  
+  Particularly new pet parents or those interested in optimizing their cat’s health and diet.
 
-##Development roadmap:
-|Phase|Milestone|Due date|Status|
-|--------|--------|--------|--------|
+- **Owners with Special Requirements:**  
+  Those managing cats with specific conditions like sensitive stomachs, obesity, diabetes, or chronic illnesses.
+
+---
+
+##  Key Features
+
+###  Ingredients & Nutritional Comparison
+- **Ingredient Listings:** Detailed explanations of each component in canned foods, including nutritional benefits or concerns.
+- **Nutritional Comparison Tools:** Side-by-side comparisons of macronutrients and vitamins using tables or visual charts.
+
+###  Health Data Input
+- **Profile Tracking:** Store key data including age, weight, activity level, and health status.
+- **Custom Recommendations:** Personalized suggestions based on the cat's dietary needs and lifestyle.
+
+###  Taste & Budget Considerations
+- **Taste Profiling:** Log preferred flavors or textures; reject flavors cats dislike.
+- **Budget Filter:** Suggest products within a cost range, showing price-per-unit and value analysis.
+
+###  Smart Search Features
+- **Ingredient-Based Filtering:** Search by ingredient type or nutrient profile.
+- **Popularity Metrics:** Explore trending items based on user ratings and community feedback.
+
+###  Informed, Tailored Recommendations
+- **Rules-Based Logic:** Match product nutrition with individual profiles.
+- **Feedback Loop:** Future improvements through user input and product adjustments.
+
+###  Community Features (Future Phase)
+- **Connect with Other Owners:** Match users based on dietary concerns.
+- **Trade & Share:** Enable product exchange or donation among local users.
+
+---
+
+##  Project Timeline & Milestones
+
+| Week | Milestone Description |
+|------|------------------------|
+| **Week 2** | Discovery & Planning: Define features, user journey, and page flows |
+| **Week 3** | Low-Fidelity Design: Sketch wireframes (profile input, dislike tracker, recommendations) and database schema |
+| **Week 4** | Data Integration: Build initial product database, mock backend, and rules-based logic |
+| **Week 5** | Basic Functionality: Create static views using React or Vue; set up front-end structure |
+| **Week 6** | High-Fidelity UI & Web Development: Finalize UI in Figma, generate code with Cursor, implement flavor rejection tracker |
+| **Week 7** | User Testing & Iteration: Conduct testing with 5–10 users, improve UX, refine output logic |
+| **Week 8** | Final Polishing: UI polishing, responsive layouts, documentation, and deployment |
+
+---
+
+##  Contact Information
+
+**Client / Project Manager**  
+- **Name:** Jialu Huang  
+- **Email:** [jhuang95@uw.edu](mailto:jhuang95@uw.edu)
+
+**Developer**  
+- **Name:** Yu Shi  
+- **Email:** [yushi318@uw.edu](mailto:yushi318@uw.edu)
+
+
