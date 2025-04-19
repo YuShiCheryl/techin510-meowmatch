@@ -55,16 +55,6 @@ The application will open in your default web browser at `http://localhost:8501`
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License 📝
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contact 📧
-
-Yu Shi - [GitHub Profile](https://github.com/YuShiCheryl)
-
-Project Link: [https://github.com/jhuang404/techin510-project](https://github.com/jhuang404/techin510-project)
-
 ---
 
 ## 1. Project Scope
