@@ -10,45 +10,6 @@ MeowMatch is a web application that helps cat owners find the perfect food recom
 - Beautiful design with smooth animations
 - Mobile-friendly layout
 
-
-## Installation 🚀
-
-1. Clone the repository:
-```bash
-git clone https://github.com/jhuang404/techin510-project.git
-cd techin510-project
-```
-
-2. Create and activate a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows, use: venv\Scripts\activate
-```
-
-3. Install the required packages:
-```bash
-pip install -r requirements.txt
-```
-
-## Usage 💻
-
-To run the application locally:
-
-```bash
-streamlit run app.py
-```
-
-The application will open in your default web browser at `http://localhost:8501`.
-
-
-## Contributing 🤝
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ---
 
 ## 1. Project Scope
@@ -132,4 +93,44 @@ Those managing pets with dietary challenges such as sensitive stomachs, obesity,
 🟡 Next: Add user input (health profile, dislikes)  
 🟡 Next: Implement backend recommendation logic  
 🟡 Next: Integrate ingredient database and real products  
+
+---
+
+## Installation 🚀
+
+1. Clone the repository:
+```bash
+git clone https://github.com/jhuang404/techin510-project.git
+cd techin510-project
+```
+
+2. Create and activate a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows, use: venv\Scripts\activate
+```
+
+3. Install the required packages:
+```bash
+pip install -r requirements.txt
+```
+
+## Usage 💻
+
+To run the application locally:
+
+```bash
+streamlit run app.py
+```
+
+The application will open in your default web browser at `http://localhost:8501`.
+
+
+## Contributing 🤝
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
