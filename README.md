@@ -1,6 +1,6 @@
 # MeowMatch - Cat Food Recommendation System 🐱
 
-MeowMatch is a web application built with Streamlit that helps cat owners find the perfect food recommendations for their beloved feline friends. The application features a modern, user-friendly interface with personalized food suggestions and product showcases.
+MeowMatch is a web application that helps cat owners find the perfect food recommendations for their beloved feline friends. The application features a modern, user-friendly interface with personalized food suggestions and product showcases.
 
 ## Features ✨
 
@@ -10,9 +10,6 @@ MeowMatch is a web application built with Streamlit that helps cat owners find t
 - Beautiful design with smooth animations
 - Mobile-friendly layout
 
-## Live Demo 🌐
-
-[Demo Link Coming Soon]
 
 ## Installation 🚀
 
