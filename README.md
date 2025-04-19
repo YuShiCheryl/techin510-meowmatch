@@ -99,7 +99,7 @@ Those managing pets with dietary challenges such as sensitive stomachs, obesity,
 - Algorithmic matching of nutritional needs and user preferences.
 - System that improves with continuous user feedback.
 
-### 🤝 Social & Community Features
+### 🤝 Social & Community Features (Future)
 
 - Match with other owners with similar dietary needs.
 - Trade products within the community for sustainability and connection.
@@ -132,19 +132,4 @@ Those managing pets with dietary challenges such as sensitive stomachs, obesity,
 🟡 Next: Add user input (health profile, dislikes)  
 🟡 Next: Implement backend recommendation logic  
 🟡 Next: Integrate ingredient database and real products  
-🟡 Next: Connect community features (matching, trading)
 
----
-
-## 6. How to Run Locally
-
-```bash
-# 1. Set up virtual environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# 2. Install dependencies
-pip install streamlit pillow numpy
-
-# 3. Run the app
-streamlit run app.py
