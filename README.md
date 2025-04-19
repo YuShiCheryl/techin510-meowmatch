@@ -40,12 +40,6 @@ streamlit run app.py
 
 The application will open in your default web browser at `http://localhost:8501`.
 
-## Technologies Used 🛠️
-
-- Python
-- Streamlit
-- PIL (Python Imaging Library)
-- HTML/CSS
 
 ## Contributing 🤝
 
