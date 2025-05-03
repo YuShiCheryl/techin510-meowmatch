@@ -88,11 +88,10 @@ Those managing pets with dietary challenges such as sensitive stomachs, obesity,
 - Hero section (intro and call to action)
 - Featured product cards with pricing
 - Feature summary cards (Ingredients, Health, Budget)  
-✅ Integrated basic styling with custom CSS  
-✅ Placeholder product data dynamically generated using PIL  
+
 ✅ Initial layout of profile page (for user to enter cat health and taste preferences)  
-✅ Search page layout drafted (basic structure and form added)  
-✅ One unit test implemented to validate image generation logic  
+✅ Search page and profile page layout drafted (basic structure and form added)  
+
 
 🟡 Next: Connect profile form input to backend state management  
 🟡 Next: Improve layout and field grouping in the search page  
