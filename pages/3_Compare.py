@@ -406,6 +406,32 @@ st.markdown("""
         margin-bottom: 0.6rem;
     }
     
+    /* Ingredients 专用样式 */
+    .ingredients-box {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+    }
+
+    .ingredients-list {
+        margin: 0;
+        padding-left: 1.5rem;
+        color: #666666 !important;  /* 中灰色 */
+    }
+
+    .ingredients-list li {
+        color: inherit !important;
+        margin-bottom: 0.4rem;
+        line-height: 1.6;
+        list-style-type: square !important;  /* 方型项目符号 */
+    }
+
+    /* 项目符号颜色控制 */
+    .ingredients-list li::marker {
+        color: #FF6B95 !important;  /* 粉色符号 */
+    }
+
     /* Pros/Cons box */
     .pros-cons-box {
         background: #FFFFFF;
@@ -417,7 +443,7 @@ st.markdown("""
     }
     
     .pros-title {
-        color: #27AE60;
+        color: #27AE60 !important; /* 添加 !important 确保覆盖 */;
         font-weight: 700;
         margin-bottom: 0.8rem;
         display: flex;
@@ -426,7 +452,7 @@ st.markdown("""
     }
     
     .cons-title {
-        color: #FF6B95;
+        color: #FF6B95 !important; /* 添加 !important 确保覆盖 */
         font-weight: 700;
         margin: 1.2rem 0 0.8rem 0;
         display: flex;
@@ -440,9 +466,11 @@ st.markdown("""
     }
     
     .pros-cons-list li {
+        color: #444444 !important; /* 新增固定颜色 */
         margin-bottom: 0.5rem;
         line-height: 1.5;
     }
+    
     
     /* Recommendation box */
     .recommendation-box {
@@ -634,60 +662,74 @@ if compare_button or True:  # Always show for demo, in production use just compa
     st.markdown(comparison_table_html, unsafe_allow_html=True)
     
     # Ingredients Section
+    # ====== 修复后的 Ingredients 部分 ======
     st.markdown('<div class="section-header">Ingredients</div>', unsafe_allow_html=True)
-    
+
     ingredient_col1, ingredient_col2 = st.columns(2)
-    
+
     with ingredient_col1:
-        st.markdown(f'<h3 style="color: #444444; font-size: 1.3rem;">{product1}</h3>', unsafe_allow_html=True)
-        st.markdown('<ul>', unsafe_allow_html=True)
-        for ingredient in product1_data["main_ingredients"]:
-            st.markdown(f'<li>{ingredient}</li>', unsafe_allow_html=True)
-        st.markdown('</ul>', unsafe_allow_html=True)
-    
+        # 单次渲染完整 HTML 结构
+        ingredients_html = f'''
+        <div class="ingredients-box">
+            <h3 style="color: #444444; font-size: 1.3rem;">{product1}</h3>
+            <ul class="ingredients-list">
+                {"".join([f"<li>{ingredient}</li>" for ingredient in product1_data['main_ingredients']])}
+            </ul>
+        </div>
+        '''
+        st.markdown(ingredients_html, unsafe_allow_html=True)
+
     with ingredient_col2:
-        st.markdown(f'<h3 style="color: #444444; font-size: 1.3rem;">{product2}</h3>', unsafe_allow_html=True)
-        st.markdown('<ul>', unsafe_allow_html=True)
-        for ingredient in product2_data["main_ingredients"]:
-            st.markdown(f'<li>{ingredient}</li>', unsafe_allow_html=True)
-        st.markdown('</ul>', unsafe_allow_html=True)
+        # 同理修改 product2
+        ingredients_html = f'''
+        <div class="ingredients-box">
+            <h3 style="color: #444444; font-size: 1.3rem;">{product2}</h3>
+            <ul class="ingredients-list">
+                {"".join([f"<li>{ingredient}</li>" for ingredient in product2_data['main_ingredients']])}
+            </ul>
+        </div>
+        '''
+        st.markdown(ingredients_html, unsafe_allow_html=True)
     
     # Pros and Cons Section
+    # ====== 修复后的 Pros/Cons 部分 ======
     st.markdown('<div class="section-header">Pros and Cons</div>', unsafe_allow_html=True)
-    
+
     pros_cons_col1, pros_cons_col2 = st.columns(2)
-    
+
     with pros_cons_col1:
-        st.markdown(f'<h3 style="color: #444444; font-size: 1.3rem;">{product1}</h3>', unsafe_allow_html=True)
-        st.markdown('<div class="pros-cons-box">', unsafe_allow_html=True)
-        st.markdown('<div class="pros-title">✓ Pros</div>', unsafe_allow_html=True)
-        st.markdown('<ul class="pros-cons-list">', unsafe_allow_html=True)
-        for pro in product1_data["pros"]:
-            st.markdown(f'<li>{pro}</li>', unsafe_allow_html=True)
-        st.markdown('</ul>', unsafe_allow_html=True)
-        
-        st.markdown('<div class="cons-title">✗ Cons</div>', unsafe_allow_html=True)
-        st.markdown('<ul class="pros-cons-list">', unsafe_allow_html=True)
-        for con in product1_data["cons"]:
-            st.markdown(f'<li>{con}</li>', unsafe_allow_html=True)
-        st.markdown('</ul>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+        # 单次渲染完整 HTML 结构
+        pros_cons_html = f'''
+        <div class="pros-cons-box">
+            <h3 style="color: #444444; font-size: 1.3rem;">{product1}</h3>
+            <div class="pros-title">✓ Pros</div>
+            <ul class="pros-cons-list">
+                {"".join([f"<li>{pro}</li>" for pro in product1_data['pros']])}
+            </ul>
+            <div class="cons-title">✗ Cons</div>
+            <ul class="pros-cons-list">
+                {"".join([f"<li>{con}</li>" for con in product1_data['cons']])}
+            </ul>
+        </div>
+        '''
+        st.markdown(pros_cons_html, unsafe_allow_html=True)
+
     with pros_cons_col2:
-        st.markdown(f'<h3 style="color: #444444; font-size: 1.3rem;">{product2}</h3>', unsafe_allow_html=True)
-        st.markdown('<div class="pros-cons-box">', unsafe_allow_html=True)
-        st.markdown('<div class="pros-title">✓ Pros</div>', unsafe_allow_html=True)
-        st.markdown('<ul class="pros-cons-list">', unsafe_allow_html=True)
-        for pro in product2_data["pros"]:
-            st.markdown(f'<li>{pro}</li>', unsafe_allow_html=True)
-        st.markdown('</ul>', unsafe_allow_html=True)
-        
-        st.markdown('<div class="cons-title">✗ Cons</div>', unsafe_allow_html=True)
-        st.markdown('<ul class="pros-cons-list">', unsafe_allow_html=True)
-        for con in product2_data["cons"]:
-            st.markdown(f'<li>{con}</li>', unsafe_allow_html=True)
-        st.markdown('</ul>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # 同理修改 product2
+        pros_cons_html = f'''
+        <div class="pros-cons-box">
+            <h3 style="color: #444444; font-size: 1.3rem;">{product2}</h3>
+            <div class="pros-title">✓ Pros</div>
+            <ul class="pros-cons-list">
+                {"".join([f"<li>{pro}</li>" for pro in product2_data['pros']])}
+            </ul>
+            <div class="cons-title">✗ Cons</div>
+            <ul class="pros-cons-list">
+                {"".join([f"<li>{con}</li>" for con in product2_data['cons']])}
+            </ul>
+        </div>
+        '''
+        st.markdown(pros_cons_html, unsafe_allow_html=True)
     
     # Recommendation Section
     st.markdown('<div class="section-header">Our Recommendation</div>', unsafe_allow_html=True)
