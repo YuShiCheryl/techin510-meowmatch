@@ -568,14 +568,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Hero Section
-st.markdown('<div class="hero-section fade-in">', unsafe_allow_html=True)
 col1, col2 = st.columns([1, 1])
 with col1:
     st.markdown("""
     <div class="hero-content">
         <h1 class="main-title">MeowMatch<br><span class="subtitle-text">Food Suggestion for Your Cat</span></h1>
         <p class="subtitle">We help you find the perfect nutrition for your feline friend with personalized recommendations based on health needs and preferences.</p>
-        <button class="stButton">Get Started</button>
+       
     </div>
     """, unsafe_allow_html=True)
 
