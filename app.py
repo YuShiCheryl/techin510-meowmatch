@@ -7,8 +7,18 @@ import pandas as pd
 st.set_page_config(
     page_title="MeowMatch - Personalized Cat Food Recommendations",
     page_icon="M",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
+
+# Add hidden navigation bar CSS
+st.markdown("""
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
 
 # Create placeholder images using PIL
 def create_placeholder_image(width, height, color):
