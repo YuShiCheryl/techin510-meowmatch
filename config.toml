@@ -1,0 +1,35 @@
+[browser]
+gatherUsageStats = false
+
+[server]
+enableCORS = false
+enableXsrfProtection = false
+
+[theme]
+# 主题颜色
+primaryColor = "#FF6B95"
+backgroundColor = "#FFFAF9"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#444444"
+font = "Poppins"
+
+# 组件样式
+[theme.button]
+backgroundColor = "#FF6B95"
+textColor = "#FFFFFF"
+borderRadius = "30px"
+
+[theme.selectbox]
+backgroundColor = "#FFFFFF"
+textColor = "#444444"
+borderRadius = "30px"
+
+[theme.slider]
+backgroundColor = "#FFFFFF"
+textColor = "#444444"
+borderRadius = "30px"
+
+# 布局设置
+[theme.layout]
+padding = "3rem"
+maxWidth = "1200px"
