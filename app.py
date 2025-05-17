@@ -6,237 +6,9 @@ import pandas as pd
 # Set page configuration
 st.set_page_config(
     page_title="MeowMatch - Personalized Cat Food Recommendations",
-    page_icon="🐱",
+    page_icon="M",
     layout="wide"
 )
-
-# Custom CSS for the avatar
-st.markdown("""
-<style>
-    /* Hide the default Streamlit menu button */
-    #MainMenu {
-        visibility: hidden;
-    }
-    
-    /* Main background and container styling */
-    .stApp {
-        background-color: #ffffff;
-    }
-    
-    /* Main content container */
-    .main .block-container {
-        background-color: #ffffff;
-        padding: 3rem;
-        padding-top: 6rem;  /* 增加顶部间距 */
-        max-width: 1200px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-    }
-    
-    /* Profile avatar container */
-    .profile-container {
-        position: fixed;
-        top: 2.5rem;  /* 增加顶部间距 */
-        right: 2rem;
-        z-index: 1001;
-        padding: 0.5rem;
-    }
-    
-    .profile-avatar {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        border: 2px solid #e60000;
-        background-color: #FFE0E0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-    }
-    
-    .profile-avatar:hover {
-        transform: scale(1.05);
-        box-shadow: 0 2px 8px rgba(230,0,0,0.2);
-    }
-    
-    .profile-icon {
-        font-size: 24px;
-        color: #e60000;
-    }
-
-    /* Add top margin to the first section */
-    .hero-section {
-        margin-top: 3.5rem;  /* 增加顶部间距 */
-    }
-
-    /* Feature card styling */
-    .feature-card {
-        background-color: #ffffff;
-        padding: 2rem;
-        border-radius: 20px;
-        margin: 1rem 0;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #e0e0e0;
-    }
-    
-    .feature-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100px;
-        height: 100px;
-        background: linear-gradient(45deg, transparent 50%, #ffb3b3 50%);
-        border-radius: 0 0 0 100%;
-        opacity: 0.8;
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    }
-    
-    /* Title styling */
-    .main-title {
-        color: #000000;
-        font-size: 3.5rem;
-        font-weight: 800;
-        text-align: left;
-        margin-bottom: 0.5rem;
-        letter-spacing: -1px;
-        position: relative;
-        z-index: 1;
-        text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
-    }
-    
-    .subtitle {
-        color: #333333;
-        font-size: 1.2rem;
-        font-weight: 500;
-        margin-bottom: 2rem;
-        position: relative;
-        z-index: 1;
-        line-height: 1.6;
-    }
-    
-    /* Button styling */
-    .stButton button {
-        background-color: #e60000 !important;
-        color: white !important;
-        border-radius: 25px;
-        padding: 0.8rem 2.5rem;
-        font-weight: 600;
-        border: none;
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 1;
-        box-shadow: 0 2px 8px rgba(230,0,0,0.3);
-    }
-    
-    .stButton button:hover {
-        background-color: #cc0000 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(230,0,0,0.4);
-    }
-    
-    /* Feature section styling */
-    .feature-title {
-        color: #000000;
-        font-size: 1.3rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .feature-description {
-        color: #333333;
-        font-size: 1rem;
-        line-height: 1.6;
-        font-weight: 500;
-    }
-    
-    /* Product card styling */
-    .product-card {
-        background-color: #ffffff;
-        padding: 1.5rem;
-        border-radius: 15px;
-        text-align: center;
-        transition: all 0.3s ease;
-        margin: 1rem 0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        border: 1px solid #e0e0e0;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    }
-    
-    .product-title {
-        color: #000000;
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin: 1rem 0;
-    }
-    
-    .product-price {
-        color: #e60000;
-        font-size: 1.3rem;
-        font-weight: 800;
-    }
-    
-    /* Footer styling */
-    .footer {
-        color: #333333;
-        font-size: 1rem;
-        font-weight: 500;
-        margin-top: 4rem;
-        text-align: center;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Background decorations */
-    .bg-decoration {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0.3;
-    }
-
-    /* Section headings */
-    h2, h3 {
-        color: #000000 !important;
-        font-weight: 700 !important;
-    }
-</style>
-
-<!-- Profile Avatar -->
-<div class="profile-container">
-    <a href="Profile" class="profile-avatar" target="_self">
-        <span class="profile-icon">🐱</span>
-    </a>
-</div>
-
-# Add search box next to the avatar
-search_query = st.text_input('Search', key='search_input', placeholder='Search...', label_visibility='collapsed')
-
-# If search is submitted, navigate to the search page
-if search_query:
-    st.switch_page('pages/2_Search.py')
-""", unsafe_allow_html=True)
 
 # Create placeholder images using PIL
 def create_placeholder_image(width, height, color):
@@ -244,10 +16,10 @@ def create_placeholder_image(width, height, color):
     return img
 
 # Create sample images
-hero_image = create_placeholder_image(800, 400, '#FFD6D6')
-product_image1 = create_placeholder_image(300, 300, '#FFE0E0')
-product_image2 = create_placeholder_image(300, 300, '#FFD6D6')
-product_image3 = create_placeholder_image(300, 300, '#FFCCCC')
+hero_image = create_placeholder_image(800, 400, '#FFE6E6')
+product_image1 = create_placeholder_image(300, 300, '#FFE6E6')
+product_image2 = create_placeholder_image(300, 300, '#FFCCD5')
+product_image3 = create_placeholder_image(300, 300, '#FFD6E0')
 
 # Sample cat food data
 sample_food_data = {
@@ -261,33 +33,107 @@ sample_food_data = {
 # Add custom CSS for styling
 st.markdown("""
 <style>
+    /* Base styles */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Hide the default Streamlit menu button */
+    #MainMenu {
+        visibility: hidden;
+    }
+    
     /* Main background and container styling */
     .stApp {
-        background-color: #ffffff;
+        background-color: #FFFAF9;
     }
     
     /* Main content container */
     .main .block-container {
-        background-color: #ffffff;
+        background-color: #FFFAF9;
         padding: 3rem;
-        padding-top: 5rem;  /* 增加顶部间距 */
+        padding-top: 6rem;
         max-width: 1200px;
         margin: 0 auto;
         position: relative;
         z-index: 1;
     }
     
-    /* Feature card styling */
-    .feature-card {
-        background-color: #ffffff;
-        padding: 2rem;
-        border-radius: 20px;
-        margin: 1rem 0;
+    /* Profile avatar container */
+    .profile-container {
+        position: fixed;
+        top: 2.5rem;
+        right: 2rem;
+        z-index: 1001;
+        padding: 0.5rem;
+    }
+    
+    .profile-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid #FF6B95;
+        background-color: #FFE0E6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        text-decoration: none;
+        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+    }
+    
+    .profile-avatar:hover {
+        transform: scale(1.08);
+        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+    }
+    
+    .profile-icon {
+        font-size: 24px;
+        color: #FF6B95;
+    }
+
+    /* Add top margin to the first section */
+    .hero-section {
+        margin-top: 2rem;
         position: relative;
         overflow: hidden;
-        border: 1px solid #e0e0e0;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(255, 107, 149, 0.1);
+        background: linear-gradient(135deg, #FFF9F9 0%, #FFE6EC 100%);
+        padding: 2rem;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-image {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.15);
+        transform: perspective(1000px) rotateY(-5deg);
+        transition: all 0.5s ease;
+    }
+    
+    .hero-image:hover {
+        transform: perspective(1000px) rotateY(0deg);
+    }
+
+    /* Feature card styling */
+    .feature-card {
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        margin: 1.5rem 0;
+        transition: all 0.4s ease;
+        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.08);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 107, 149, 0.1);
     }
     
     .feature-card::before {
@@ -295,65 +141,92 @@ st.markdown("""
         position: absolute;
         top: 0;
         right: 0;
-        width: 100px;
-        height: 100px;
-        background: linear-gradient(45deg, transparent 50%, #ffb3b3 50%);
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(45deg, transparent 50%, rgba(255, 107, 149, 0.1) 50%);
         border-radius: 0 0 0 100%;
-        opacity: 0.8;
     }
     
     .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(255, 107, 149, 0.12);
     }
     
     /* Title styling */
     .main-title {
-        color: #000000;
-        font-size: 3.5rem;
+        color: #444444;
+        font-size: 3.8rem;
         font-weight: 800;
         text-align: left;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
         letter-spacing: -1px;
         position: relative;
         z-index: 1;
-        text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1.2;
+    }
+    
+    .main-title .subtitle-text {
+        font-size: 2.2rem;
+        font-weight: 700;
+        display: block;
+        margin-top: 5px;
     }
     
     .subtitle {
-        color: #333333;
-        font-size: 1.2rem;
+        color: #666666;
+        font-size: 1.25rem;
         font-weight: 500;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
         position: relative;
         z-index: 1;
-        line-height: 1.6;
+        line-height: 1.7;
     }
     
     /* Button styling */
     .stButton button {
-        background-color: #e60000 !important;
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
         color: white !important;
-        border-radius: 25px;
-        padding: 0.8rem 2.5rem;
-        font-weight: 600;
-        border: none;
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 1;
-        box-shadow: 0 2px 8px rgba(230,0,0,0.3);
+        border-radius: 30px !important;
+        padding: 0.8rem 2.8rem !important;
+        font-weight: 600 !important;
+        border: none !important;
+        transition: all 0.3s ease !important;
+        position: relative !important;
+        z-index: 1 !important;
+        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+        letter-spacing: 0.5px !important;
     }
     
     .stButton button:hover {
-        background-color: #cc0000 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(230,0,0,0.4);
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+    }
+    
+    .stButton button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #FF9EB5 0%, #FF6B95 100%);
+        border-radius: 30px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+    }
+    
+    .stButton button:hover::after {
+        opacity: 1;
     }
     
     /* Feature section styling */
     .feature-title {
-        color: #000000;
-        font-size: 1.3rem;
+        color: #444444;
+        font-size: 1.4rem;
         font-weight: 700;
         margin-bottom: 1rem;
         display: flex;
@@ -362,53 +235,222 @@ st.markdown("""
     }
     
     .feature-description {
-        color: #333333;
-        font-size: 1rem;
-        line-height: 1.6;
-        font-weight: 500;
+        color: #666666;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        font-weight: 400;
     }
     
     /* Product card styling */
     .product-card {
-        background-color: #ffffff;
-        padding: 1.5rem;
-        border-radius: 15px;
+        background: #FFFFFF;
+        padding: 1.8rem;
+        border-radius: 18px;
         text-align: center;
-        transition: all 0.3s ease;
-        margin: 1rem 0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        border: 1px solid #e0e0e0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin: 1.5rem 0;
+        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.08);
+        border: 1px solid rgba(255, 107, 149, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.4s ease;
     }
     
     .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(255, 107, 149, 0.12);
+    }
+    
+    .product-card:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+    
+    .product-image {
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.1);
+        transition: all 0.4s ease;
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.03);
     }
     
     .product-title {
-        color: #000000;
-        font-size: 1.2rem;
+        color: #444444;
+        font-size: 1.3rem;
         font-weight: 700;
         margin: 1rem 0;
     }
     
     .product-price {
-        color: #e60000;
-        font-size: 1.3rem;
+        color: #FF6B95;
+        font-size: 1.4rem;
         font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Rating stars */
+    .rating {
+        color: #FFB443;
+        font-size: 1.1rem;
+        margin: 0.5rem 0;
+    }
+    
+    /* Badge for new products */
+    .badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        letter-spacing: 0.5px;
+    }
+    
+    /* Section headers */
+    .section-header {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #444444;
+        margin: 3.5rem 0 1.5rem 0;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 0.5rem;
+    }
+    
+    .section-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        border-radius: 2px;
+    }
+    
+    /* Feature buttons */
+    .feature-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 2.5rem;
+        margin: 3.5rem 0;
+        padding: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .feature-button {
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%) !important;
+        color: #FF6B95 !important;
+        border: 2px solid #FF6B95 !important;
+        border-radius: 18px;
+        padding: 1.2rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.4s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.08);
+        min-width: 220px;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .feature-button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        z-index: -1;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    .feature-button:hover {
+        color: #FFFFFF !important;
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(255, 107, 149, 0.15);
+    }
+    
+    .feature-button:hover::after {
+        opacity: 1;
+    }
+
+    .feature-button-icon {
+        font-size: 1.4rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .feature-button:hover .feature-button-icon {
+        transform: scale(1.2);
+    }
+
+    .feature-button-text {
+        letter-spacing: 0.5px;
     }
     
     /* Footer styling */
     .footer {
-        color: #333333;
+        color: #666666;
         font-size: 1rem;
         font-weight: 500;
-        margin-top: 4rem;
+        margin-top: 5rem;
         text-align: center;
         position: relative;
         z-index: 1;
+        padding: 2rem 0;
+        border-top: 1px solid rgba(255, 107, 149, 0.1);
     }
-
+    
+    .footer-paw {
+        position: absolute;
+        font-size: 1.5rem;
+        opacity: 0.6;
+        transition: transform 0.3s ease;
+    }
+    
+    .footer-paw-left {
+        bottom: 20px;
+        left: 20px;
+        transform: rotate(-15deg);
+    }
+    
+    .footer-paw-right {
+        bottom: 20px;
+        right: 20px;
+        transform: rotate(15deg);
+    }
+    
+    .footer:hover .footer-paw {
+        transform: scale(1.2);
+    }
+    
     /* Background decorations */
     .bg-decoration {
         position: fixed;
@@ -420,21 +462,94 @@ st.markdown("""
         z-index: 0;
         opacity: 0.3;
     }
+    
+    /* Floating elements */
+    .floating {
+        animation: floating 3s ease-in-out infinite;
+    }
 
+    @keyframes floating {
+        0% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+    
+    /* Add to cart button */
+    .cart-button {
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 25px !important;
+        padding: 0.6rem 1.5rem !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.15) !important;
+        margin-top: 0.8rem !important;
+    }
+    
+    .cart-button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.2) !important;
+    }
+    
+    /* Animation for elements */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     /* Section headings */
     h2, h3 {
-        color: #000000 !important;
+        color: #444444 !important;
         font-weight: 700 !important;
     }
+    
+    /* Search bar styling */
+    .stTextInput > div > div > input {
+        border-radius: 30px !important;
+        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        padding: 1rem 1.5rem !important;
+        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stTextInput > div > div > input:focus {
+        border: 1px solid rgba(255, 107, 149, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+    }
 </style>
+
+<!-- Profile Avatar -->
+<div class="profile-container">
+    <a href="Profile" class="profile-avatar" target="_self">
+        <span class="profile-icon">M</span>
+    </a>
+</div>
 
 <!-- Add background decorations -->
 <div class="bg-decoration">
     <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
         <defs>
             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#ffe6e6;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+                <stop offset="0%" style="stop-color:#FFE6EC;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#FFF9F9;stop-opacity:1" />
             </linearGradient>
         </defs>
         <path d="M0,0 C30,20 70,20 100,0 L100,100 L0,100 Z" fill="url(#grad1)"/>
@@ -443,122 +558,201 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Hero Section
-st.markdown('<div class="hero-section">', unsafe_allow_html=True)
+st.markdown('<div class="hero-section fade-in">', unsafe_allow_html=True)
 col1, col2 = st.columns([1, 1])
 with col1:
     st.markdown("""
-    <div style="position: relative;">
-        <div style="position: absolute; top: -20px; right: 20px; transform: rotate(15deg); z-index: 2;">
-            <span style="font-size: 2rem;">🐱</span>
-        </div>
-        <h1 class="main-title">MeowMatch<br>Food Suggestion for Your Cat</h1>
-        <p class="subtitle">Whether cooking for your cat is made in kitchen or delivered, it just is<br>important to feed your cat food that's made with real ingredients.</p>
+    <div class="hero-content">
+        <h1 class="main-title">MeowMatch<br><span class="subtitle-text">Food Suggestion for Your Cat</span></h1>
+        <p class="subtitle">We help you find the perfect nutrition for your feline friend with personalized recommendations based on health needs and preferences.</p>
+        <button class="stButton">Get Started</button>
     </div>
     """, unsafe_allow_html=True)
-    st.button("SHOP MEAL MIXES", use_container_width=False)
 
 with col2:
+    st.markdown('<div class="hero-image">', unsafe_allow_html=True)
     st.image(hero_image, use_column_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Ingredients & Comparison Section
-st.markdown("<h2 id='ingredients'>Ingredients & Comparison</h2>", unsafe_allow_html=True)
-with st.container():
-    st.markdown('<div class="section-container">', unsafe_allow_html=True)
-    df = pd.DataFrame(sample_food_data)
-    st.dataframe(df, use_container_width=True)
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Nutritional Comparison")
-        st.bar_chart({"Protein": [32, 30, 34, 36], "Fat": [15, 16, 14, 15]})
-    with col2:
-        st.subheader("Key Ingredients")
-        st.write("• Chicken (Source of protein)")
-        st.write("• Fish Oil (Omega-3 fatty acids)")
-        st.write("• Sweet Potatoes (Complex carbohydrates)")
-        st.write("• Cranberries (Antioxidants)")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# Health Data Input Section
-st.markdown("<h2 id='health'>Health Data Input</h2>", unsafe_allow_html=True)
-with st.container():
-    st.markdown('<div class="section-container">', unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        st.number_input("Cat's Age (years)", min_value=0, max_value=30, value=5)
-        st.number_input("Weight (lbs)", min_value=0.0, max_value=30.0, value=10.0)
-        activity_level = st.select_slider(
-            "Activity Level",
-            options=["Very Low", "Low", "Moderate", "High", "Very High"],
-            value="Moderate"
-        )
-    with col2:
-        st.multiselect("Health Conditions", 
-            ["None", "Overweight", "Diabetes", "Kidney Disease", "Food Allergies"])
-        st.text_area("Additional Notes", height=100)
-        st.button("Save Health Data")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# Search by Ingredient Section
-st.markdown("<h2 id='search'>Search by Ingredient</h2>", unsafe_allow_html=True)
-with st.container():
-    st.markdown('<div class="section-container">', unsafe_allow_html=True)
-    search_col1, search_col2 = st.columns([3, 1])
-    with search_col1:
-        st.text_input("Search ingredients or nutrients...", placeholder="E.g., chicken, taurine, omega-3")
-    with search_col2:
-        st.button("Search", use_container_width=True)
-    
-    st.markdown('<div class="search-container">', unsafe_allow_html=True)
-    st.write("Popular searches:")
-    st.markdown("🔍 Grain-free • 🐟 Fish-based • 🍗 Chicken • 🥩 High protein")
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+# Feature Buttons
+st.markdown("""
+<div class="feature-buttons fade-in">
+    <a href="/Search" class="feature-button">
+        <span class="feature-button-icon">🔍</span>
+        <span class="feature-button-text">Search by Ingredient</span>
+    </a>
+    <a href="/Compare" class="feature-button">
+        <span class="feature-button-icon">⚖️</span>
+        <span class="feature-button-text">Compare Products</span>
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
 # Recommendations Section
-st.markdown("<h2 id='recommendations'>Personalized Recommendations</h2>", unsafe_allow_html=True)
+st.markdown('<h2 class="section-header fade-in">Recommended for Your Cat</h2>', unsafe_allow_html=True)
 with st.container():
-    st.markdown('<div class="section-container">', unsafe_allow_html=True)
+    st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
     rec_col1, rec_col2, rec_col3 = st.columns(3)
     
     with rec_col1:
+        st.markdown('<div class="product-image">', unsafe_allow_html=True)
         st.image(product_image1, use_column_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
             <div class="product-title">Organic Chicken & Berries</div>
+            <div class="rating">⭐⭐⭐⭐⭐ (128)</div>
             <div class="product-price">$24.99</div>
+            <button class="cart-button">Add to Cart</button>
         </div>
         """, unsafe_allow_html=True)
         
     with rec_col2:
+        st.markdown('<div class="product-image">', unsafe_allow_html=True)
         st.image(product_image2, use_column_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
             <div class="product-title">Mixed Veggie Feast</div>
+            <div class="rating">⭐⭐⭐⭐<span style="color:#DDDDDD">☆</span> (94)</div>
             <div class="product-price">$22.99</div>
+            <button class="cart-button">Add to Cart</button>
         </div>
         """, unsafe_allow_html=True)
         
     with rec_col3:
+        st.markdown('<div class="product-image">', unsafe_allow_html=True)
         st.image(product_image3, use_column_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
             <div class="product-title">Grain-Free Fish Mix</div>
+            <div class="rating">⭐⭐⭐⭐⭐ (156)</div>
             <div class="product-price">$26.99</div>
+            <button class="cart-button">Add to Cart</button>
         </div>
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Footer (keep your existing footer)
+# Popular Products Section
+st.markdown('<h2 class="section-header fade-in">Popular Products</h2>', unsafe_allow_html=True)
+
+# Sample popular products data
+popular_products = [
+    {
+        "name": "Purina Pro Plan",
+        "price": "$27.99",
+        "image": product_image1,
+        "rating": 4.8,
+        "reviews": 1250
+    },
+    {
+        "name": "Orijen Cat & Kitten",
+        "price": "$39.99",
+        "image": product_image2,
+        "rating": 4.9,
+        "reviews": 980
+    },
+    {
+        "name": "Acana Wild Coast",
+        "price": "$35.99",
+        "image": product_image3,
+        "rating": 4.7,
+        "reviews": 850
+    }
+]
+
+# Display popular products in a grid
+pop_cols = st.columns(3)
+for idx, product in enumerate(popular_products):
+    with pop_cols[idx]:
+        st.markdown('<div class="product-card fade-in">', unsafe_allow_html=True)
+        st.markdown('<div class="product-image">', unsafe_allow_html=True)
+        st.image(product["image"], use_column_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="product-title">{product['name']}</div>
+        <div class="rating">{"⭐" * int(product['rating'])}{"<span style='color:#DDDDDD'>☆</span>" * (5-int(product['rating']))} ({product['reviews']})</div>
+        <div class="product-price">{product['price']}</div>
+        """, unsafe_allow_html=True)
+        st.markdown('<button class="cart-button">Add to Cart</button>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# New Arrivals Section
+st.markdown('<h2 class="section-header fade-in">New Arrivals</h2>', unsafe_allow_html=True)
+
+# Sample new arrivals data
+new_arrivals = [
+    {
+        "name": "Wellness Complete Health",
+        "price": "$28.99",
+        "image": product_image2,
+        "is_new": True
+    },
+    {
+        "name": "Instinct Raw Boost",
+        "price": "$34.99",
+        "image": product_image3,
+        "is_new": True
+    },
+    {
+        "name": "Merrick Backcountry",
+        "price": "$31.99",
+        "image": product_image1,
+        "is_new": True
+    }
+]
+
+# Display new arrivals in a grid
+new_cols = st.columns(3)
+for idx, product in enumerate(new_arrivals):
+    with new_cols[idx]:
+        st.markdown('<div class="product-card fade-in">', unsafe_allow_html=True)
+        if product["is_new"]:
+            st.markdown('<span class="badge">New</span>', unsafe_allow_html=True)
+        st.markdown('<div class="product-image">', unsafe_allow_html=True)
+        st.image(product["image"], use_column_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="product-title">{product['name']}</div>
+        <div class="rating">⭐⭐⭐⭐⭐ (New)</div>
+        <div class="product-price">{product['price']}</div>
+        """, unsafe_allow_html=True)
+        st.markdown('<button class="cart-button">Add to Cart</button>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# Why Choose Us Section
+st.markdown('<h2 class="section-header fade-in">Why Choose MeowMatch</h2>', unsafe_allow_html=True)
+
+why_cols = st.columns(3)
+with why_cols[0]:
+    st.markdown("""
+    <div class="feature-card fade-in">
+        <div class="feature-title">🌿 Quality Ingredients</div>
+        <p class="feature-description">We carefully select products with natural, high-quality ingredients that support your cat's health and wellbeing.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+with why_cols[1]:
+    st.markdown("""
+    <div class="feature-card fade-in">
+        <div class="feature-title">🔬 Nutrition Experts</div>
+        <p class="feature-description">Our recommendations are backed by feline nutrition experts to ensure optimal health for your furry friend.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+with why_cols[2]:
+    st.markdown("""
+    <div class="feature-card fade-in">
+        <div class="feature-title">❤️ Personalized Care</div>
+        <p class="feature-description">Get tailored food suggestions based on your cat's age, weight, health conditions, and taste preferences.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Footer
 st.markdown("""
-<div class="footer">
-    <div style="position: absolute; bottom: 20px; left: 20px; transform: rotate(-15deg);">
-        <span style="font-size: 1.5rem;">🐾</span>
-    </div>
-    <p>© 2024 MeowMatch | All rights reserved</p>
-    <div style="position: absolute; bottom: 20px; right: 20px; transform: rotate(15deg);">
-        <span style="font-size: 1.5rem;">🎀</span>
-    </div>
+<div class="footer fade-in">
+    <p>© 2024 MeowMatch | All rights reserved | Made with ❤️ for cats everywhere</p>
 </div>
-""", unsafe_allow_html=True) 
+""", unsafe_allow_html=True)
