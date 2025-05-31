@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
+from session_utils import init_session_state, get_user_profile, get_pet_display_info
 
 # Set page configuration
 st.set_page_config(

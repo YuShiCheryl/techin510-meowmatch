@@ -1,23 +1,27 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
+from datetime import datetime, date
+import base64
+import io
+from session_utils import init_session_state, get_user_profile, update_user_profile
 
 # Set page configuration
 st.set_page_config(
     page_title="Pet Profile - MeowMatch",
     page_icon="M",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide"
 )
 
-# Add hidden navigation bar CSS
-st.markdown("""
-    <style>
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-    </style>
-""", unsafe_allow_html=True)
+# Initialize session state
+init_session_state()
+
+# Function to convert PIL image to base64
+def pil_to_base64(img):
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    img_str = base64.b64encode(buffer.getvalue()).decode()
+    return f"data:image/png;base64,{img_str}"
 
 # Create placeholder image
 def create_placeholder_image(width, height, color):
@@ -78,6 +82,7 @@ st.markdown("""
         transition: all 0.3s ease;
         text-decoration: none;
         box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        overflow: hidden;
     }
     
     .profile-avatar:hover {
@@ -88,6 +93,13 @@ st.markdown("""
     .profile-icon {
         font-size: 24px;
         color: #FF6B95;
+    }
+    
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
     }
     
     /* Back button */
@@ -164,74 +176,6 @@ st.markdown("""
     /* Section content */
     .section-content {
         padding: 2rem;
-    }
-    
-    /* Pet photo container */
-    .pet-photo-container {
-        position: relative;
-        width: 100%;
-        margin-bottom: 1.5rem;
-    }
-    
-    .pet-photo {
-        width: 100%;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.15);
-        transition: all 0.4s ease;
-    }
-    
-    .pet-photo-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 107, 149, 0.05);
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: all 0.3s ease;
-    }
-    
-    .pet-photo-container:hover .pet-photo-overlay {
-        opacity: 1;
-    }
-    
-    .photo-upload-button {
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        border-radius: 30px;
-        padding: 0.8rem 1.5rem;
-        color: #FF6B95;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2);
-    }
-    
-    .photo-upload-button:hover {
-        background: white;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3);
-    }
-    
-    /* Upload box */
-    .upload-box {
-        border: 2px dashed rgba(255, 107, 149, 0.3);
-        border-radius: 15px;
-        padding: 1.5rem;
-        text-align: center;
-        margin: 1rem 0;
-        transition: all 0.3s ease;
-        background: rgba(255, 107, 149, 0.05);
-    }
-    
-    .upload-box:hover {
-        border-color: rgba(255, 107, 149, 0.6);
-        background: rgba(255, 107, 149, 0.08);
     }
     
     /* Stat card */
@@ -315,58 +259,47 @@ st.markdown("""
         padding: 0.3rem 1rem !important;
     }
     
-    /* Table styling */
-    .stDataFrame {
-        border-radius: 15px !important;
-        overflow: hidden !important;
-        border: 1px solid rgba(255, 107, 149, 0.1) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.08) !important;
+    /* Health conditions styling */
+    .health-conditions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
     }
     
-    .stDataFrame table {
-        border-collapse: separate !important;
-        border-spacing: 0 !important;
-        width: 100% !important;
+    .health-condition-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
     }
     
-    .stDataFrame th {
-        background-color: #FFF5F7 !important;
-        color: #FF6B95 !important;
-        font-weight: 600 !important;
-        padding: 1rem !important;
-        text-align: left !important;
-        border-bottom: 1px solid rgba(255, 107, 149, 0.1) !important;
+    .health-condition-item:hover {
+        background-color: rgba(255, 107, 149, 0.05);
     }
     
-    .stDataFrame td {
-        padding: 1rem !important;
-        border-bottom: 1px solid rgba(255, 107, 149, 0.1) !important;
-        color: #666666 !important;
+    /* Success message styling */
+    .success-message {
+        background: linear-gradient(90deg, #27AE60 0%, #2ECC71 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
     }
     
-    /* Slider styling */
-    .stSlider > div > div > div > div {
-        background-color: #FF6B95 !important;
-    }
-    
-    /* Save button */
-    .save-button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
-        color: white !important;
-        border-radius: 30px !important;
-        padding: 0.8rem 2.5rem !important;
-        font-weight: 600 !important;
-        font-size: 1.1rem !important;
-        border: none !important;
-        transition: all 0.3s ease !important;
-        width: 100% !important;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.2) !important;
-        letter-spacing: 0.5px !important;
-    }
-    
-    .save-button:hover {
-        transform: translateY(-3px) !important;
-        box-shadow: 0 12px 30px rgba(255, 107, 149, 0.3) !important;
+    /* Unsaved changes warning */
+    .unsaved-warning {
+        background: linear-gradient(90deg, #FF9500 0%, #FFAD33 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(255, 149, 0, 0.2);
     }
     
     /* Animation for elements */
@@ -384,24 +317,35 @@ st.markdown("""
             transform: translateY(0);
         }
     }
-    
-    /* Footer */
-    .profile-footer {
-        text-align: center;
-        margin-top: 3rem;
-        color: #666666;
-        padding: 1.5rem 0;
-        border-top: 1px solid rgba(255, 107, 149, 0.1);
-    }
 </style>
-
-<!-- Profile Avatar -->
-<div class="profile-container">
-    <a href="/" class="profile-avatar" target="_self">
-        <span class="profile-icon">M</span>
-    </a>
-</div>
 """, unsafe_allow_html=True)
+
+# Get current user profile
+user_profile = get_user_profile()
+
+# Initialize form state if not exists
+if 'form_data' not in st.session_state:
+    st.session_state.form_data = user_profile.copy()
+
+# Profile Avatar (with uploaded image if available)
+if user_profile.get('profile_image_base64'):
+    profile_avatar_html = f"""
+    <div class="profile-container">
+        <a href="/" class="profile-avatar" target="_self">
+            <img src="{user_profile['profile_image_base64']}" alt="Profile">
+        </a>
+    </div>
+    """
+else:
+    profile_avatar_html = """
+    <div class="profile-container">
+        <a href="/" class="profile-avatar" target="_self">
+            <span class="profile-icon">M</span>
+        </a>
+    </div>
+    """
+
+st.markdown(profile_avatar_html, unsafe_allow_html=True)
 
 # Back button
 st.markdown("""
@@ -411,12 +355,28 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Page header
-st.markdown("""
+st.markdown(f"""
 <div class="page-header fade-in">
-    <h1 class="profile-header">Pet Profile</h1>
+    <h1 class="profile-header">{user_profile['pet_name']}'s Profile</h1>
     <p class="profile-subheader">Manage your cat's information, health records, and preferences</p>
 </div>
 """, unsafe_allow_html=True)
+
+# Check if there are unsaved changes
+def has_unsaved_changes():
+    form_data = st.session_state.form_data
+    for key in form_data:
+        if key in user_profile and form_data[key] != user_profile[key]:
+            return True
+    return False
+
+# Show unsaved changes warning
+if has_unsaved_changes():
+    st.markdown("""
+    <div class="unsaved-warning">
+        ⚠️ You have unsaved changes. Click "Save Profile" to apply your changes.
+    </div>
+    """, unsafe_allow_html=True)
 
 # Basic Information Section
 st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
@@ -427,32 +387,103 @@ st.markdown('<div class="section-content">', unsafe_allow_html=True)
 col1, col2 = st.columns([1, 2], gap="large")
 
 with col1:
-    st.markdown('<div class="pet-photo-container">', unsafe_allow_html=True)
-    st.image(pet_image, use_column_width=True, output_format="PNG")
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Display current profile image or placeholder
+    if st.session_state.form_data.get('profile_image'):
+        st.image(st.session_state.form_data['profile_image'], use_column_width=True)
+    else:
+        st.image(pet_image, use_column_width=True, output_format="PNG")
     
     uploaded_file = st.file_uploader("Choose a photo", type=['png', 'jpg', 'jpeg'], key="profile_pic")
     
     if uploaded_file is not None:
-        # Display the uploaded image if available
+        # Save uploaded image to form data (not session state yet)
         image = Image.open(uploaded_file)
-        st.image(image, caption='Uploaded Image', use_column_width=True)
+        image_base64 = pil_to_base64(image)
+        st.session_state.form_data['profile_image'] = image
+        st.session_state.form_data['profile_image_base64'] = image_base64
+        st.image(image, caption='New Profile Picture (Click Save to apply)', use_column_width=True)
         
 with col2:
     col_a, col_b = st.columns(2)
     with col_a:
-        st.text_input("Pet Name", value="Whiskers", placeholder="Enter your pet's name")
-        st.date_input("Birthday")
-        st.number_input("Weight (lbs)", min_value=0.0, max_value=30.0, value=10.0, step=0.1)
+        # Pet Name input
+        new_pet_name = st.text_input(
+            "Pet Name", 
+            value=st.session_state.form_data['pet_name'],
+            placeholder="Enter your pet's name"
+        )
+        st.session_state.form_data['pet_name'] = new_pet_name
+        
+        # Birthday input
+        new_birthday = st.date_input(
+            "Birthday",
+            value=st.session_state.form_data['birthday']
+        )
+        if new_birthday != st.session_state.form_data['birthday']:
+            st.session_state.form_data['birthday'] = new_birthday
+            # Calculate age from birthday
+            today = date.today()
+            age = today.year - new_birthday.year - ((today.month, today.day) < (new_birthday.month, new_birthday.day))
+            st.session_state.form_data['age'] = age
+        
+        # Weight input with proper decimal handling
+        new_weight = st.number_input(
+            "Weight (lbs)", 
+            min_value=0.0, 
+            max_value=30.0, 
+            value=float(st.session_state.form_data['weight']), 
+            step=0.1,
+            format="%.1f"
+        )
+        st.session_state.form_data['weight'] = round(new_weight, 1)
+            
     with col_b:
-        st.selectbox("Breed", ["Persian", "Siamese", "Maine Coon", "Scottish Fold", "Bengal", "Ragdoll", "Other"])
-        st.selectbox("Gender", ["Male", "Female"])
-        st.number_input("Age (years)", min_value=0, max_value=30, value=5)
+        # Breed input - allow custom input with common options
+        breed_options = [
+            "Persian", "Siamese", "Maine Coon", "Scottish Fold", "Bengal", "Ragdoll", 
+            "British Shorthair", "American Shorthair", "Russian Blue", "Abyssinian",
+            "Birman", "Norwegian Forest Cat", "Sphinx", "Munchkin", "Other"
+        ]
+        
+        # Check if current breed is in options, if not add it
+        current_breed = st.session_state.form_data['breed']
+        if current_breed not in breed_options:
+            breed_options.insert(-1, current_breed)  # Insert before "Other"
+        
+        breed_index = breed_options.index(current_breed) if current_breed in breed_options else 0
+        
+        selected_breed = st.selectbox(
+            "Breed", 
+            breed_options,
+            index=breed_index
+        )
+        
+        # If "Other" is selected, show text input
+        if selected_breed == "Other":
+            custom_breed = st.text_input(
+                "Enter breed name", 
+                value=current_breed if current_breed not in breed_options[:-1] else ""
+            )
+            if custom_breed:
+                st.session_state.form_data['breed'] = custom_breed
+        else:
+            st.session_state.form_data['breed'] = selected_breed
+        
+        # Gender input
+        gender_options = ["Male", "Female"]
+        current_gender_index = gender_options.index(st.session_state.form_data['gender']) if st.session_state.form_data['gender'] in gender_options else 0
+        
+        new_gender = st.selectbox(
+            "Gender", 
+            gender_options,
+            index=current_gender_index
+        )
+        st.session_state.form_data['gender'] = new_gender
 
 st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Health Statistics Section
+# Health Statistics Section (using current saved data)
 st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
 st.markdown('<div class="section-header"><h2 class="section-title">Health Statistics</h2></div>', unsafe_allow_html=True)
 st.markdown('<div class="section-content">', unsafe_allow_html=True)
@@ -460,62 +491,77 @@ st.markdown('<div class="section-content">', unsafe_allow_html=True)
 stat_col1, stat_col2, stat_col3, stat_col4 = st.columns(4)
 
 with stat_col1:
-    st.markdown("""
+    # Display current saved weight (not form weight)
+    weight_display = f"{user_profile['weight']:.1f}"
+    st.markdown(f"""
     <div class="stat-card">
-        <div class="stat-number">10.5</div>
+        <div class="stat-number">{weight_display}</div>
         <div class="stat-label">Current Weight (lbs)</div>
     </div>
     """, unsafe_allow_html=True)
 
 with stat_col2:
-    st.markdown("""
+    # Count health conditions from saved data
+    health_conditions_count = len([cond for cond in user_profile.get('health_conditions', []) if cond])
+    st.markdown(f"""
     <div class="stat-card">
-        <div class="stat-number">3</div>
-        <div class="stat-label">Vet Visits This Year</div>
+        <div class="stat-number">{health_conditions_count}</div>
+        <div class="stat-label">Health Conditions</div>
     </div>
     """, unsafe_allow_html=True)
 
 with stat_col3:
-    st.markdown("""
+    # Calculate health score based on saved data
+    health_score = 100 - (health_conditions_count * 10) - max(0, (user_profile['age'] - 7) * 5)
+    health_score = max(60, min(100, health_score))
+    st.markdown(f"""
     <div class="stat-card">
-        <div class="stat-number">85%</div>
+        <div class="stat-number">{health_score}%</div>
         <div class="stat-label">Health Score</div>
     </div>
     """, unsafe_allow_html=True)
 
 with stat_col4:
-    st.markdown("""
+    st.markdown(f"""
     <div class="stat-card">
-        <div class="stat-number">2</div>
-        <div class="stat-label">Active Medications</div>
+        <div class="stat-number">{user_profile['age']}</div>
+        <div class="stat-label">Age (years)</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Medical History Section
+# Health Conditions Section
 st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
-st.markdown('<div class="section-header"><h2 class="section-title">Medical History</h2></div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header"><h2 class="section-title">Health Conditions</h2></div>', unsafe_allow_html=True)
 st.markdown('<div class="section-content">', unsafe_allow_html=True)
 
-# Sample medical history data
-medical_history = pd.DataFrame({
-    'Date': ['2024-03-15', '2024-02-01', '2024-01-10'],
-    'Type': ['Vaccination', 'Check-up', 'Dental Cleaning'],
-    'Notes': [
-        'Annual vaccination renewal',
-        'Regular health check - all normal',
-        'Professional dental cleaning and check-up'
-    ]
-})
+st.markdown('<p style="font-weight: 600; margin-bottom: 1rem; color: #666666;">Select any health conditions that apply to your cat:</p>', unsafe_allow_html=True)
 
-st.dataframe(medical_history, use_container_width=True)
+# Health conditions list
+health_conditions_options = [
+    "Kidney Disease",
+    "Urinary Tract Issues", 
+    "Diabetes",
+    "Obesity",
+    "Digestive Sensitivity",
+    "Dental Problems",
+    "Senior Cat Special Needs",
+    "Kitten Special Needs"
+]
 
-# Add record button
-col1, col2, col3 = st.columns([4, 2, 4])
-with col2:
-    st.button("+ Add New Record", use_container_width=True)
+# Get current health conditions from form data
+current_conditions = st.session_state.form_data.get('health_conditions', [])
+
+# Create checkboxes for health conditions
+new_conditions = st.multiselect(
+    "",
+    health_conditions_options,
+    default=current_conditions,
+    label_visibility="collapsed"
+)
+st.session_state.form_data['health_conditions'] = new_conditions
 
 st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
@@ -529,75 +575,79 @@ diet_col1, diet_col2 = st.columns(2)
 
 with diet_col1:
     st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Favorite Flavors</p>', unsafe_allow_html=True)
-    favorite_flavors = st.multiselect(
+    new_favorite_flavors = st.multiselect(
         "",
         ["Chicken", "Fish", "Beef", "Turkey", "Salmon", "Tuna", "Duck", "Lamb", "Venison"],
-        ["Chicken", "Fish"],
+        default=st.session_state.form_data['favorite_flavors'],
         label_visibility="collapsed"
     )
+    st.session_state.form_data['favorite_flavors'] = new_favorite_flavors
     
     st.markdown('<p style="font-weight: 600; margin: 1.5rem 0 0.5rem 0;">Food Allergies</p>', unsafe_allow_html=True)
-    allergies = st.multiselect(
+    new_allergies = st.multiselect(
         "",
         ["None", "Chicken", "Fish", "Dairy", "Grain", "Beef", "Eggs", "Corn"],
-        ["None"],
+        default=st.session_state.form_data['allergies'],
         label_visibility="collapsed"
     )
+    st.session_state.form_data['allergies'] = new_allergies
 
 with diet_col2:
     st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Activity Level</p>', unsafe_allow_html=True)
-    activity = st.select_slider(
+    activity_options = ["Very Low", "Low", "Moderate", "High", "Very High"]
+    
+    new_activity = st.select_slider(
         "",
-        options=["Very Low", "Low", "Moderate", "High", "Very High"],
-        value="Moderate",
+        options=activity_options,
+        value=st.session_state.form_data['activity_level'],
         label_visibility="collapsed"
     )
+    st.session_state.form_data['activity_level'] = new_activity
     
     st.markdown('<p style="font-weight: 600; margin: 1.5rem 0 0.5rem 0;">Special Dietary Notes</p>', unsafe_allow_html=True)
-    notes = st.text_area("", placeholder="Add any special dietary requirements or preferences...", height=120, label_visibility="collapsed")
-
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Feeding Schedule Section (New)
-st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
-st.markdown('<div class="section-header"><h2 class="section-title">Feeding Schedule</h2></div>', unsafe_allow_html=True)
-st.markdown('<div class="section-content">', unsafe_allow_html=True)
-
-schedule_col1, schedule_col2 = st.columns(2)
-
-with schedule_col1:
-    st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Meals Per Day</p>', unsafe_allow_html=True)
-    meals_per_day = st.number_input("", min_value=1, max_value=6, value=2, label_visibility="collapsed")
-    
-    st.markdown('<p style="font-weight: 600; margin: 1.5rem 0 0.5rem 0;">Feeding Times</p>', unsafe_allow_html=True)
-    morning_time = st.time_input("Morning", value=None, label_visibility="collapsed")
-    evening_time = st.time_input("Evening", value=None, label_visibility="collapsed")
-
-with schedule_col2:
-    st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Portion Size</p>', unsafe_allow_html=True)
-    portion_size = st.select_slider(
-        "",
-        options=["Small", "Medium", "Large"],
-        value="Medium",
+    new_notes = st.text_area(
+        "", 
+        value=st.session_state.form_data.get('special_notes', ''),
+        placeholder="Add any special dietary requirements or preferences...", 
+        height=120, 
         label_visibility="collapsed"
     )
-    
-    st.markdown('<p style="font-weight: 600; margin: 1.5rem 0 0.5rem 0;">Special Instructions</p>', unsafe_allow_html=True)
-    feeding_notes = st.text_area("", placeholder="Add any special feeding instructions...", height=120, label_visibility="collapsed", key="feeding_notes")
+    st.session_state.form_data['special_notes'] = new_notes
 
 st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Save Button
 st.markdown('<div style="max-width: 400px; margin: 3rem auto;">', unsafe_allow_html=True)
-if st.button("Save Profile", use_container_width=True, type="primary"):
-    st.success("Profile saved successfully!")
+
+# Add Cancel and Save buttons
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("Cancel Changes", use_container_width=True):
+        # Reset form data to current saved data
+        st.session_state.form_data = user_profile.copy()
+        st.rerun()
+
+with col2:
+    if st.button("Save Profile", use_container_width=True, type="primary"):
+        # Save all form data to session state
+        for key, value in st.session_state.form_data.items():
+            update_user_profile(key, value)
+        
+        st.markdown('<div class="success-message">✅ Profile saved successfully!</div>', unsafe_allow_html=True)
+        st.balloons()
+        
+        # Reset form data to match saved data
+        st.session_state.form_data = st.session_state.user_profile.copy()
+        st.rerun()
+
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Footer
-st.markdown("""
-<div class="profile-footer">
-    <p>© 2024 MeowMatch | All rights reserved</p>
-</div>
-""", unsafe_allow_html=True)
+# Debug: Show current session state (you can remove this in production)
+if st.checkbox("Show Debug Info"):
+    st.write("**Current Saved Profile:**")
+    st.json(user_profile)
+    st.write("**Form Data (Unsaved):**")
+    st.json(st.session_state.form_data)
+    st.write("**Has Unsaved Changes:**", has_unsaved_changes())
