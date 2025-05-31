@@ -113,15 +113,15 @@ def load_profile_from_cookie():
     get_cookie_data()
     
     # 检查是否有URL参数传递的数据（备用方法）
-    query_params = st.experimental_get_query_params()
-    if 'profile' in query_params:
-        try:
-            encoded_profile = query_params['profile'][0]
+    try:
+        query_params = st.query_params
+        if 'profile' in query_params:
+            encoded_profile = query_params['profile']
             decoded_data = base64.b64decode(encoded_profile.encode('utf-8')).decode('utf-8')
             profile_data = json.loads(decoded_data)
             return deserialize_from_cookie(profile_data)
-        except Exception as e:
-            st.warning(f"无法从URL参数加载配置文件: {e}")
+    except Exception as e:
+        st.warning(f"无法从URL参数加载配置文件: {e}")
     
     return None
 
@@ -164,13 +164,13 @@ def check_cookie_support():
 
 # 默认配置文件数据
 DEFAULT_PROFILE = {
-    'pet_name': '🐱',
+    'pet_name': '',
     'breed': '',
     'gender': '',
     'age': 0,
     'weight': 0,
-    'birthday': date(2025, 6, 6),
-    'activity_level': 'Moderate',
+    'birthday': date(2019, 5, 15),
+    'activity_level': '',
     'favorite_flavors': [],
     'allergies': [],
     'health_conditions': [],
