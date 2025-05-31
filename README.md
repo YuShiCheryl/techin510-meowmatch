@@ -1,8 +1,8 @@
-# MeowMatch - Cat Food Recommendation System 🐱
+# MeowMatch - Cat Food Recommendation System
 
 MeowMatch is a web application that helps cat owners find the perfect food recommendations for their beloved feline friends. The application features a modern, user-friendly interface with personalized food suggestions and product showcases.
 
-## Features ✨
+## Features
 
 - Modern and responsive user interface
 - Featured product showcase
@@ -160,7 +160,6 @@ Those managing pets with dietary challenges such as sensitive stomachs, obesity,
   - Optimizing match calculation accuracy
 
 - **User Experience Enhancements**:
-  - Mobile responsiveness final adjustments
   - Loading state optimizations
   - Performance monitoring and analytics integration
 
@@ -169,7 +168,6 @@ Those managing pets with dietary challenges such as sensitive stomachs, obesity,
 - Implement user authentication for saving profiles and preferences
 - Add favorites/saved products functionality
 - Create loading states for smoother transitions
-- Add tooltips for nutritional information
 - Integrate ingredient database with recommendation algorithm
 - Replace placeholder product data with real items sourced from pet food retailers
 - Deploy to production environment
@@ -179,14 +177,12 @@ Those managing pets with dietary challenges such as sensitive stomachs, obesity,
 ## 6. Known Issues
 
 ### Resolved ✅
-- ~~Navigation links open in new tabs instead of navigating within the application~~
 - ~~Profile form default values causing StreamlitAPIException~~
 - ~~Session state management issues with form data~~
 
 ### Current Issues 🔧
 - **Algorithm Fine-tuning**: Recommendation weights may need adjustment based on real user feedback
 - **Database Expansion**: Adding more diverse cat food brands and products
-- **Mobile Optimization**: Minor responsiveness improvements for smaller screens
 - **Performance**: Loading states and caching optimizations
 
 ---
