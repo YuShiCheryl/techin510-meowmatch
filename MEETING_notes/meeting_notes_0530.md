@@ -1,13 +1,10 @@
 # Client Meeting Notes - 05/30
 
-
 ## Meeting Details
 
 - **Attendees**: 
   - Yu Shi (Developer)
   - Jialu Huang (Client)
-
-
 
 ## Project Testing for Acceptance
 
