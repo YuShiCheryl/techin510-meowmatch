@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime, date
 import base64
 import io
-from session_utils import init_session_state, get_user_profile, update_user_profile
+from session_utils import init_session_state, get_user_profile, update_user_profile, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
@@ -22,6 +22,7 @@ st.markdown("""
         header {visibility: hidden;}
     </style>
 """, unsafe_allow_html=True)
+
 
 # Initialize session state
 init_session_state()
@@ -42,7 +43,6 @@ pet_image = create_placeholder_image(300, 300, '#FFE6E6')
 
 # Custom CSS
 st.markdown("""
-
 <style>
     /* Base styles */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -113,21 +113,26 @@ st.markdown("""
         border-radius: 50%;
     }
     
-    /* Back button */
-    .back-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #666666;
-        text-decoration: none;
-        margin-bottom: 1.5rem;
-        transition: all 0.3s ease;
-        font-weight: 500;
+    /* Back button styling for Streamlit - 改为粉色样式 */
+    .back-button-streamlit .stButton button {
+        background: transparent !important;
+        color: #666666 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
     }
-    
-    .back-button:hover {
-        color: #FF6B95;
-        transform: translateX(-3px);
+
+    .back-button-streamlit .stButton button:hover {
+        color: #FF6B95 !important;
+        transform: translateX(-3px) !important;
+        background: rgba(255, 107, 149, 0.05) !important;
     }
     
     /* Page header */
@@ -270,6 +275,44 @@ st.markdown("""
         padding: 0.3rem 1rem !important;
     }
     
+    /* Button styling - 更新为粉色渐变按钮 */
+    .stButton button {
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        color: white !important;
+        border-radius: 30px !important;
+        padding: 0.8rem 2.8rem !important;
+        font-weight: 600 !important;
+        border: none !important;
+        transition: all 0.3s ease !important;
+        position: relative !important;
+        z-index: 1 !important;
+        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+    }
+    
+    .stButton button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #FF9EB5 0%, #FF6B95 100%);
+        border-radius: 30px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+    }
+    
+    .stButton button:hover::after {
+        opacity: 1;
+    }
+    
     /* Health conditions styling */
     .health-conditions {
         display: grid;
@@ -339,31 +382,13 @@ if 'form_data' not in st.session_state:
     st.session_state.form_data = user_profile.copy()
 
 # Profile Avatar (with uploaded image if available)
-if user_profile.get('profile_image_base64'):
-    profile_avatar_html = f"""
-    <div class="profile-container">
-        <a href="/" class="profile-avatar" target="_self">
-            <img src="{user_profile['profile_image_base64']}" alt="Profile">
-        </a>
-    </div>
-    """
-else:
-    profile_avatar_html = """
-    <div class="profile-container">
-        <a href="/" class="profile-avatar" target="_self">
-            <span class="profile-icon">M</span>
-        </a>
-    </div>
-    """
+st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
-st.markdown(profile_avatar_html, unsafe_allow_html=True)
-
-# Back button
-st.markdown("""
-<a href="/" class="back-button" target="_self">
-    <span>←</span> Back to Home
-</a>
-""", unsafe_allow_html=True)
+# Back button - 改为和其他页面一样的Streamlit按钮样式
+st.markdown('<div class="back-button-streamlit">', unsafe_allow_html=True)
+if st.button("← Back to Home", key="back_home"):
+    st.switch_page("app.py")
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Page header
 st.markdown(f"""
@@ -456,8 +481,12 @@ with col2:
             "Birman", "Norwegian Forest Cat", "Sphinx", "Munchkin", "Other"
         ]
         
+        # 处理breed的默认值
+        current_breed = st.session_state.form_data.get('breed', '')
+        if current_breed == '-' or not current_breed:
+            current_breed = "Persian"  # 设置默认品种
+        
         # Check if current breed is in options, if not add it
-        current_breed = st.session_state.form_data['breed']
         if current_breed not in breed_options:
             breed_options.insert(-1, current_breed)  # Insert before "Other"
         
@@ -482,7 +511,11 @@ with col2:
         
         # Gender input
         gender_options = ["Male", "Female"]
-        current_gender_index = gender_options.index(st.session_state.form_data['gender']) if st.session_state.form_data['gender'] in gender_options else 0
+        current_gender = st.session_state.form_data.get('gender', 'Male')
+        if current_gender == '-' or current_gender not in gender_options:
+            current_gender = "Male"  # 默认值
+        
+        current_gender_index = gender_options.index(current_gender)
         
         new_gender = st.selectbox(
             "Gender", 
@@ -607,18 +640,29 @@ with diet_col2:
     st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Activity Level</p>', unsafe_allow_html=True)
     activity_options = ["Very Low", "Low", "Moderate", "High", "Very High"]
     
+    # 处理activity_level的默认值
+    current_activity = st.session_state.form_data.get('activity_level', 'Moderate')
+    if not current_activity or current_activity not in activity_options:
+        current_activity = "Moderate"
+    
     new_activity = st.select_slider(
         "",
         options=activity_options,
-        value=st.session_state.form_data['activity_level'],
+        value=current_activity,
         label_visibility="collapsed"
     )
     st.session_state.form_data['activity_level'] = new_activity
     
     st.markdown('<p style="font-weight: 600; margin: 1.5rem 0 0.5rem 0;">Special Dietary Notes</p>', unsafe_allow_html=True)
+    
+    # 处理special_notes的默认值
+    current_notes = st.session_state.form_data.get('special_notes', '')
+    if current_notes == '-':
+        current_notes = ''  # 将'-'替换为空字符串
+    
     new_notes = st.text_area(
         "", 
-        value=st.session_state.form_data.get('special_notes', ''),
+        value=current_notes,
         placeholder="Add any special dietary requirements or preferences...", 
         height=120, 
         label_visibility="collapsed"
@@ -646,7 +690,7 @@ with col2:
         for key, value in st.session_state.form_data.items():
             update_user_profile(key, value)
         
-        st.markdown('<div class="success-message">✅ Profile saved successfully!</div>', unsafe_allow_html=True)
+        st.markdown('<div class="success-message">✅ Profile saved successfully and synced to browser!</div>', unsafe_allow_html=True)
         st.balloons()
         
         # Reset form data to match saved data

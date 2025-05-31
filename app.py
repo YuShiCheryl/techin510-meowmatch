@@ -242,6 +242,49 @@ st.markdown("""
         opacity: 1;
     }
     
+    /* Feature buttons - Streamlit按钮样式，保持HTML按钮的外观 */
+    .feature-button-streamlit .stButton button {
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%) !important;
+        color: #FF6B95 !important;
+        border: 2px solid #FF6B95 !important;
+        border-radius: 18px !important;
+        padding: 1.2rem 2.5rem !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        transition: all 0.4s ease !important;
+        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.08) !important;
+        min-width: 220px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        z-index: 1 !important;
+        letter-spacing: 0.5px !important;
+        width: 100% !important;
+    }
+
+    .feature-button-streamlit .stButton button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        border-radius: 18px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+    }
+
+    .feature-button-streamlit .stButton button:hover {
+        color: #FFFFFF !important;
+        transform: translateY(-5px) !important;
+        box-shadow: 0 12px 25px rgba(255, 107, 149, 0.15) !important;
+    }
+    
+    .feature-button-streamlit .stButton button:hover::after {
+        opacity: 1;
+    }
+    
     /* Feature section styling */
     .feature-title {
         color: #444444;
@@ -367,7 +410,7 @@ st.markdown("""
         border-radius: 2px;
     }
     
-    /* Feature buttons */
+    /* Feature buttons container */
     .feature-buttons {
         display: flex;
         justify-content: center;
@@ -377,61 +420,45 @@ st.markdown("""
         flex-wrap: wrap;
     }
 
-    .feature-button {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%) !important;
-        color: #FF6B95 !important;
-        border: 2px solid #FF6B95 !important;
-        border-radius: 18px;
-        padding: 1.2rem 2.5rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        transition: all 0.4s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.8rem;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.08);
-        min-width: 220px;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-        z-index: 1;
-    }
-
-    .feature-button::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
-        z-index: -1;
-        transition: opacity 0.3s ease;
-        opacity: 0;
-    }
-
-    .feature-button:hover {
-        color: #FFFFFF !important;
-        transform: translateY(-5px);
-        box-shadow: 0 12px 25px rgba(255, 107, 149, 0.15);
+    /* Animation for elements */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
     }
     
-    .feature-button:hover::after {
-        opacity: 1;
-    }
-
-    .feature-button-icon {
-        font-size: 1.4rem;
-        transition: transform 0.3s ease;
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     
-    .feature-button:hover .feature-button-icon {
-        transform: scale(1.2);
+    /* Section headings */
+    h2, h3 {
+        color: #444444 !important;
+        font-weight: 700 !important;
     }
-
-    .feature-button-text {
-        letter-spacing: 0.5px;
+    
+    /* Add to cart button */
+    .cart-button {
+        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 25px !important;
+        padding: 0.6rem 1.5rem !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.15) !important;
+        margin-top: 0.8rem !important;
+    }
+    
+    .cart-button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.2) !important;
     }
     
     /* Footer styling */
@@ -499,47 +526,6 @@ st.markdown("""
         }
     }
     
-    /* Add to cart button */
-    .cart-button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 25px !important;
-        padding: 0.6rem 1.5rem !important;
-        font-size: 0.9rem !important;
-        font-weight: 600 !important;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.15) !important;
-        margin-top: 0.8rem !important;
-    }
-    
-    .cart-button:hover {
-        transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.2) !important;
-    }
-    
-    /* Animation for elements */
-    .fade-in {
-        animation: fadeIn 0.5s ease-in;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    /* Section headings */
-    h2, h3 {
-        color: #444444 !important;
-        font-weight: 700 !important;
-    }
-    
     /* Search bar styling */
     .stTextInput > div > div > input {
         border-radius: 30px !important;
@@ -577,20 +563,30 @@ with col2:
     st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Feature Buttons
-st.markdown("""
-<div class="feature-buttons fade-in">
-    <a href="/Search" class="feature-button" target="_self">
-        <span class="feature-button-icon">🔍</span>
-        <span class="feature-button-text">Search by Ingredient</span>
-    </a>
-    <a href="/Compare" class="feature-button" target="_self">
-        <span class="feature-button-icon">⚖️</span>
-        <span class="feature-button-text">Compare Products</span>
-    </a>
-    
-</div>
-""", unsafe_allow_html=True)
+# Feature Buttons - 改为Streamlit按钮但保持原有样式
+st.markdown('<div class="feature-buttons fade-in">', unsafe_allow_html=True)
+
+feature_col1, feature_col2, feature_col3 = st.columns(3, gap="large")
+
+with feature_col1:
+    st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
+    if st.button("🔍 Search by Ingredient", key="search_btn", use_container_width=True):
+        st.switch_page("pages/2_Search.py")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with feature_col2:
+    st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
+    if st.button("⚖️ Compare Products", key="compare_btn", use_container_width=True):
+        st.switch_page("pages/3_Compare.py")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with feature_col3:
+    st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
+    if st.button("🎯 Get Recommendations", key="recommend_btn", use_container_width=True):
+        st.switch_page("pages/4_Recommendations.py")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Recommendations Section
 st.markdown('<h2 class="section-header fade-in">Recommended for Your Cat</h2>', unsafe_allow_html=True)

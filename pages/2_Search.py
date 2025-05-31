@@ -102,6 +102,28 @@ st.markdown("""
         border-radius: 50%;
     }
     
+    /* Back button styling for Streamlit */
+    .back-button-streamlit .stButton button {
+        background: transparent !important;
+        color: #666666 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .back-button-streamlit .stButton button:hover {
+        color: #FF6B95 !important;
+        transform: translateX(-3px) !important;
+        background: rgba(255, 107, 149, 0.05) !important;
+    }
+    
     /* Title styling */
     .main-title {
         color: #444444;
@@ -441,23 +463,6 @@ st.markdown("""
         box-shadow: 0 8px 20px rgba(255, 107, 149, 0.2) !important;
     }
     
-    /* Back button */
-    .back-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #666666;
-        text-decoration: none;
-        margin-bottom: 2rem;
-        transition: all 0.3s ease;
-        font-weight: 500;
-    }
-    
-    .back-button:hover {
-        color: #FF6B95;
-        transform: translateX(-3px);
-    }
-    
     /* Progress bar */
     .stProgress > div > div > div {
         background-color: #FF6B95 !important;
@@ -469,12 +474,11 @@ st.markdown("""
 init_session_state()
 st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
-# Back button
-st.markdown("""
-<a href="/" class="back-button" target="_self">
-    <span>←</span> Back to Home
-</a>
-""", unsafe_allow_html=True)
+# Back button - 改为Streamlit按钮
+st.markdown('<div class="back-button-streamlit">', unsafe_allow_html=True)
+if st.button("← Back to Home", key="back_home"):
+    st.switch_page("app.py")
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Page title
 st.markdown('<h1 class="main-title fade-in">Search Cat Food by Ingredient</h1>', unsafe_allow_html=True)

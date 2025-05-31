@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 import random
-from session_utils import init_session_state, get_user_profile, get_pet_display_info
+from session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
@@ -12,6 +12,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# Add hidden navigation bar CSS
+st.markdown("""
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
 
 # Initialize session state
 init_session_state()
@@ -232,20 +240,26 @@ div[data-testid="stToolbar"] { display: none; }
     border-radius: 50%;
 }
 
-.back-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #666666;
-    text-decoration: none;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
-    font-weight: 500;
+/* Back button styling for Streamlit */
+.back-button-streamlit .stButton button {
+    background: transparent !important;
+    color: #666666 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
 }
 
-.back-button:hover {
-    color: #FF6B95;
-    transform: translateX(-3px);
+.back-button-streamlit .stButton button:hover {
+    color: #FF6B95 !important;
+    transform: translateX(-3px) !important;
+    background: rgba(255, 107, 149, 0.05) !important;
 }
 
 .main-title {
@@ -501,6 +515,24 @@ div[data-testid="stToolbar"] { display: none; }
     transition: all 0.3s ease !important;
 }
 
+/* Button styling */
+.stButton button {
+    background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+    color: white !important;
+    border-radius: 30px !important;
+    padding: 0.7rem 2.5rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+    letter-spacing: 0.5px !important;
+}
+
+.stButton button:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+}
+
 .fade-in { animation: fadeIn 0.5s ease-in; }
 
 @keyframes fadeIn {
@@ -523,15 +555,13 @@ div[data-testid="stToolbar"] { display: none; }
 """, unsafe_allow_html=True)
 
 # Profile Avatar
-from session_utils import get_profile_avatar_html
 st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
-# Back button
-st.markdown("""
-<a href="/" class="back-button" target="_self">
-    <span>←</span> Back to Home
-</a>
-""", unsafe_allow_html=True)
+# Back button - 改为Streamlit按钮
+st.markdown('<div class="back-button-streamlit">', unsafe_allow_html=True)
+if st.button("← Back to Home", key="back_home"):
+    st.switch_page("app.py")
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Page title
 st.markdown('<h1 class="main-title fade-in">Personalized Recommendations</h1>', unsafe_allow_html=True)
