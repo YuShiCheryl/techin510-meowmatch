@@ -69,20 +69,18 @@
 - **User Experience**: Created intuitive interface that's easy for cat owners to use
 
 ### Challenges
-- **Streamlit Limitations**: Framework constraints required creative solutions for session state
+- **Streamlit Limitations**: Streamlit theme color interferes with text color
 - **Data Validation**: Complex form inputs needed extensive error handling
 - **Algorithm Complexity**: Balancing multiple criteria (health, nutrition, allergies) in recommendations
 
 ### Lessons Learned
 - **Plan for State Management**: Session state architecture should be designed early in development
-- **User Testing**: Regular testing catches usability issues before they become problems
 - **Database Quality**: Good product data is essential for meaningful recommendations
 - **Deployment Preparation**: Early deployment planning prevents last-minute issues
 
 
 ## Next Steps
-- [ ] Yu Shi: Implement mobile improvements by next week
-- [ ] Jialu Huang: Conduct user testing with 3-5 cat owners
-- [ ] Both: Plan feature roadmap for next development cycle
-
-**Meeting Status**: ✅ **Project Accepted - Ready for Public Use**
+- [ ] Complete user log-in and profile info storing
+- [ ] Replace all placeholders
+- [ ] Integrate recommendation algorithm with front-end
+- [ ] Make sure all button functions properly
