@@ -18,14 +18,17 @@
 - **Production Deployment**: Website successfully deployed and accessible online
 
 ### Outstanding Items
-- Recommendation algorithm weights may need fine-tuning based on user feedback
-- Product database could be expanded with more brands
-- Placeholder images needs to be replaced
+- [ ] Recommendation algorithm weights may need fine-tuning based on user feedback
+- [ ] Product database could be expanded with more brands
+- [ ] Placeholder images needs to be replaced
+- [ ] Complete user log-in and profile info storing
+- [ ] Integrate recommendation algorithm with front-end
+- [ ] Make sure all button functions properly
 
 ### Project Goal Assessment
 **Original Goal**: Create a personalized cat food recommendation system to help cat owners make informed feeding decisions.
 
-**Result**: **Goal Achieved and Exceeded**
+**Result**: **Goal Achieved**
 - Successfully implemented intelligent recommendation system with nutritional analysis
 - Created comprehensive user profiles with health condition tracking
 - Developed working algorithm that considers allergies, health conditions, and nutritional needs
@@ -75,9 +78,3 @@
 - **Database Quality**: Good product data is essential for meaningful recommendations
 - **Deployment Preparation**: Early deployment planning prevents last-minute issues
 
-
-## Next Steps
-- [ ] Complete user log-in and profile info storing
-- [ ] Replace all placeholders
-- [ ] Integrate recommendation algorithm with front-end
-- [ ] Make sure all button functions properly
