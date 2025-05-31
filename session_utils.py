@@ -12,7 +12,7 @@ def init_session_state():
             'gender': '',
             'age': 0,
             'weight': 0,
-            'birthday': date(2019, 5, 15),
+            'birthday': date(2025, 5, 1),
             'activity_level': 'Moderate',
             'favorite_flavors': [],
             'allergies': [],
