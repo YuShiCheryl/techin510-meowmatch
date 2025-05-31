@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import pandas as pd
-from session_utils import init_session_state, get_user_profile, get_pet_display_info
+from session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
@@ -94,6 +94,7 @@ st.markdown("""
         transition: all 0.3s ease;
         text-decoration: none;
         box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        overflow: hidden;
     }
     
     .profile-avatar:hover {
@@ -104,6 +105,13 @@ st.markdown("""
     .profile-icon {
         font-size: 24px;
         color: #FF6B95;
+    }
+    
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
     }
 
     /* Add top margin to the first section */
@@ -546,27 +554,11 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
     }
 </style>
-
-<!-- Profile Avatar -->
-<div class="profile-container">
-    <a href="Profile" class="profile-avatar" target="_self">
-        <span class="profile-icon">M</span>
-    </a>
-</div>
-
-<!-- Add background decorations -->
-<div class="bg-decoration">
-    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <defs>
-            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FFE6EC;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#FFF9F9;stop-opacity:1" />
-            </linearGradient>
-        </defs>
-        <path d="M0,0 C30,20 70,20 100,0 L100,100 L0,100 Z" fill="url(#grad1)"/>
-    </svg>
-</div>
 """, unsafe_allow_html=True)
+
+# Initialize session state and display dynamic avatar
+init_session_state()
+st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
 # Hero Section
 col1, col2 = st.columns([1, 1])
@@ -588,14 +580,15 @@ st.markdown('</div>', unsafe_allow_html=True)
 # Feature Buttons
 st.markdown("""
 <div class="feature-buttons fade-in">
-    <a href="/Search" class="feature-button">
+    <a href="/Search" class="feature-button" target="_self">
         <span class="feature-button-icon">🔍</span>
         <span class="feature-button-text">Search by Ingredient</span>
     </a>
-    <a href="/Compare" class="feature-button">
+    <a href="/Compare" class="feature-button" target="_self">
         <span class="feature-button-icon">⚖️</span>
         <span class="feature-button-text">Compare Products</span>
     </a>
+    
 </div>
 """, unsafe_allow_html=True)
 

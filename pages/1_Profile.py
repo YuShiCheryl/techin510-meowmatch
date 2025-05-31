@@ -10,8 +10,18 @@ from session_utils import init_session_state, get_user_profile, update_user_prof
 st.set_page_config(
     page_title="Pet Profile - MeowMatch",
     page_icon="M",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
+
+# Add hidden navigation bar CSS
+st.markdown("""
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
 
 # Initialize session state
 init_session_state()
@@ -32,6 +42,7 @@ pet_image = create_placeholder_image(300, 300, '#FFE6E6')
 
 # Custom CSS
 st.markdown("""
+
 <style>
     /* Base styles */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
@@ -349,7 +360,7 @@ st.markdown(profile_avatar_html, unsafe_allow_html=True)
 
 # Back button
 st.markdown("""
-<a href="/" class="back-button">
+<a href="/" class="back-button" target="_self">
     <span>←</span> Back to Home
 </a>
 """, unsafe_allow_html=True)

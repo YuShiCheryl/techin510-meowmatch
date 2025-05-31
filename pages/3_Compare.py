@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
-from session_utils import init_session_state, get_user_profile, get_pet_display_info
+from session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
@@ -143,6 +143,7 @@ st.markdown("""
         transition: all 0.3s ease;
         text-decoration: none;
         box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        overflow: hidden;
     }
     
     .profile-avatar:hover {
@@ -153,6 +154,13 @@ st.markdown("""
     .profile-icon {
         font-size: 24px;
         color: #FF6B95;
+    }
+    
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
     }
     
     /* Back button */
@@ -536,18 +544,15 @@ st.markdown("""
         }
     }
 </style>
-
-<!-- Profile Avatar -->
-<div class="profile-container">
-    <a href="Profile" class="profile-avatar" target="_self">
-        <span class="profile-icon">M</span>
-    </a>
-</div>
 """, unsafe_allow_html=True)
+
+# Initialize session state and display dynamic avatar
+init_session_state()
+st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
 # Back button
 st.markdown("""
-<a href="/" class="back-button">
+<a href="/" class="back-button" target="_self">
     <span>←</span> Back to Home
 </a>
 """, unsafe_allow_html=True)

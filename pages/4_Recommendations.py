@@ -8,8 +8,10 @@ from session_utils import init_session_state, get_user_profile, get_pet_display_
 st.set_page_config(
     page_title="MeowMatch - Personalized Recommendations",
     page_icon="M",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
+
 
 # Initialize session state
 init_session_state()
@@ -171,7 +173,12 @@ st.markdown("""
 
 * { font-family: 'Poppins', sans-serif; }
 
+/* 隐藏Streamlit默认UI元素 */
 #MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header { visibility: hidden; }
+.stDeployButton { display: none; }
+div[data-testid="stToolbar"] { display: none; }
 
 .stApp { background-color: #FFFAF9; }
 
@@ -521,7 +528,7 @@ st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
 # Back button
 st.markdown("""
-<a href="/" class="back-button">
+<a href="/" class="back-button" target="_self">
     <span>←</span> Back to Home
 </a>
 """, unsafe_allow_html=True)
