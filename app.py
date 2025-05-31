@@ -581,7 +581,7 @@ with col1:
 
 with col2:
     st.markdown('<div class="hero-image">', unsafe_allow_html=True)
-    st.image(hero_image, use_column_width=True)
+    st.image(hero_image, use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -607,7 +607,7 @@ with st.container():
     
     with rec_col1:
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image1, use_column_width=True)
+        st.image(product_image1, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
@@ -620,7 +620,7 @@ with st.container():
         
     with rec_col2:
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image2, use_column_width=True)
+        st.image(product_image2, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
@@ -633,7 +633,7 @@ with st.container():
         
     with rec_col3:
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image3, use_column_width=True)
+        st.image(product_image3, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
@@ -679,7 +679,7 @@ for idx, product in enumerate(popular_products):
     with pop_cols[idx]:
         st.markdown('<div class="product-card fade-in">', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product["image"], use_column_width=True)
+        st.image(product["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f"""
         <div class="product-title">{product['name']}</div>
@@ -722,7 +722,7 @@ for idx, product in enumerate(new_arrivals):
         if product["is_new"]:
             st.markdown('<span class="badge">New</span>', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product["image"], use_column_width=True)
+        st.image(product["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f"""
         <div class="product-title">{product['name']}</div>

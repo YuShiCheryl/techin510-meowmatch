@@ -389,9 +389,9 @@ col1, col2 = st.columns([1, 2], gap="large")
 with col1:
     # Display current profile image or placeholder
     if st.session_state.form_data.get('profile_image'):
-        st.image(st.session_state.form_data['profile_image'], use_column_width=True)
+        st.image(st.session_state.form_data['profile_image'], use_container_width=True)
     else:
-        st.image(pet_image, use_column_width=True, output_format="PNG")
+        st.image(pet_image, use_container_width=True, output_format="PNG")
     
     uploaded_file = st.file_uploader("Choose a photo", type=['png', 'jpg', 'jpeg'], key="profile_pic")
     
@@ -401,7 +401,7 @@ with col1:
         image_base64 = pil_to_base64(image)
         st.session_state.form_data['profile_image'] = image
         st.session_state.form_data['profile_image_base64'] = image_base64
-        st.image(image, caption='New Profile Picture (Click Save to apply)', use_column_width=True)
+        st.image(image, caption='New Profile Picture (Click Save to apply)', use_container_width=True)
         
 with col2:
     col_a, col_b = st.columns(2)
