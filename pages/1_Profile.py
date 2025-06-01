@@ -39,7 +39,7 @@ def create_placeholder_image(width, height, color):
     return Image.new('RGB', (width, height), color)
 
 # Pet profile image
-pet_image = create_placeholder_image(300, 300, '#FFE6E6')
+pet_image = create_placeholder_image(300, 300, '#FFE5D4')
 
 # Custom CSS
 st.markdown("""
@@ -58,12 +58,12 @@ st.markdown("""
     
     /* Main background and container styling */
     .stApp {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
     }
     
     /* Main content container */
     .main .block-container {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
         padding: 3rem;
         max-width: 1200px;
         margin: 0 auto;
@@ -84,26 +84,26 @@ st.markdown("""
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 2px solid #FF6B95;
-        background-color: #FFE0E6;
+        border: 2px solid #FF8C42;
+        background-color: #FFE5D4;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
         overflow: hidden;
     }
     
     .profile-avatar:hover {
         transform: scale(1.08);
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.3);
     }
     
     .profile-icon {
         font-size: 24px;
-        color: #FF6B95;
+        color: #FF8C42;
     }
     
     .profile-avatar img {
@@ -113,7 +113,7 @@ st.markdown("""
         border-radius: 50%;
     }
     
-    /* Back button styling for Streamlit - 改为粉色样式 */
+    /* Back button styling for Streamlit - 改为橙色样式 */
     .back-button-streamlit .stButton button {
         background: transparent !important;
         color: #666666 !important;
@@ -130,9 +130,9 @@ st.markdown("""
     }
 
     .back-button-streamlit .stButton button:hover {
-        color: #FF6B95 !important;
+        color: #FF8C42 !important;
         transform: translateX(-3px) !important;
-        background: rgba(255, 107, 149, 0.05) !important;
+        background: rgba(255, 140, 66, 0.05) !important;
     }
     
     /* Page header */
@@ -147,7 +147,7 @@ st.markdown("""
         font-size: 2.8rem;
         font-weight: 800;
         margin-bottom: 0.5rem;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -163,21 +163,21 @@ st.markdown("""
     .section-container {
         background: #FFFFFF;
         border-radius: 20px;
-        box-shadow: 0 8px 30px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 30px rgba(255, 140, 66, 0.1);
         margin: 2rem 0;
         overflow: hidden;
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         transition: all 0.3s ease;
     }
     
     .section-container:hover {
-        box-shadow: 0 12px 40px rgba(255, 107, 149, 0.15);
+        box-shadow: 0 12px 40px rgba(255, 140, 66, 0.15);
         transform: translateY(-5px);
     }
     
     /* Section header */
     .section-header {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         padding: 1.5rem 2rem;
         position: relative;
     }
@@ -196,12 +196,12 @@ st.markdown("""
     
     /* Stat card */
     .stat-card {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
         padding: 1.5rem;
         border-radius: 15px;
         text-align: center;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.08);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.08);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         height: 100%;
         transition: all 0.3s ease;
         position: relative;
@@ -215,7 +215,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         transform: scaleX(0);
         transform-origin: right;
         transition: transform 0.4s ease;
@@ -223,7 +223,7 @@ st.markdown("""
     
     .stat-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 30px rgba(255, 140, 66, 0.12);
     }
     
     .stat-card:hover::after {
@@ -232,7 +232,7 @@ st.markdown("""
     }
     
     .stat-number {
-        color: #FF6B95;
+        color: #FF8C42;
         font-size: 2.2rem;
         font-weight: 800;
         line-height: 1.2;
@@ -250,34 +250,63 @@ st.markdown("""
     .stNumberInput > div > div > input,
     .stTextArea > div > div > textarea {
         border-radius: 10px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
         padding: 0.75rem 1rem !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
         transition: all 0.3s ease !important;
     }
     
     .stTextInput > div > div > input:focus,
     .stNumberInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus {
-        border: 1px solid rgba(255, 107, 149, 0.8) !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+        border: 1px solid rgba(255, 140, 66, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.1) !important;
     }
     
     .stSelectbox > div > div > div,
     .stDateInput > div > div > div,
     .stMultiselect > div > div > div {
         border-radius: 10px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
     }
     
     .stDateInput > div > div > div {
         padding: 0.3rem 1rem !important;
     }
     
-    /* Button styling - 更新为粉色渐变按钮 */
+    /* Slider styling - 橙色主题 */
+    .stSlider > div > div > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    .stSlider > div > div > div > div[data-baseweb="slider"] > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    .stSlider > div > div > div > div[data-baseweb="slider"] > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    /* Activity level select slider 橙色主题 */
+    div[data-testid="stSelectSlider"] > div > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    /* Select slider track 橙色主题 */
+    .stSelectSlider > div > div > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    /* Select slider thumb 橙色主题 */
+    .stSelectSlider div[role="slider"] {
+        background-color: #FF8C42 !important;
+        border-color: #FF8C42 !important;
+    }
+    
+    /* Button styling - 更新为橙色渐变按钮 */
     .stButton button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
         color: white !important;
         border-radius: 30px !important;
         padding: 0.8rem 2.8rem !important;
@@ -286,13 +315,13 @@ st.markdown("""
         transition: all 0.3s ease !important;
         position: relative !important;
         z-index: 1 !important;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2) !important;
         letter-spacing: 0.5px !important;
     }
     
     .stButton button:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3) !important;
     }
     
     .stButton button::after {
@@ -302,7 +331,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, #FF9EB5 0%, #FF6B95 100%);
+        background: linear-gradient(90deg, #FFB380 0%, #FF8C42 100%);
         border-radius: 30px;
         opacity: 0;
         z-index: -1;
@@ -331,7 +360,7 @@ st.markdown("""
     }
     
     .health-condition-item:hover {
-        background-color: rgba(255, 107, 149, 0.05);
+        background-color: rgba(255, 140, 66, 0.05);
     }
     
     /* Success message styling */

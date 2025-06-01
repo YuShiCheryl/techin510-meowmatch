@@ -27,10 +27,10 @@ def create_placeholder_image(width, height, color):
     return img
 
 # Create sample images
-hero_image = create_placeholder_image(800, 400, '#FFE6E6')
-product_image1 = create_placeholder_image(300, 300, '#FFE6E6')
-product_image2 = create_placeholder_image(300, 300, '#FFCCD5')
-product_image3 = create_placeholder_image(300, 300, '#FFD6E0')
+hero_image = create_placeholder_image(800, 400, '#FFE5D4')     # 浅橙色
+product_image1 = create_placeholder_image(300, 300, '#FFE5D4') # 浅橙色
+product_image2 = create_placeholder_image(300, 300, '#FFEAD6') # 更浅的橙色
+product_image3 = create_placeholder_image(300, 300, '#FFF0E6') # 极浅橙色
 
 # Sample cat food data
 sample_food_data = {
@@ -58,12 +58,12 @@ st.markdown("""
     
     /* Main background and container styling */
     .stApp {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
     }
     
     /* Main content container */
     .main .block-container {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
         padding: 3rem;
         padding-top: 6rem;
         max-width: 1200px;
@@ -85,26 +85,26 @@ st.markdown("""
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 2px solid #FF6B95;
-        background-color: #FFE0E6;
+        border: 2px solid #FF8C42;
+        background-color: #FFE5D4;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
         overflow: hidden;
     }
     
     .profile-avatar:hover {
         transform: scale(1.08);
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.3);
     }
     
     .profile-icon {
         font-size: 24px;
-        color: #FF6B95;
+        color: #FF8C42;
     }
     
     .profile-avatar img {
@@ -120,8 +120,8 @@ st.markdown("""
         position: relative;
         overflow: hidden;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(255, 107, 149, 0.1);
-        background: linear-gradient(135deg, #FFF9F9 0%, #FFE6EC 100%);
+        box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
+        background: linear-gradient(135deg, #FFFBF7 0%, #FFE8D9 100%);
         padding: 2rem;
     }
     
@@ -133,7 +133,7 @@ st.markdown("""
     .hero-image {
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.15);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.15);
         transform: perspective(1000px) rotateY(-5deg);
         transition: all 0.5s ease;
     }
@@ -144,15 +144,15 @@ st.markdown("""
 
     /* Feature card styling */
     .feature-card {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
         padding: 2rem;
         border-radius: 20px;
         margin: 1.5rem 0;
         transition: all 0.4s ease;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.08);
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.08);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
     }
     
     .feature-card::before {
@@ -162,13 +162,13 @@ st.markdown("""
         right: 0;
         width: 120px;
         height: 120px;
-        background: linear-gradient(45deg, transparent 50%, rgba(255, 107, 149, 0.1) 50%);
+        background: linear-gradient(45deg, transparent 50%, rgba(255, 140, 66, 0.1) 50%);
         border-radius: 0 0 0 100%;
     }
     
     .feature-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 30px rgba(255, 140, 66, 0.12);
     }
     
     /* Title styling */
@@ -181,7 +181,7 @@ st.markdown("""
         letter-spacing: -1px;
         position: relative;
         z-index: 1;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         line-height: 1.2;
@@ -206,7 +206,7 @@ st.markdown("""
     
     /* Button styling */
     .stButton button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
         color: white !important;
         border-radius: 30px !important;
         padding: 0.8rem 2.8rem !important;
@@ -215,13 +215,13 @@ st.markdown("""
         transition: all 0.3s ease !important;
         position: relative !important;
         z-index: 1 !important;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2) !important;
         letter-spacing: 0.5px !important;
     }
     
     .stButton button:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3) !important;
     }
     
     .stButton button::after {
@@ -231,7 +231,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, #FF9EB5 0%, #FF6B95 100%);
+        background: linear-gradient(90deg, #FFB380 0%, #FF8C42 100%);
         border-radius: 30px;
         opacity: 0;
         z-index: -1;
@@ -244,15 +244,15 @@ st.markdown("""
     
     /* Feature buttons - Streamlit按钮样式，保持HTML按钮的外观 */
     .feature-button-streamlit .stButton button {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%) !important;
-        color: #FF6B95 !important;
-        border: 2px solid #FF6B95 !important;
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%) !important;
+        color: #FF8C42 !important;
+        border: 2px solid #FF8C42 !important;
         border-radius: 18px !important;
         padding: 1.2rem 2.5rem !important;
         font-size: 1.1rem !important;
         font-weight: 600 !important;
         transition: all 0.4s ease !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.08) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.08) !important;
         min-width: 220px !important;
         position: relative !important;
         overflow: hidden !important;
@@ -268,7 +268,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         border-radius: 18px;
         opacity: 0;
         z-index: -1;
@@ -278,7 +278,7 @@ st.markdown("""
     .feature-button-streamlit .stButton button:hover {
         color: #FFFFFF !important;
         transform: translateY(-5px) !important;
-        box-shadow: 0 12px 25px rgba(255, 107, 149, 0.15) !important;
+        box-shadow: 0 12px 25px rgba(255, 140, 66, 0.15) !important;
     }
     
     .feature-button-streamlit .stButton button:hover::after {
@@ -311,8 +311,8 @@ st.markdown("""
         text-align: center;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         margin: 1.5rem 0;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.08);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.08);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         position: relative;
         overflow: hidden;
     }
@@ -324,7 +324,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 5px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         transform: scaleX(0);
         transform-origin: right;
         transition: transform 0.4s ease;
@@ -332,7 +332,7 @@ st.markdown("""
     
     .product-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 35px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 35px rgba(255, 140, 66, 0.12);
     }
     
     .product-card:hover::after {
@@ -344,7 +344,7 @@ st.markdown("""
         border-radius: 12px;
         margin-bottom: 1.5rem;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.1);
         transition: all 0.4s ease;
     }
     
@@ -360,7 +360,7 @@ st.markdown("""
     }
     
     .product-price {
-        color: #FF6B95;
+        color: #FF8C42;
         font-size: 1.4rem;
         font-weight: 800;
         letter-spacing: 0.5px;
@@ -378,13 +378,13 @@ st.markdown("""
         position: absolute;
         top: 1rem;
         right: 1rem;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         color: white;
         font-size: 0.85rem;
         font-weight: 600;
         padding: 0.4rem 1rem;
         border-radius: 20px;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
         letter-spacing: 0.5px;
     }
     
@@ -406,7 +406,7 @@ st.markdown("""
         left: 0;
         width: 80px;
         height: 4px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         border-radius: 2px;
     }
     
@@ -444,7 +444,7 @@ st.markdown("""
     
     /* Add to cart button */
     .cart-button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
         color: white !important;
         border: none !important;
         border-radius: 25px !important;
@@ -452,13 +452,13 @@ st.markdown("""
         font-size: 0.9rem !important;
         font-weight: 600 !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.15) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.15) !important;
         margin-top: 0.8rem !important;
     }
     
     .cart-button:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.2) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.2) !important;
     }
     
     /* Footer styling */
@@ -471,7 +471,7 @@ st.markdown("""
         position: relative;
         z-index: 1;
         padding: 2rem 0;
-        border-top: 1px solid rgba(255, 107, 149, 0.1);
+        border-top: 1px solid rgba(255, 140, 66, 0.1);
     }
     
     .footer-paw {
@@ -529,15 +529,15 @@ st.markdown("""
     /* Search bar styling */
     .stTextInput > div > div > input {
         border-radius: 30px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
         padding: 1rem 1.5rem !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
         transition: all 0.3s ease !important;
     }
     
     .stTextInput > div > div > input:focus {
-        border: 1px solid rgba(255, 107, 149, 0.8) !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+        border: 1px solid rgba(255, 140, 66, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.1) !important;
     }
 </style>
 """, unsafe_allow_html=True)
