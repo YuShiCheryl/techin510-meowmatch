@@ -6,16 +6,16 @@ enableCORS = false
 enableXsrfProtection = false
 
 [theme]
-# 主题颜色
-primaryColor = "#FF6B95"
-backgroundColor = "#FFFAF9"
+# 主题颜色 - 改为橙色系
+primaryColor = "#FF8C42"           # 主橙色（原来是 #FF6B95 粉色）
+backgroundColor = "#FFFBF7"        # 背景色改为浅橙色（原来是 #FFFAF9 粉色背景）
 secondaryBackgroundColor = "#FFFFFF"
 textColor = "#444444"
 font = "Poppins"
 
 # 组件样式
 [theme.button]
-backgroundColor = "#FF6B95"
+backgroundColor = "#FF8C42"        # 按钮背景改为橙色（原来是 #FF6B95 粉色）
 textColor = "#FFFFFF"
 borderRadius = "30px"
 
