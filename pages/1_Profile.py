@@ -4,14 +4,25 @@ import pandas as pd
 from datetime import datetime, date
 import base64
 import io
-from session_utils import init_session_state, get_user_profile, update_user_profile
+from session_utils import init_session_state, get_user_profile, update_user_profile, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
     page_title="Pet Profile - MeowMatch",
     page_icon="M",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
+
+# Add hidden navigation bar CSS
+st.markdown("""
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
+
 
 # Initialize session state
 init_session_state()
@@ -28,7 +39,7 @@ def create_placeholder_image(width, height, color):
     return Image.new('RGB', (width, height), color)
 
 # Pet profile image
-pet_image = create_placeholder_image(300, 300, '#FFE6E6')
+pet_image = create_placeholder_image(300, 300, '#FFE5D4')
 
 # Custom CSS
 st.markdown("""
@@ -47,12 +58,12 @@ st.markdown("""
     
     /* Main background and container styling */
     .stApp {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
     }
     
     /* Main content container */
     .main .block-container {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
         padding: 3rem;
         max-width: 1200px;
         margin: 0 auto;
@@ -73,26 +84,26 @@ st.markdown("""
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 2px solid #FF6B95;
-        background-color: #FFE0E6;
+        border: 2px solid #FF8C42;
+        background-color: #FFE5D4;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
         overflow: hidden;
     }
     
     .profile-avatar:hover {
         transform: scale(1.08);
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.3);
     }
     
     .profile-icon {
         font-size: 24px;
-        color: #FF6B95;
+        color: #FF8C42;
     }
     
     .profile-avatar img {
@@ -102,21 +113,26 @@ st.markdown("""
         border-radius: 50%;
     }
     
-    /* Back button */
-    .back-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #666666;
-        text-decoration: none;
-        margin-bottom: 1.5rem;
-        transition: all 0.3s ease;
-        font-weight: 500;
+    /* Back button styling for Streamlit - 改为橙色样式 */
+    .back-button-streamlit .stButton button {
+        background: transparent !important;
+        color: #666666 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
     }
-    
-    .back-button:hover {
-        color: #FF6B95;
-        transform: translateX(-3px);
+
+    .back-button-streamlit .stButton button:hover {
+        color: #FF8C42 !important;
+        transform: translateX(-3px) !important;
+        background: rgba(255, 140, 66, 0.05) !important;
     }
     
     /* Page header */
@@ -131,7 +147,7 @@ st.markdown("""
         font-size: 2.8rem;
         font-weight: 800;
         margin-bottom: 0.5rem;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -147,21 +163,21 @@ st.markdown("""
     .section-container {
         background: #FFFFFF;
         border-radius: 20px;
-        box-shadow: 0 8px 30px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 30px rgba(255, 140, 66, 0.1);
         margin: 2rem 0;
         overflow: hidden;
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         transition: all 0.3s ease;
     }
     
     .section-container:hover {
-        box-shadow: 0 12px 40px rgba(255, 107, 149, 0.15);
+        box-shadow: 0 12px 40px rgba(255, 140, 66, 0.15);
         transform: translateY(-5px);
     }
     
     /* Section header */
     .section-header {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         padding: 1.5rem 2rem;
         position: relative;
     }
@@ -180,12 +196,12 @@ st.markdown("""
     
     /* Stat card */
     .stat-card {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
         padding: 1.5rem;
         border-radius: 15px;
         text-align: center;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.08);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.08);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         height: 100%;
         transition: all 0.3s ease;
         position: relative;
@@ -199,7 +215,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         transform: scaleX(0);
         transform-origin: right;
         transition: transform 0.4s ease;
@@ -207,7 +223,7 @@ st.markdown("""
     
     .stat-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 30px rgba(255, 140, 66, 0.12);
     }
     
     .stat-card:hover::after {
@@ -216,7 +232,7 @@ st.markdown("""
     }
     
     .stat-number {
-        color: #FF6B95;
+        color: #FF8C42;
         font-size: 2.2rem;
         font-weight: 800;
         line-height: 1.2;
@@ -234,29 +250,96 @@ st.markdown("""
     .stNumberInput > div > div > input,
     .stTextArea > div > div > textarea {
         border-radius: 10px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
         padding: 0.75rem 1rem !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
         transition: all 0.3s ease !important;
     }
     
     .stTextInput > div > div > input:focus,
     .stNumberInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus {
-        border: 1px solid rgba(255, 107, 149, 0.8) !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+        border: 1px solid rgba(255, 140, 66, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.1) !important;
     }
     
     .stSelectbox > div > div > div,
     .stDateInput > div > div > div,
     .stMultiselect > div > div > div {
         border-radius: 10px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
     }
     
     .stDateInput > div > div > div {
         padding: 0.3rem 1rem !important;
+    }
+    
+    /* Slider styling - 橙色主题 */
+    .stSlider > div > div > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    .stSlider > div > div > div > div[data-baseweb="slider"] > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    .stSlider > div > div > div > div[data-baseweb="slider"] > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    /* Activity level select slider 橙色主题 */
+    div[data-testid="stSelectSlider"] > div > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    /* Select slider track 橙色主题 */
+    .stSelectSlider > div > div > div > div {
+        background-color: #FF8C42 !important;
+    }
+    
+    /* Select slider thumb 橙色主题 */
+    .stSelectSlider div[role="slider"] {
+        background-color: #FF8C42 !important;
+        border-color: #FF8C42 !important;
+    }
+    
+    /* Button styling - 更新为橙色渐变按钮 */
+    .stButton button {
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
+        color: white !important;
+        border-radius: 30px !important;
+        padding: 0.8rem 2.8rem !important;
+        font-weight: 600 !important;
+        border: none !important;
+        transition: all 0.3s ease !important;
+        position: relative !important;
+        z-index: 1 !important;
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2) !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3) !important;
+    }
+    
+    .stButton button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #FFB380 0%, #FF8C42 100%);
+        border-radius: 30px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+    }
+    
+    .stButton button:hover::after {
+        opacity: 1;
     }
     
     /* Health conditions styling */
@@ -277,7 +360,7 @@ st.markdown("""
     }
     
     .health-condition-item:hover {
-        background-color: rgba(255, 107, 149, 0.05);
+        background-color: rgba(255, 140, 66, 0.05);
     }
     
     /* Success message styling */
@@ -328,31 +411,13 @@ if 'form_data' not in st.session_state:
     st.session_state.form_data = user_profile.copy()
 
 # Profile Avatar (with uploaded image if available)
-if user_profile.get('profile_image_base64'):
-    profile_avatar_html = f"""
-    <div class="profile-container">
-        <a href="/" class="profile-avatar" target="_self">
-            <img src="{user_profile['profile_image_base64']}" alt="Profile">
-        </a>
-    </div>
-    """
-else:
-    profile_avatar_html = """
-    <div class="profile-container">
-        <a href="/" class="profile-avatar" target="_self">
-            <span class="profile-icon">M</span>
-        </a>
-    </div>
-    """
+st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
-st.markdown(profile_avatar_html, unsafe_allow_html=True)
-
-# Back button
-st.markdown("""
-<a href="/" class="back-button">
-    <span>←</span> Back to Home
-</a>
-""", unsafe_allow_html=True)
+# Back button - 改为和其他页面一样的Streamlit按钮样式
+st.markdown('<div class="back-button-streamlit">', unsafe_allow_html=True)
+if st.button("← Back to Home", key="back_home"):
+    st.switch_page("app.py")
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Page header
 st.markdown(f"""
@@ -389,9 +454,9 @@ col1, col2 = st.columns([1, 2], gap="large")
 with col1:
     # Display current profile image or placeholder
     if st.session_state.form_data.get('profile_image'):
-        st.image(st.session_state.form_data['profile_image'], use_column_width=True)
+        st.image(st.session_state.form_data['profile_image'], use_container_width=True)
     else:
-        st.image(pet_image, use_column_width=True, output_format="PNG")
+        st.image(pet_image, use_container_width=True, output_format="PNG")
     
     uploaded_file = st.file_uploader("Choose a photo", type=['png', 'jpg', 'jpeg'], key="profile_pic")
     
@@ -401,7 +466,7 @@ with col1:
         image_base64 = pil_to_base64(image)
         st.session_state.form_data['profile_image'] = image
         st.session_state.form_data['profile_image_base64'] = image_base64
-        st.image(image, caption='New Profile Picture (Click Save to apply)', use_column_width=True)
+        st.image(image, caption='New Profile Picture (Click Save to apply)', use_container_width=True)
         
 with col2:
     col_a, col_b = st.columns(2)
@@ -445,8 +510,12 @@ with col2:
             "Birman", "Norwegian Forest Cat", "Sphinx", "Munchkin", "Other"
         ]
         
+        # 处理breed的默认值
+        current_breed = st.session_state.form_data.get('breed', '')
+        if current_breed == '-' or not current_breed:
+            current_breed = "Persian"  # 设置默认品种
+        
         # Check if current breed is in options, if not add it
-        current_breed = st.session_state.form_data['breed']
         if current_breed not in breed_options:
             breed_options.insert(-1, current_breed)  # Insert before "Other"
         
@@ -471,7 +540,11 @@ with col2:
         
         # Gender input
         gender_options = ["Male", "Female"]
-        current_gender_index = gender_options.index(st.session_state.form_data['gender']) if st.session_state.form_data['gender'] in gender_options else 0
+        current_gender = st.session_state.form_data.get('gender', 'Male')
+        if current_gender == '-' or current_gender not in gender_options:
+            current_gender = "Male"  # 默认值
+        
+        current_gender_index = gender_options.index(current_gender)
         
         new_gender = st.selectbox(
             "Gender", 
@@ -596,18 +669,29 @@ with diet_col2:
     st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Activity Level</p>', unsafe_allow_html=True)
     activity_options = ["Very Low", "Low", "Moderate", "High", "Very High"]
     
+    # 处理activity_level的默认值
+    current_activity = st.session_state.form_data.get('activity_level', 'Moderate')
+    if not current_activity or current_activity not in activity_options:
+        current_activity = "Moderate"
+    
     new_activity = st.select_slider(
         "",
         options=activity_options,
-        value=st.session_state.form_data['activity_level'],
+        value=current_activity,
         label_visibility="collapsed"
     )
     st.session_state.form_data['activity_level'] = new_activity
     
     st.markdown('<p style="font-weight: 600; margin: 1.5rem 0 0.5rem 0;">Special Dietary Notes</p>', unsafe_allow_html=True)
+    
+    # 处理special_notes的默认值
+    current_notes = st.session_state.form_data.get('special_notes', '')
+    if current_notes == '-':
+        current_notes = ''  # 将'-'替换为空字符串
+    
     new_notes = st.text_area(
         "", 
-        value=st.session_state.form_data.get('special_notes', ''),
+        value=current_notes,
         placeholder="Add any special dietary requirements or preferences...", 
         height=120, 
         label_visibility="collapsed"
@@ -635,7 +719,7 @@ with col2:
         for key, value in st.session_state.form_data.items():
             update_user_profile(key, value)
         
-        st.markdown('<div class="success-message">✅ Profile saved successfully!</div>', unsafe_allow_html=True)
+        st.markdown('<div class="success-message">✅ Profile saved successfully and synced to browser!</div>', unsafe_allow_html=True)
         st.balloons()
         
         # Reset form data to match saved data

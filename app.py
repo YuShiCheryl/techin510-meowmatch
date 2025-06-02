@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import pandas as pd
-from session_utils import init_session_state, get_user_profile, get_pet_display_info
+from session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
@@ -27,10 +27,10 @@ def create_placeholder_image(width, height, color):
     return img
 
 # Create sample images
-hero_image = create_placeholder_image(800, 400, '#FFE6E6')
-product_image1 = create_placeholder_image(300, 300, '#FFE6E6')
-product_image2 = create_placeholder_image(300, 300, '#FFCCD5')
-product_image3 = create_placeholder_image(300, 300, '#FFD6E0')
+hero_image = create_placeholder_image(800, 400, '#FFE5D4')     # 浅橙色
+product_image1 = create_placeholder_image(300, 300, '#FFE5D4') # 浅橙色
+product_image2 = create_placeholder_image(300, 300, '#FFEAD6') # 更浅的橙色
+product_image3 = create_placeholder_image(300, 300, '#FFF0E6') # 极浅橙色
 
 # Sample cat food data
 sample_food_data = {
@@ -58,12 +58,12 @@ st.markdown("""
     
     /* Main background and container styling */
     .stApp {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
     }
     
     /* Main content container */
     .main .block-container {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
         padding: 3rem;
         padding-top: 6rem;
         max-width: 1200px;
@@ -85,25 +85,33 @@ st.markdown("""
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 2px solid #FF6B95;
-        background-color: #FFE0E6;
+        border: 2px solid #FF8C42;
+        background-color: #FFE5D4;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
+        overflow: hidden;
     }
     
     .profile-avatar:hover {
         transform: scale(1.08);
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.3);
     }
     
     .profile-icon {
         font-size: 24px;
-        color: #FF6B95;
+        color: #FF8C42;
+    }
+    
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
     }
 
     /* Add top margin to the first section */
@@ -112,8 +120,8 @@ st.markdown("""
         position: relative;
         overflow: hidden;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(255, 107, 149, 0.1);
-        background: linear-gradient(135deg, #FFF9F9 0%, #FFE6EC 100%);
+        box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
+        background: linear-gradient(135deg, #FFFBF7 0%, #FFE8D9 100%);
         padding: 2rem;
     }
     
@@ -125,7 +133,7 @@ st.markdown("""
     .hero-image {
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.15);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.15);
         transform: perspective(1000px) rotateY(-5deg);
         transition: all 0.5s ease;
     }
@@ -136,15 +144,15 @@ st.markdown("""
 
     /* Feature card styling */
     .feature-card {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
         padding: 2rem;
         border-radius: 20px;
         margin: 1.5rem 0;
         transition: all 0.4s ease;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.08);
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.08);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
     }
     
     .feature-card::before {
@@ -154,13 +162,13 @@ st.markdown("""
         right: 0;
         width: 120px;
         height: 120px;
-        background: linear-gradient(45deg, transparent 50%, rgba(255, 107, 149, 0.1) 50%);
+        background: linear-gradient(45deg, transparent 50%, rgba(255, 140, 66, 0.1) 50%);
         border-radius: 0 0 0 100%;
     }
     
     .feature-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 30px rgba(255, 140, 66, 0.12);
     }
     
     /* Title styling */
@@ -173,7 +181,7 @@ st.markdown("""
         letter-spacing: -1px;
         position: relative;
         z-index: 1;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         line-height: 1.2;
@@ -198,7 +206,7 @@ st.markdown("""
     
     /* Button styling */
     .stButton button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
         color: white !important;
         border-radius: 30px !important;
         padding: 0.8rem 2.8rem !important;
@@ -207,13 +215,13 @@ st.markdown("""
         transition: all 0.3s ease !important;
         position: relative !important;
         z-index: 1 !important;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2) !important;
         letter-spacing: 0.5px !important;
     }
     
     .stButton button:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3) !important;
     }
     
     .stButton button::after {
@@ -223,7 +231,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, #FF9EB5 0%, #FF6B95 100%);
+        background: linear-gradient(90deg, #FFB380 0%, #FF8C42 100%);
         border-radius: 30px;
         opacity: 0;
         z-index: -1;
@@ -231,6 +239,49 @@ st.markdown("""
     }
     
     .stButton button:hover::after {
+        opacity: 1;
+    }
+    
+    /* Feature buttons - Streamlit按钮样式，保持HTML按钮的外观 */
+    .feature-button-streamlit .stButton button {
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%) !important;
+        color: #FF8C42 !important;
+        border: 2px solid #FF8C42 !important;
+        border-radius: 18px !important;
+        padding: 1.2rem 2.5rem !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        transition: all 0.4s ease !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.08) !important;
+        min-width: 220px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        z-index: 1 !important;
+        letter-spacing: 0.5px !important;
+        width: 100% !important;
+    }
+
+    .feature-button-streamlit .stButton button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
+        border-radius: 18px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+    }
+
+    .feature-button-streamlit .stButton button:hover {
+        color: #FFFFFF !important;
+        transform: translateY(-5px) !important;
+        box-shadow: 0 12px 25px rgba(255, 140, 66, 0.15) !important;
+    }
+    
+    .feature-button-streamlit .stButton button:hover::after {
         opacity: 1;
     }
     
@@ -260,8 +311,8 @@ st.markdown("""
         text-align: center;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         margin: 1.5rem 0;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.08);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.08);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         position: relative;
         overflow: hidden;
     }
@@ -273,7 +324,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 5px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         transform: scaleX(0);
         transform-origin: right;
         transition: transform 0.4s ease;
@@ -281,7 +332,7 @@ st.markdown("""
     
     .product-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 35px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 35px rgba(255, 140, 66, 0.12);
     }
     
     .product-card:hover::after {
@@ -293,7 +344,7 @@ st.markdown("""
         border-radius: 12px;
         margin-bottom: 1.5rem;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.1);
         transition: all 0.4s ease;
     }
     
@@ -309,7 +360,7 @@ st.markdown("""
     }
     
     .product-price {
-        color: #FF6B95;
+        color: #FF8C42;
         font-size: 1.4rem;
         font-weight: 800;
         letter-spacing: 0.5px;
@@ -327,13 +378,13 @@ st.markdown("""
         position: absolute;
         top: 1rem;
         right: 1rem;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         color: white;
         font-size: 0.85rem;
         font-weight: 600;
         padding: 0.4rem 1rem;
         border-radius: 20px;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
         letter-spacing: 0.5px;
     }
     
@@ -355,11 +406,11 @@ st.markdown("""
         left: 0;
         width: 80px;
         height: 4px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         border-radius: 2px;
     }
     
-    /* Feature buttons */
+    /* Feature buttons container */
     .feature-buttons {
         display: flex;
         justify-content: center;
@@ -369,61 +420,45 @@ st.markdown("""
         flex-wrap: wrap;
     }
 
-    .feature-button {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%) !important;
-        color: #FF6B95 !important;
-        border: 2px solid #FF6B95 !important;
-        border-radius: 18px;
-        padding: 1.2rem 2.5rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        transition: all 0.4s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.8rem;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.08);
-        min-width: 220px;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-        z-index: 1;
-    }
-
-    .feature-button::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
-        z-index: -1;
-        transition: opacity 0.3s ease;
-        opacity: 0;
-    }
-
-    .feature-button:hover {
-        color: #FFFFFF !important;
-        transform: translateY(-5px);
-        box-shadow: 0 12px 25px rgba(255, 107, 149, 0.15);
+    /* Animation for elements */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
     }
     
-    .feature-button:hover::after {
-        opacity: 1;
-    }
-
-    .feature-button-icon {
-        font-size: 1.4rem;
-        transition: transform 0.3s ease;
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     
-    .feature-button:hover .feature-button-icon {
-        transform: scale(1.2);
+    /* Section headings */
+    h2, h3 {
+        color: #444444 !important;
+        font-weight: 700 !important;
     }
-
-    .feature-button-text {
-        letter-spacing: 0.5px;
+    
+    /* Add to cart button */
+    .cart-button {
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 25px !important;
+        padding: 0.6rem 1.5rem !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.15) !important;
+        margin-top: 0.8rem !important;
+    }
+    
+    .cart-button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.2) !important;
     }
     
     /* Footer styling */
@@ -436,7 +471,7 @@ st.markdown("""
         position: relative;
         z-index: 1;
         padding: 2rem 0;
-        border-top: 1px solid rgba(255, 107, 149, 0.1);
+        border-top: 1px solid rgba(255, 140, 66, 0.1);
     }
     
     .footer-paw {
@@ -491,82 +526,25 @@ st.markdown("""
         }
     }
     
-    /* Add to cart button */
-    .cart-button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 25px !important;
-        padding: 0.6rem 1.5rem !important;
-        font-size: 0.9rem !important;
-        font-weight: 600 !important;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.15) !important;
-        margin-top: 0.8rem !important;
-    }
-    
-    .cart-button:hover {
-        transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.2) !important;
-    }
-    
-    /* Animation for elements */
-    .fade-in {
-        animation: fadeIn 0.5s ease-in;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    /* Section headings */
-    h2, h3 {
-        color: #444444 !important;
-        font-weight: 700 !important;
-    }
-    
     /* Search bar styling */
     .stTextInput > div > div > input {
         border-radius: 30px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
         padding: 1rem 1.5rem !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
         transition: all 0.3s ease !important;
     }
     
     .stTextInput > div > div > input:focus {
-        border: 1px solid rgba(255, 107, 149, 0.8) !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+        border: 1px solid rgba(255, 140, 66, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.1) !important;
     }
 </style>
-
-<!-- Profile Avatar -->
-<div class="profile-container">
-    <a href="Profile" class="profile-avatar" target="_self">
-        <span class="profile-icon">M</span>
-    </a>
-</div>
-
-<!-- Add background decorations -->
-<div class="bg-decoration">
-    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <defs>
-            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FFE6EC;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#FFF9F9;stop-opacity:1" />
-            </linearGradient>
-        </defs>
-        <path d="M0,0 C30,20 70,20 100,0 L100,100 L0,100 Z" fill="url(#grad1)"/>
-    </svg>
-</div>
 """, unsafe_allow_html=True)
+
+# Initialize session state and display dynamic avatar
+init_session_state()
+st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
 # Hero Section
 col1, col2 = st.columns([1, 1])
@@ -581,33 +559,44 @@ with col1:
 
 with col2:
     st.markdown('<div class="hero-image">', unsafe_allow_html=True)
-    st.image(hero_image, use_column_width=True)
+    st.image(hero_image, use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Feature Buttons
-st.markdown("""
-<div class="feature-buttons fade-in">
-    <a href="/Search" class="feature-button">
-        <span class="feature-button-icon">🔍</span>
-        <span class="feature-button-text">Search by Ingredient</span>
-    </a>
-    <a href="/Compare" class="feature-button">
-        <span class="feature-button-icon">⚖️</span>
-        <span class="feature-button-text">Compare Products</span>
-    </a>
-</div>
-""", unsafe_allow_html=True)
+# Feature Buttons - 改为Streamlit按钮但保持原有样式
+st.markdown('<div class="feature-buttons fade-in">', unsafe_allow_html=True)
+
+feature_col1, feature_col2, feature_col3 = st.columns(3, gap="large")
+
+with feature_col1:
+    st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
+    if st.button("Search by Ingredient", key="search_btn", use_container_width=True):
+        st.switch_page("pages/2_Search.py")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with feature_col2:
+    st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
+    if st.button("Compare Products", key="compare_btn", use_container_width=True):
+        st.switch_page("pages/3_Compare.py")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with feature_col3:
+    st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
+    if st.button("Custom Recommendations", key="recommend_btn", use_container_width=True):
+        st.switch_page("pages/4_Recommendations.py")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Recommendations Section
-st.markdown('<h2 class="section-header fade-in">Recommended for Your Cat</h2>', unsafe_allow_html=True)
+st.markdown('<h2 class="section-header fade-in">Your Cat Will Love These</h2>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
     rec_col1, rec_col2, rec_col3 = st.columns(3)
     
     with rec_col1:
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image1, use_column_width=True)
+        st.image(product_image1, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
@@ -620,7 +609,7 @@ with st.container():
         
     with rec_col2:
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image2, use_column_width=True)
+        st.image(product_image2, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
@@ -633,7 +622,7 @@ with st.container():
         
     with rec_col3:
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image3, use_column_width=True)
+        st.image(product_image3, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="product-card">
@@ -679,7 +668,7 @@ for idx, product in enumerate(popular_products):
     with pop_cols[idx]:
         st.markdown('<div class="product-card fade-in">', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product["image"], use_column_width=True)
+        st.image(product["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f"""
         <div class="product-title">{product['name']}</div>
@@ -722,7 +711,7 @@ for idx, product in enumerate(new_arrivals):
         if product["is_new"]:
             st.markdown('<span class="badge">New</span>', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product["image"], use_column_width=True)
+        st.image(product["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f"""
         <div class="product-title">{product['name']}</div>
@@ -739,7 +728,7 @@ why_cols = st.columns(3)
 with why_cols[0]:
     st.markdown("""
     <div class="feature-card fade-in">
-        <div class="feature-title">🌿 Quality Ingredients</div>
+        <div class="feature-title">Quality Ingredients</div>
         <p class="feature-description">We carefully select products with natural, high-quality ingredients that support your cat's health and wellbeing.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -747,7 +736,7 @@ with why_cols[0]:
 with why_cols[1]:
     st.markdown("""
     <div class="feature-card fade-in">
-        <div class="feature-title">🔬 Nutrition Experts</div>
+        <div class="feature-title">Nutrition Experts</div>
         <p class="feature-description">Our recommendations are backed by feline nutrition experts to ensure optimal health for your furry friend.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -755,7 +744,7 @@ with why_cols[1]:
 with why_cols[2]:
     st.markdown("""
     <div class="feature-card fade-in">
-        <div class="feature-title">❤️ Personalized Care</div>
+        <div class="feature-title">Personalized Care</div>
         <p class="feature-description">Get tailored food suggestions based on your cat's age, weight, health conditions, and taste preferences.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -763,6 +752,6 @@ with why_cols[2]:
 # Footer
 st.markdown("""
 <div class="footer fade-in">
-    <p>© 2024 MeowMatch | All rights reserved | Made with ❤️ for cats everywhere</p>
+    <p>© 2025 MeowMatch | All rights reserved | Purr-fect nutrition, purr-fect love</p>
 </div>
 """, unsafe_allow_html=True)

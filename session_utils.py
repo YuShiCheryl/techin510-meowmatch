@@ -7,12 +7,12 @@ def init_session_state():
     # User profile data
     if 'user_profile' not in st.session_state:
         st.session_state.user_profile = {
-            'pet_name': '',
+            'pet_name': '🐱',
             'breed': '',
             'gender': '',
             'age': 0,
-            'weight': 10,
-            'birthday': date(2019, 5, 15),
+            'weight': 0,
+            'birthday': date(2025, 5, 1),
             'activity_level': 'Moderate',
             'favorite_flavors': [],
             'allergies': [],

@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
-from session_utils import init_session_state, get_user_profile, get_pet_display_info
+from session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
@@ -10,6 +10,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# Initialize session state
+init_session_state()
 
 # Add hidden navigation bar CSS
 st.markdown("""
@@ -25,11 +28,11 @@ def create_placeholder_image(width, height, color):
     img = Image.new('RGB', (width, height), color)
     return img
 
-# Create sample images
-product_image1 = create_placeholder_image(300, 300, '#FFE6E6')
-product_image2 = create_placeholder_image(300, 300, '#FFCCD5')
-product_image3 = create_placeholder_image(300, 300, '#FFD6E0')
-product_image4 = create_placeholder_image(300, 300, '#FFC8DD')
+# Create sample images - 改为橙色系
+product_image1 = create_placeholder_image(300, 300, '#FFE5D4')
+product_image2 = create_placeholder_image(300, 300, '#FFEAD6')
+product_image3 = create_placeholder_image(300, 300, '#FFF0E6')
+product_image4 = create_placeholder_image(300, 300, '#FFF2E8')
 
 # Sample cat food data
 sample_food_data = {
@@ -108,12 +111,12 @@ st.markdown("""
     
     /* Main background and container styling */
     .stApp {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
     }
     
     /* Main content container */
     .main .block-container {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
         padding: 3rem;
         max-width: 1200px;
         margin: 0 auto;
@@ -134,42 +137,55 @@ st.markdown("""
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 2px solid #FF6B95;
-        background-color: #FFE0E6;
+        border: 2px solid #FF8C42;
+        background-color: #FFE5D4;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
+        overflow: hidden;
     }
     
     .profile-avatar:hover {
         transform: scale(1.08);
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.3);
     }
     
     .profile-icon {
         font-size: 24px;
-        color: #FF6B95;
+        color: #FF8C42;
     }
     
-    /* Back button */
-    .back-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #666666;
-        text-decoration: none;
-        margin-bottom: 1.5rem;
-        transition: all 0.3s ease;
-        font-weight: 500;
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
     }
     
-    .back-button:hover {
-        color: #FF6B95;
-        transform: translateX(-3px);
+    /* Back button styling for Streamlit */
+    .back-button-streamlit .stButton button {
+        background: transparent !important;
+        color: #666666 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .back-button-streamlit .stButton button:hover {
+        color: #FF8C42 !important;
+        transform: translateX(-3px) !important;
+        background: rgba(255, 140, 66, 0.05) !important;
     }
     
     /* Main title styling */
@@ -182,7 +198,7 @@ st.markdown("""
         letter-spacing: -1px;
         position: relative;
         z-index: 1;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         line-height: 1.2;
@@ -200,19 +216,19 @@ st.markdown("""
     
     /* Comparison container */
     .comparison-container {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
         padding: 2.5rem;
         border-radius: 20px;
         margin: 2rem 0;
-        box-shadow: 0 10px 30px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         transition: all 0.3s ease;
     }
     
     .comparison-container:hover {
-        box-shadow: 0 15px 40px rgba(255, 107, 149, 0.15);
+        box-shadow: 0 15px 40px rgba(255, 140, 66, 0.15);
         transform: translateY(-5px);
     }
     
@@ -223,7 +239,7 @@ st.markdown("""
         right: 0;
         width: 150px;
         height: 150px;
-        background: linear-gradient(45deg, transparent 50%, rgba(255, 107, 149, 0.05) 50%);
+        background: linear-gradient(45deg, transparent 50%, rgba(255, 140, 66, 0.05) 50%);
         border-radius: 0 0 0 100%;
     }
     
@@ -235,8 +251,8 @@ st.markdown("""
         text-align: center;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         margin: 1.5rem 0;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.08);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.08);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         position: relative;
         overflow: hidden;
         height: 100%;
@@ -249,7 +265,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 5px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         transform: scaleX(0);
         transform-origin: right;
         transition: transform 0.4s ease;
@@ -257,7 +273,7 @@ st.markdown("""
     
     .product-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 35px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 35px rgba(255, 140, 66, 0.12);
     }
     
     .product-card:hover::after {
@@ -269,7 +285,7 @@ st.markdown("""
         border-radius: 12px;
         margin-bottom: 1.5rem;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.1);
         transition: all 0.4s ease;
     }
     
@@ -285,7 +301,7 @@ st.markdown("""
     }
     
     .product-price {
-        color: #FF6B95;
+        color: #FF8C42;
         font-size: 1.4rem;
         font-weight: 800;
         letter-spacing: 0.5px;
@@ -300,34 +316,34 @@ st.markdown("""
     
     /* Button styling */
     .stButton button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
         color: white !important;
         border-radius: 30px !important;
         padding: 0.7rem 2.5rem !important;
         font-weight: 600 !important;
         border: none !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2) !important;
         letter-spacing: 0.5px !important;
     }
     
     .stButton button:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3) !important;
     }
     
     /* Selectbox styling */
     .stSelectbox > div > div > div {
         border-radius: 30px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
         padding: 0.3rem 1.5rem !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
         transition: all 0.3s ease !important;
     }
     
     .stSelectbox > div > div > div:focus {
-        border: 1px solid rgba(255, 107, 149, 0.8) !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+        border: 1px solid rgba(255, 140, 66, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.1) !important;
     }
     
     /* Comparison table styling */
@@ -335,25 +351,25 @@ st.markdown("""
         background: #FFFFFF;
         border-radius: 18px;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.08);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.08);
         margin: 2rem 0;
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
     }
     
     .comparison-table th {
-        background: linear-gradient(90deg, #FFF5F7 0%, #FFFFFF 100%);
+        background: linear-gradient(90deg, #FFF8F3 0%, #FFFFFF 100%);
         color: #666666;
         font-size: 1.1rem;
         font-weight: 600;
         padding: 1.2rem 1.5rem;
         text-align: left;
-        border-bottom: 2px solid rgba(255, 107, 149, 0.1);
+        border-bottom: 2px solid rgba(255, 140, 66, 0.1);
     }
     
     .comparison-table td {
         padding: 1.2rem 1.5rem;
         font-size: 1rem;
-        border-bottom: 1px solid rgba(255, 107, 149, 0.1);
+        border-bottom: 1px solid rgba(255, 140, 66, 0.1);
         color: #444444;
     }
     
@@ -362,7 +378,7 @@ st.markdown("""
     }
     
     .comparison-table tr:hover td {
-        background-color: rgba(255, 107, 149, 0.03);
+        background-color: rgba(255, 140, 66, 0.03);
     }
     
     /* Highlight styling */
@@ -375,8 +391,8 @@ st.markdown("""
     }
     
     .highlight-worse {
-        background-color: rgba(255, 107, 149, 0.1);
-        color: #FF6B95;
+        background-color: rgba(255, 140, 66, 0.1);
+        color: #FF8C42;
         font-weight: 600;
         padding: 0.2rem 0.5rem;
         border-radius: 4px;
@@ -400,15 +416,15 @@ st.markdown("""
         left: 0;
         width: 60px;
         height: 3px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         border-radius: 2px;
     }
     
     /* Feature badges */
     .feature-badge {
         display: inline-block;
-        background: rgba(255, 107, 149, 0.1);
-        color: #FF6B95;
+        background: rgba(255, 140, 66, 0.1);
+        color: #FF8C42;
         font-size: 0.85rem;
         font-weight: 600;
         padding: 0.4rem 1rem;
@@ -440,7 +456,7 @@ st.markdown("""
 
     /* 项目符号颜色控制 */
     .ingredients-list li::marker {
-        color: #FF6B95 !important;  /* 粉色符号 */
+        color: #FF8C42 !important;  /* 橙色符号 */
     }
 
     /* Pros/Cons box */
@@ -449,8 +465,8 @@ st.markdown("""
         border-radius: 15px;
         padding: 1.5rem;
         margin: 1rem 0;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.08);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.08);
+        border: 1px solid rgba(255, 140, 66, 0.1);
     }
     
     .pros-title {
@@ -463,7 +479,7 @@ st.markdown("""
     }
     
     .cons-title {
-        color: #FF6B95 !important; /* 添加 !important 确保覆盖 */
+        color: #FF8C42 !important; /* 改为橙色 */
         font-weight: 700;
         margin: 1.2rem 0 0.8rem 0;
         display: flex;
@@ -485,17 +501,17 @@ st.markdown("""
     
     /* Recommendation box */
     .recommendation-box {
-        background: linear-gradient(135deg, #FFF5F7 0%, #FFFFFF 100%);
+        background: linear-gradient(135deg, #FFF8F3 0%, #FFFFFF 100%);
         border-radius: 15px;
         padding: 2rem;
         margin: 2rem 0;
-        box-shadow: 0 8px 30px rgba(255, 107, 149, 0.1);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 30px rgba(255, 140, 66, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         position: relative;
     }
     
     .recommendation-title {
-        color: #FF6B95;
+        color: #FF8C42;
         font-size: 1.3rem;
         font-weight: 700;
         margin-bottom: 1rem;
@@ -511,7 +527,7 @@ st.markdown("""
         transform: translateY(-50%);
         width: 4px;
         height: 80%;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         border-radius: 2px;
     }
     
@@ -536,21 +552,17 @@ st.markdown("""
         }
     }
 </style>
-
-<!-- Profile Avatar -->
-<div class="profile-container">
-    <a href="Profile" class="profile-avatar" target="_self">
-        <span class="profile-icon">M</span>
-    </a>
-</div>
 """, unsafe_allow_html=True)
 
-# Back button
-st.markdown("""
-<a href="/" class="back-button">
-    <span>←</span> Back to Home
-</a>
-""", unsafe_allow_html=True)
+# Initialize session state and display dynamic avatar
+init_session_state()
+st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
+
+# Back button - 改为Streamlit按钮
+st.markdown('<div class="back-button-streamlit">', unsafe_allow_html=True)
+if st.button("← Back to Home", key="back_home"):
+    st.switch_page("app.py")
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Page title
 st.markdown('<h1 class="main-title fade-in">Compare Cat Food Products</h1>', unsafe_allow_html=True)
@@ -602,7 +614,7 @@ if compare_button or True:  # Always show for demo, in production use just compa
     with product_col1:
         st.markdown('<div class="product-card">', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product1_data["image"], use_column_width=True)
+        st.image(product1_data["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-title">{product1}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-rating">{"⭐" * int(product1_data["rating"])}{"<span style=\'color:#DDDDDD\'>☆</span>" * (5-int(product1_data["rating"]))} ({product1_data["reviews"]})</div>', unsafe_allow_html=True)
@@ -618,7 +630,7 @@ if compare_button or True:  # Always show for demo, in production use just compa
     with product_col2:
         st.markdown('<div class="product-card">', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product2_data["image"], use_column_width=True)
+        st.image(product2_data["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-title">{product2}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-rating">{"⭐" * int(product2_data["rating"])}{"<span style=\'color:#DDDDDD\'>☆</span>" * (5-int(product2_data["rating"]))} ({product2_data["reviews"]})</div>', unsafe_allow_html=True)

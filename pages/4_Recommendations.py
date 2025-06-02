@@ -2,14 +2,24 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 import random
-from session_utils import init_session_state, get_user_profile, get_pet_display_info
+from session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
 
 # Set page configuration
 st.set_page_config(
     page_title="MeowMatch - Personalized Recommendations",
     page_icon="M",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
+
+# Add hidden navigation bar CSS
+st.markdown("""
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
 
 # Initialize session state
 init_session_state()
@@ -19,13 +29,13 @@ def create_placeholder_image(width, height, color):
     img = Image.new('RGB', (width, height), color)
     return img
 
-# Create sample images
-product_image1 = create_placeholder_image(300, 300, '#FFE6E6')
-product_image2 = create_placeholder_image(300, 300, '#FFCCD5')
-product_image3 = create_placeholder_image(300, 300, '#FFD6E0')
-product_image4 = create_placeholder_image(300, 300, '#FFC8DD')
-product_image5 = create_placeholder_image(300, 300, '#FDECEF')
-product_image6 = create_placeholder_image(300, 300, '#FFE2E8')
+# Create sample images - 改为橙色系
+product_image1 = create_placeholder_image(300, 300, '#FFE5D4')
+product_image2 = create_placeholder_image(300, 300, '#FFEAD6')
+product_image3 = create_placeholder_image(300, 300, '#FFF0E6')
+product_image4 = create_placeholder_image(300, 300, '#FFF2E8')
+product_image5 = create_placeholder_image(300, 300, '#FFF4EA')
+product_image6 = create_placeholder_image(300, 300, '#FFF6EC')
 
 # Sample cat food data with more detailed attributes for filtering
 recommended_products = [
@@ -164,19 +174,24 @@ def get_filtered_recommendations(user_profile, preferences):
     # Sort by match score
     return sorted(filtered_products, key=lambda x: x['match_score'], reverse=True)
 
-# Add custom CSS
+# Add custom CSS - 改为橙色主题
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 * { font-family: 'Poppins', sans-serif; }
 
+/* 隐藏Streamlit默认UI元素 */
 #MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header { visibility: hidden; }
+.stDeployButton { display: none; }
+div[data-testid="stToolbar"] { display: none; }
 
-.stApp { background-color: #FFFAF9; }
+.stApp { background-color: #FFFBF7; }
 
 .main .block-container {
-    background-color: #FFFAF9;
+    background-color: #FFFBF7;
     padding: 3rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -196,26 +211,26 @@ st.markdown("""
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid #FF6B95;
-    background-color: #FFE0E6;
+    border: 2px solid #FF8C42;
+    background-color: #FFE5D4;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
-    box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+    box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
     overflow: hidden;
 }
 
 .profile-avatar:hover {
     transform: scale(1.08);
-    box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+    box-shadow: 0 5px 15px rgba(255, 140, 66, 0.3);
 }
 
 .profile-icon {
     font-size: 24px;
-    color: #FF6B95;
+    color: #FF8C42;
 }
 
 .profile-avatar img {
@@ -225,20 +240,26 @@ st.markdown("""
     border-radius: 50%;
 }
 
-.back-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #666666;
-    text-decoration: none;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
-    font-weight: 500;
+/* Back button styling for Streamlit */
+.back-button-streamlit .stButton button {
+    background: transparent !important;
+    color: #666666 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
 }
 
-.back-button:hover {
-    color: #FF6B95;
-    transform: translateX(-3px);
+.back-button-streamlit .stButton button:hover {
+    color: #FF8C42 !important;
+    transform: translateX(-3px) !important;
+    background: rgba(255, 140, 66, 0.05) !important;
 }
 
 .main-title {
@@ -250,7 +271,7 @@ st.markdown("""
     letter-spacing: -1px;
     position: relative;
     z-index: 1;
-    background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+    background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.2;
@@ -267,14 +288,14 @@ st.markdown("""
 }
 
 .pet-summary-card {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
     padding: 2rem;
     border-radius: 20px;
     margin: 1.5rem 0 3rem 0;
-    box-shadow: 0 10px 30px rgba(255, 107, 149, 0.1);
+    box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 107, 149, 0.1);
+    border: 1px solid rgba(255, 140, 66, 0.1);
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -287,7 +308,7 @@ st.markdown("""
     right: 0;
     width: 150px;
     height: 150px;
-    background: linear-gradient(45deg, transparent 50%, rgba(255, 107, 149, 0.05) 50%);
+    background: linear-gradient(45deg, transparent 50%, rgba(255, 140, 66, 0.05) 50%);
     border-radius: 0 0 0 100%;
 }
 
@@ -297,7 +318,7 @@ st.markdown("""
     border-radius: 60px;
     overflow: hidden;
     border: 4px solid white;
-    box-shadow: 0 8px 25px rgba(255, 107, 149, 0.15);
+    box-shadow: 0 8px 25px rgba(255, 140, 66, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -325,8 +346,8 @@ st.markdown("""
 }
 
 .pet-tag {
-    background: rgba(255, 107, 149, 0.1);
-    color: #FF6B95;
+    background: rgba(255, 140, 66, 0.1);
+    color: #FF8C42;
     font-size: 0.9rem;
     font-weight: 600;
     padding: 0.4rem 1rem;
@@ -338,8 +359,8 @@ st.markdown("""
     padding: 1.8rem;
     border-radius: 18px;
     transition: all 0.4s ease;
-    box-shadow: 0 8px 25px rgba(255, 107, 149, 0.08);
-    border: 1px solid rgba(255, 107, 149, 0.1);
+    box-shadow: 0 8px 25px rgba(255, 140, 66, 0.08);
+    border: 1px solid rgba(255, 140, 66, 0.1);
     position: relative;
     overflow: hidden;
     height: 100%;
@@ -355,7 +376,7 @@ st.markdown("""
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+    background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.4s ease;
@@ -363,7 +384,7 @@ st.markdown("""
 
 .product-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(255, 107, 149, 0.12);
+    box-shadow: 0 15px 35px rgba(255, 140, 66, 0.12);
 }
 
 .product-card:hover::after {
@@ -375,7 +396,7 @@ st.markdown("""
     position: absolute;
     top: 1.2rem;
     right: 1.2rem;
-    background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+    background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
     color: white;
     font-size: 1rem;
     font-weight: 700;
@@ -385,7 +406,7 @@ st.markdown("""
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(255, 107, 149, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.2);
     z-index: 2;
 }
 
@@ -405,7 +426,7 @@ st.markdown("""
 }
 
 .product-price {
-    color: #FF6B95;
+    color: #FF8C42;
     font-size: 1.4rem;
     font-weight: 800;
     letter-spacing: 0.5px;
@@ -434,8 +455,8 @@ st.markdown("""
 }
 
 .product-tag {
-    background: rgba(255, 107, 149, 0.1);
-    color: #FF6B95;
+    background: rgba(255, 140, 66, 0.1);
+    color: #FF8C42;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 0.3rem 0.8rem;
@@ -459,7 +480,7 @@ st.markdown("""
     left: 0;
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+    background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
     border-radius: 2px;
 }
 
@@ -467,8 +488,8 @@ st.markdown("""
     background: #FFFFFF;
     border-radius: 15px;
     padding: 1.5rem;
-    box-shadow: 0 6px 20px rgba(255, 107, 149, 0.08);
-    border: 1px solid rgba(255, 107, 149, 0.1);
+    box-shadow: 0 6px 20px rgba(255, 140, 66, 0.08);
+    border: 1px solid rgba(255, 140, 66, 0.1);
     margin-bottom: 1.5rem;
 }
 
@@ -482,16 +503,34 @@ st.markdown("""
     gap: 0.5rem;
 }
 
-.preference-icon { color: #FF6B95; }
+.preference-icon { color: #FF8C42; }
 
-.stSlider > div > div > div > div { background-color: #FF6B95 !important; }
+.stSlider > div > div > div > div { background-color: #FF8C42 !important; }
 
 .stSelectbox > div > div > div {
     border-radius: 30px !important;
-    border: 1px solid rgba(255, 107, 149, 0.3) !important;
+    border: 1px solid rgba(255, 140, 66, 0.3) !important;
     padding: 0.3rem 1.5rem !important;
-    box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
     transition: all 0.3s ease !important;
+}
+
+/* Button styling */
+.stButton button {
+    background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
+    color: white !important;
+    border-radius: 30px !important;
+    padding: 0.7rem 2.5rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2) !important;
+    letter-spacing: 0.5px !important;
+}
+
+.stButton button:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3) !important;
 }
 
 .fade-in { animation: fadeIn 0.5s ease-in; }
@@ -510,21 +549,19 @@ st.markdown("""
     position: relative;
     z-index: 1;
     padding: 2rem 0;
-    border-top: 1px solid rgba(255, 107, 149, 0.1);
+    border-top: 1px solid rgba(255, 140, 66, 0.1);
 }
 </style>
 """, unsafe_allow_html=True)
 
 # Profile Avatar
-from session_utils import get_profile_avatar_html
 st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
-# Back button
-st.markdown("""
-<a href="/" class="back-button">
-    <span>←</span> Back to Home
-</a>
-""", unsafe_allow_html=True)
+# Back button - 改为Streamlit按钮
+st.markdown('<div class="back-button-streamlit">', unsafe_allow_html=True)
+if st.button("← Back to Home", key="back_home"):
+    st.switch_page("app.py")
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Page title
 st.markdown('<h1 class="main-title fade-in">Personalized Recommendations</h1>', unsafe_allow_html=True)
@@ -538,7 +575,7 @@ pet_info = get_pet_display_info()
 if pet_info.get('profile_image_base64'):
     pet_avatar_html = f'<img src="{pet_info["profile_image_base64"]}" width="120" height="120" style="border-radius: 60px; object-fit: cover;">'
 else:
-    pet_avatar_html = '<div style="width: 120px; height: 120px; background: #FFE6E6; border-radius: 60px; display: flex; align-items: center; justify-content: center; font-size: 48px;">🐱</div>'
+    pet_avatar_html = '<div style="width: 120px; height: 120px; background: #FFE5D4; border-radius: 60px; display: flex; align-items: center; justify-content: center; font-size: 48px;">🐱</div>'
 
 st.markdown(f"""
 <div class="pet-summary-card fade-in">
@@ -642,7 +679,7 @@ with maincol:
             col1, col2 = st.columns([1, 2])
             
             with col1:
-                st.image(product["image"], use_column_width=True)
+                st.image(product["image"], use_container_width=True)
             
             with col2:
                 st.markdown(f"""
