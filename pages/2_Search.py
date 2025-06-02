@@ -25,10 +25,10 @@ def create_placeholder_image(width, height, color):
     img = Image.new('RGB', (width, height), color)
     return img
 
-# Create sample images for products
-product_image1 = create_placeholder_image(300, 300, '#FFE6E6')
-product_image2 = create_placeholder_image(300, 300, '#FFCCD5')
-product_image3 = create_placeholder_image(300, 300, '#FFD6E0')
+# Create sample images for products - 改为橙色系
+product_image1 = create_placeholder_image(300, 300, '#FFE5D4')
+product_image2 = create_placeholder_image(300, 300, '#FFEAD6')
+product_image3 = create_placeholder_image(300, 300, '#FFF0E6')
 
 # Add custom CSS for styling
 st.markdown("""
@@ -47,12 +47,12 @@ st.markdown("""
     
     /* Main background and container styling */
     .stApp {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
     }
     
     /* Main content container */
     .main .block-container {
-        background-color: #FFFAF9;
+        background-color: #FFFBF7;
         padding: 3rem;
         max-width: 1200px;
         margin: 0 auto;
@@ -73,26 +73,26 @@ st.markdown("""
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 2px solid #FF6B95;
-        background-color: #FFE0E6;
+        border: 2px solid #FF8C42;
+        background-color: #FFE5D4;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
-        box-shadow: 0 3px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 3px 10px rgba(255, 140, 66, 0.2);
         overflow: hidden;
     }
     
     .profile-avatar:hover {
         transform: scale(1.08);
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.3);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.3);
     }
     
     .profile-icon {
         font-size: 24px;
-        color: #FF6B95;
+        color: #FF8C42;
     }
     
     .profile-avatar img {
@@ -119,9 +119,9 @@ st.markdown("""
     }
 
     .back-button-streamlit .stButton button:hover {
-        color: #FF6B95 !important;
+        color: #FF8C42 !important;
         transform: translateX(-3px) !important;
-        background: rgba(255, 107, 149, 0.05) !important;
+        background: rgba(255, 140, 66, 0.05) !important;
     }
     
     /* Title styling */
@@ -134,7 +134,7 @@ st.markdown("""
         letter-spacing: -1px;
         position: relative;
         z-index: 1;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         line-height: 1.2;
@@ -152,14 +152,14 @@ st.markdown("""
     
     /* Search container */
     .search-container {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
         padding: 2.5rem;
         border-radius: 20px;
         margin: 2rem 0;
-        box-shadow: 0 10px 30px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        border: 1px solid rgba(255, 140, 66, 0.1);
     }
     
     .search-container::before {
@@ -169,7 +169,7 @@ st.markdown("""
         right: 0;
         width: 150px;
         height: 150px;
-        background: linear-gradient(45deg, transparent 50%, rgba(255, 107, 149, 0.05) 50%);
+        background: linear-gradient(45deg, transparent 50%, rgba(255, 140, 66, 0.05) 50%);
         border-radius: 0 0 0 100%;
     }
     
@@ -188,48 +188,48 @@ st.markdown("""
     /* Input fields styling */
     .stTextInput > div > div > input {
         border-radius: 30px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
         padding: 0.75rem 1.5rem !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
         transition: all 0.3s ease !important;
         font-size: 1rem !important;
     }
     
     .stTextInput > div > div > input:focus {
-        border: 1px solid rgba(255, 107, 149, 0.8) !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+        border: 1px solid rgba(255, 140, 66, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.1) !important;
     }
     
     /* Selectbox styling */
     .stSelectbox > div > div > div {
         border-radius: 30px !important;
-        border: 1px solid rgba(255, 107, 149, 0.3) !important;
+        border: 1px solid rgba(255, 140, 66, 0.3) !important;
         padding: 0.3rem 1.5rem !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
         transition: all 0.3s ease !important;
     }
     
     .stSelectbox > div > div > div:focus {
-        border: 1px solid rgba(255, 107, 149, 0.8) !important;
-        box-shadow: 0 6px 20px rgba(255, 107, 149, 0.1) !important;
+        border: 1px solid rgba(255, 140, 66, 0.8) !important;
+        box-shadow: 0 6px 20px rgba(255, 140, 66, 0.1) !important;
     }
     
     /* Button styling */
     .stButton button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
         color: white !important;
         border-radius: 30px !important;
         padding: 0.7rem 2.5rem !important;
         font-weight: 600 !important;
         border: none !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2) !important;
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2) !important;
         letter-spacing: 0.5px !important;
     }
     
     .stButton button:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3) !important;
     }
     
     /* Results section */
@@ -254,7 +254,7 @@ st.markdown("""
         left: 0;
         width: 60px;
         height: 3px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         border-radius: 2px;
     }
     
@@ -265,8 +265,8 @@ st.markdown("""
         border-radius: 18px;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         margin: 1.5rem 0;
-        box-shadow: 0 8px 25px rgba(255, 107, 149, 0.08);
-        border: 1px solid rgba(255, 107, 149, 0.1);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.08);
+        border: 1px solid rgba(255, 140, 66, 0.1);
         position: relative;
         overflow: hidden;
     }
@@ -278,7 +278,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         transform: scaleX(0);
         transform-origin: right;
         transition: transform 0.4s ease;
@@ -286,7 +286,7 @@ st.markdown("""
     
     .product-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 15px 35px rgba(255, 107, 149, 0.12);
+        box-shadow: 0 15px 35px rgba(255, 140, 66, 0.12);
     }
     
     .product-card:hover::after {
@@ -302,7 +302,7 @@ st.markdown("""
     .product-image {
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(255, 107, 149, 0.1);
+        box-shadow: 0 5px 15px rgba(255, 140, 66, 0.1);
         margin-right: 1.5rem;
         transition: all 0.4s ease;
         flex: 0 0 120px;
@@ -327,7 +327,7 @@ st.markdown("""
     }
     
     .product-price {
-        color: #FF6B95;
+        color: #FF8C42;
         font-size: 1.4rem;
         font-weight: 800;
         letter-spacing: 0.5px;
@@ -335,8 +335,8 @@ st.markdown("""
     
     .product-taste {
         display: inline-block;
-        background: rgba(255, 107, 149, 0.1);
-        color: #FF6B95;
+        background: rgba(255, 140, 66, 0.1);
+        color: #FF8C42;
         font-size: 0.85rem;
         font-weight: 600;
         padding: 0.4rem 1rem;
@@ -352,10 +352,10 @@ st.markdown("""
     }
     
     .highlight {
-        background-color: rgba(255, 107, 149, 0.2);
+        background-color: rgba(255, 140, 66, 0.2);
         padding: 0 0.3rem;
         border-radius: 3px;
-        color: #FF6B95;
+        color: #FF8C42;
         font-weight: 600;
     }
     
@@ -368,7 +368,7 @@ st.markdown("""
     }
     
     .filter-chip {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%);
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%);
         color: white;
         font-size: 0.9rem;
         font-weight: 600;
@@ -377,7 +377,7 @@ st.markdown("""
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
+        box-shadow: 0 4px 10px rgba(255, 140, 66, 0.2);
     }
     
     .chip-remove {
@@ -407,7 +407,7 @@ st.markdown("""
     .empty-state-icon {
         font-size: 3rem;
         margin-bottom: 1rem;
-        color: rgba(255, 107, 149, 0.3);
+        color: rgba(255, 140, 66, 0.3);
     }
     
     .empty-state-title {
@@ -446,7 +446,7 @@ st.markdown("""
     
     /* Cart button */
     .cart-button {
-        background: linear-gradient(90deg, #FF6B95 0%, #FF9EB5 100%) !important;
+        background: linear-gradient(90deg, #FF8C42 0%, #FFB380 100%) !important;
         color: white !important;
         border: none !important;
         border-radius: 25px !important;
@@ -454,18 +454,18 @@ st.markdown("""
         font-size: 0.9rem !important;
         font-weight: 600 !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(255, 107, 149, 0.15) !important;
+        box-shadow: 0 4px 15px rgba(255, 140, 66, 0.15) !important;
         margin-top: 0.8rem !important;
     }
     
     .cart-button:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 149, 0.2) !important;
+        box-shadow: 0 8px 20px rgba(255, 140, 66, 0.2) !important;
     }
     
     /* Progress bar */
     .stProgress > div > div > div {
-        background-color: #FF6B95 !important;
+        background-color: #FF8C42 !important;
     }
 </style>
 """, unsafe_allow_html=True)
