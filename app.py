@@ -570,26 +570,26 @@ feature_col1, feature_col2, feature_col3 = st.columns(3, gap="large")
 
 with feature_col1:
     st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
-    if st.button("🔍 Search by Ingredient", key="search_btn", use_container_width=True):
+    if st.button("Search by Ingredient", key="search_btn", use_container_width=True):
         st.switch_page("pages/2_Search.py")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with feature_col2:
     st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
-    if st.button("⚖️ Compare Products", key="compare_btn", use_container_width=True):
+    if st.button("Compare Products", key="compare_btn", use_container_width=True):
         st.switch_page("pages/3_Compare.py")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with feature_col3:
     st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
-    if st.button("🎯 Get Recommendations", key="recommend_btn", use_container_width=True):
+    if st.button("Custom Recommendations", key="recommend_btn", use_container_width=True):
         st.switch_page("pages/4_Recommendations.py")
     st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Recommendations Section
-st.markdown('<h2 class="section-header fade-in">Recommended for Your Cat</h2>', unsafe_allow_html=True)
+st.markdown('<h2 class="section-header fade-in">Your Cat Will Love These</h2>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
     rec_col1, rec_col2, rec_col3 = st.columns(3)
