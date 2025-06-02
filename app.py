@@ -728,7 +728,7 @@ why_cols = st.columns(3)
 with why_cols[0]:
     st.markdown("""
     <div class="feature-card fade-in">
-        <div class="feature-title">🌿 Quality Ingredients</div>
+        <div class="feature-title">Quality Ingredients</div>
         <p class="feature-description">We carefully select products with natural, high-quality ingredients that support your cat's health and wellbeing.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -736,7 +736,7 @@ with why_cols[0]:
 with why_cols[1]:
     st.markdown("""
     <div class="feature-card fade-in">
-        <div class="feature-title">🔬 Nutrition Experts</div>
+        <div class="feature-title">Nutrition Experts</div>
         <p class="feature-description">Our recommendations are backed by feline nutrition experts to ensure optimal health for your furry friend.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -744,7 +744,7 @@ with why_cols[1]:
 with why_cols[2]:
     st.markdown("""
     <div class="feature-card fade-in">
-        <div class="feature-title">❤️ Personalized Care</div>
+        <div class="feature-title">Personalized Care</div>
         <p class="feature-description">Get tailored food suggestions based on your cat's age, weight, health conditions, and taste preferences.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -752,6 +752,6 @@ with why_cols[2]:
 # Footer
 st.markdown("""
 <div class="footer fade-in">
-    <p>© 2024 MeowMatch | All rights reserved | Made with ❤️ for cats everywhere</p>
+    <p>© 2025 MeowMatch | All rights reserved | Purr-fect nutrition, purr-fect love</p>
 </div>
 """, unsafe_allow_html=True)
