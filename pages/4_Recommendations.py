@@ -2,7 +2,11 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 import random
-from utils.session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
+from utils.session_utils import (
+    init_session_state, get_user_profile, get_pet_display_info, 
+    get_profile_avatar_html, get_budget_range, get_texture_preferences, 
+    has_texture_preference, get_budget_category
+)
 
 # Set page configuration
 st.set_page_config(
@@ -37,7 +41,7 @@ product_image4 = create_placeholder_image(300, 300, '#FFF2E8')
 product_image5 = create_placeholder_image(300, 300, '#FFF4EA')
 product_image6 = create_placeholder_image(300, 300, '#FFF6EC')
 
-# Sample cat food data with more detailed attributes for filtering
+# Enhanced cat food data with texture and budget information
 recommended_products = [
     {
         "name": "Royal Canin Indoor",
@@ -51,7 +55,9 @@ recommended_products = [
         "suitable_breeds": ["Persian", "Maine Coon", "British Shorthair"],
         "age_range": ["Adult", "Senior"],
         "flavors": ["Chicken"],
-        "diet_type": "Weight Control"
+        "diet_type": "Weight Control",
+        "texture": "Chunks",
+        "budget_category": "premium"
     },
     {
         "name": "Purina Pro Plan Sensitive Skin",
@@ -65,7 +71,9 @@ recommended_products = [
         "suitable_breeds": ["Persian", "Siamese", "Ragdoll"],
         "age_range": ["Adult"],
         "flavors": ["Fish", "Salmon"],
-        "diet_type": "Sensitive Digestion"
+        "diet_type": "Sensitive Digestion",
+        "texture": "Pate",
+        "budget_category": "premium"
     },
     {
         "name": "Hills Science Diet Adult",
@@ -79,7 +87,9 @@ recommended_products = [
         "suitable_breeds": ["All Breeds"],
         "age_range": ["Adult"],
         "flavors": ["Chicken"],
-        "diet_type": "All Types"
+        "diet_type": "All Types",
+        "texture": "Gravy",
+        "budget_category": "premium"
     },
     {
         "name": "Blue Buffalo Wilderness",
@@ -93,12 +103,14 @@ recommended_products = [
         "suitable_breeds": ["All Breeds"],
         "age_range": ["Adult", "Senior"],
         "flavors": ["Chicken"],
-        "diet_type": "Grain-Free"
+        "diet_type": "Grain-Free",
+        "texture": "Shreds",
+        "budget_category": "premium"
     },
     {
         "name": "Iams ProActive Health",
         "image": product_image5,
-        "price": 32.99,
+        "price": 18.99,
         "description": "Complete and balanced nutrition for cats of all life stages with real chicken.",
         "match_score": 85,
         "rating": 4.5,
@@ -107,12 +119,14 @@ recommended_products = [
         "suitable_breeds": ["All Breeds"],
         "age_range": ["Kitten", "Adult", "Senior"],
         "flavors": ["Chicken"],
-        "diet_type": "All Types"
+        "diet_type": "All Types",
+        "texture": "Chunks",
+        "budget_category": "mid-range"
     },
     {
         "name": "Wellness Complete Health",
         "image": product_image6,
-        "price": 38.99,
+        "price": 28.99,
         "description": "Natural ingredients with added vitamins and minerals for whole body health.",
         "match_score": 82,
         "rating": 4.7,
@@ -121,12 +135,46 @@ recommended_products = [
         "suitable_breeds": ["All Breeds"],
         "age_range": ["Adult"],
         "flavors": ["Fish", "Chicken"],
-        "diet_type": "All Types"
+        "diet_type": "All Types",
+        "texture": "Pate",
+        "budget_category": "mid-range"
+    },
+    {
+        "name": "Fancy Feast Gourmet",
+        "image": product_image1,
+        "price": 12.99,
+        "description": "Gourmet flavors with tender, slow-cooked textures that cats love.",
+        "match_score": 78,
+        "rating": 4.3,
+        "reviews": 892,
+        "tags": ["Gourmet", "Variety", "Affordable"],
+        "suitable_breeds": ["All Breeds"],
+        "age_range": ["Adult"],
+        "flavors": ["Fish", "Chicken", "Beef"],
+        "diet_type": "All Types",
+        "texture": "Gravy",
+        "budget_category": "budget"
+    },
+    {
+        "name": "Friskies Indoor Delights",
+        "image": product_image2,
+        "price": 8.99,
+        "description": "Budget-friendly nutrition with essential vitamins and minerals for indoor cats.",
+        "match_score": 75,
+        "rating": 4.1,
+        "reviews": 567,
+        "tags": ["Indoor", "Budget-Friendly", "Essential Nutrition"],
+        "suitable_breeds": ["All Breeds"],
+        "age_range": ["Adult"],
+        "flavors": ["Chicken", "Turkey"],
+        "diet_type": "All Types",
+        "texture": "Shreds",
+        "budget_category": "budget"
     }
 ]
 
-# Function to calculate match score based on user profile
-def calculate_match_score(product, user_profile, preferences):
+# Enhanced function to calculate match score with budget and texture preferences
+def calculate_match_score(product, user_profile, user_budget_category, user_textures, price_range=None):
     score = 70  # Base score
     
     # Breed matching
@@ -145,31 +193,72 @@ def calculate_match_score(product, user_profile, preferences):
     user_flavors = set(user_profile['favorite_flavors'])
     product_flavors = set(product['flavors'])
     if user_flavors.intersection(product_flavors):
-        score += 10
+        score += 12
     
-    # Diet type matching
-    if preferences['diet_type'] != "All Types" and product['diet_type'] == preferences['diet_type']:
+    # Budget category matching
+    if user_budget_category == 'all' or product['budget_category'] == user_budget_category:
+        score += 10
+    elif user_budget_category == 'premium' and product['budget_category'] == 'luxury':
+        score += 5  # Close match
+    elif user_budget_category == 'budget' and product['budget_category'] == 'mid-range':
+        score += 5  # Close match
+    else:
+        score -= 5  # Penalty for budget mismatch
+    
+    # Texture preference matching
+    if user_textures:
+        if product['texture'].lower() in [t.lower() for t in user_textures]:
+            score += 8
+    
+    # Price range matching (if custom range provided)
+    if price_range:
+        if price_range[0] <= product['price'] <= price_range[1]:
+            score += 5
+        else:
+            score -= 8  # Penalty for being outside price range
+    
+    # Health conditions consideration
+    health_conditions = user_profile.get('health_conditions', [])
+    if 'Digestive Sensitivity' in health_conditions and 'Sensitive' in product['description']:
+        score += 8
+    if 'Obesity' in health_conditions and 'Weight' in ' '.join(product['tags']):
+        score += 8
+    if 'Senior Cat Special Needs' in health_conditions and 'Senior' in product['age_range']:
         score += 8
     
-    # Price range matching
-    if preferences['price_range'][0] <= product['price'] <= preferences['price_range'][1]:
-        score += 5
-    else:
-        score -= 10  # Penalty for being outside price range
+    # Allergies consideration
+    allergies = user_profile.get('allergies', [])
+    for allergy in allergies:
+        if allergy != 'None' and allergy.lower() in product['description'].lower():
+            score -= 15  # Heavy penalty for allergens
     
     return min(score, 99)  # Cap at 99%
 
-# Function to filter and sort products
-def get_filtered_recommendations(user_profile, preferences):
+# Function to filter and sort products based on user profile
+def get_filtered_recommendations(user_profile, price_range=None):
+    user_budget_category = get_budget_category()
+    user_textures = get_texture_preferences()
+    
     filtered_products = []
     
     for product in recommended_products:
-        # Apply filters
-        if preferences['price_range'][0] <= product['price'] <= preferences['price_range'][1]:
-            # Calculate dynamic match score
-            product_copy = product.copy()
-            product_copy['match_score'] = calculate_match_score(product, user_profile, preferences)
-            filtered_products.append(product_copy)
+        # Apply budget filter if no custom price range
+        if price_range:
+            if price_range[0] <= product['price'] <= price_range[1]:
+                product_copy = product.copy()
+                product_copy['match_score'] = calculate_match_score(
+                    product, user_profile, user_budget_category, user_textures, price_range
+                )
+                filtered_products.append(product_copy)
+        else:
+            # Use budget preference for filtering
+            budget_range = get_budget_range()
+            if budget_range[0] <= product['price'] <= budget_range[1]:
+                product_copy = product.copy()
+                product_copy['match_score'] = calculate_match_score(
+                    product, user_profile, user_budget_category, user_textures
+                )
+                filtered_products.append(product_copy)
     
     # Sort by match score
     return sorted(filtered_products, key=lambda x: x['match_score'], reverse=True)
@@ -291,7 +380,7 @@ div[data-testid="stToolbar"] { display: none; }
     background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F3 100%);
     padding: 2rem;
     border-radius: 20px;
-    margin: 1.5rem 0 3rem 0;
+    margin: 1.5rem 0 2rem 0;
     box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
     position: relative;
     overflow: hidden;
@@ -353,6 +442,27 @@ div[data-testid="stToolbar"] { display: none; }
     padding: 0.4rem 1rem;
     border-radius: 20px;
 }
+
+.price-filter-card {
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 20px rgba(255, 140, 66, 0.08);
+    border: 1px solid rgba(255, 140, 66, 0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-title {
+    color: #444444;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-icon { color: #FF8C42; }
 
 .product-card {
     background: #FFFFFF;
@@ -463,6 +573,31 @@ div[data-testid="stToolbar"] { display: none; }
     border-radius: 15px;
 }
 
+.product-details {
+    background: rgba(255, 140, 66, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #FF8C42;
+}
+
+.product-detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.product-detail-label {
+    color: #666666;
+    font-weight: 600;
+}
+
+.product-detail-value {
+    color: #FF8C42;
+    font-weight: 600;
+}
+
 .section-header {
     font-size: 1.8rem;
     font-weight: 700;
@@ -484,36 +619,7 @@ div[data-testid="stToolbar"] { display: none; }
     border-radius: 2px;
 }
 
-.preference-card {
-    background: #FFFFFF;
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: 0 6px 20px rgba(255, 140, 66, 0.08);
-    border: 1px solid rgba(255, 140, 66, 0.1);
-    margin-bottom: 1.5rem;
-}
-
-.preference-title {
-    color: #444444;
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.preference-icon { color: #FF8C42; }
-
 .stSlider > div > div > div > div { background-color: #FF8C42 !important; }
-
-.stSelectbox > div > div > div {
-    border-radius: 30px !important;
-    border: 1px solid rgba(255, 140, 66, 0.3) !important;
-    padding: 0.3rem 1.5rem !important;
-    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.05) !important;
-    transition: all 0.3s ease !important;
-}
 
 /* Button styling */
 .stButton button {
@@ -592,158 +698,198 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# Filter and preferences sidebar 
-sidecol1, maincol = st.columns([1, 3])
+# Price range filter (optional override)
+st.markdown("""
+<div class="price-filter-card">
+    <div class="filter-title">
+        <span class="filter-icon">💰</span> Custom Price Range (Optional)
+    </div>
+    <p style="color: #666666; margin-bottom: 1rem; font-size: 0.9rem;">
+        Leave unchanged to use your profile budget preference, or adjust to override.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
-with sidecol1:
-    st.markdown('<div class="section-header">Preferences</div>', unsafe_allow_html=True)
-    
-    # Diet Type
-    st.markdown("""
-    <div class="preference-card">
-        <div class="preference-title">
-            <span class="preference-icon">🥘</span> Diet Type
-        </div>
-    """, unsafe_allow_html=True)
-    diet_type = st.selectbox("", ["All Types", "Grain-Free", "Limited Ingredient", "Weight Control", "Sensitive Digestion"], label_visibility="collapsed")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Age-specific
-    st.markdown("""
-    <div class="preference-card">
-        <div class="preference-title">
-            <span class="preference-icon">🐱</span> Age Specific
-        </div>
-    """, unsafe_allow_html=True)
-    # Auto-select based on user's cat age
-    if user_profile['age'] <= 1:
-        default_age = "Kitten"
-    elif user_profile['age'] <= 7:
-        default_age = "Adult"
-    else:
-        default_age = "Senior"
-    
-    age_specific = st.selectbox("", ["All Ages", "Kitten", "Adult", "Senior"], 
-                               index=["All Ages", "Kitten", "Adult", "Senior"].index(default_age), 
-                               label_visibility="collapsed")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Protein Preference (auto-filled from profile)
-    st.markdown("""
-    <div class="preference-card">
-        <div class="preference-title">
-            <span class="preference-icon">🍗</span> Protein Preference
-        </div>
-    """, unsafe_allow_html=True)
-    protein_pref = st.multiselect("", ["Chicken", "Fish", "Beef", "Turkey", "Lamb", "Duck"], 
-                                 default=user_profile['favorite_flavors'], 
-                                 label_visibility="collapsed")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Price Range
-    st.markdown("""
-    <div class="preference-card">
-        <div class="preference-title">
-            <span class="preference-icon">💰</span> Price Range
-        </div>
-    """, unsafe_allow_html=True)
-    price_range = st.slider("", 10, 70, (25, 50), label_visibility="collapsed", format="$%d")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Refresh Button
-    if st.button("↻ Refresh Recommendations", use_container_width=True):
-        st.rerun()
+# Get budget range from profile as default
+default_budget_range = get_budget_range()
+price_range = st.slider(
+    "Price Range", 
+    5, 80, 
+    default_budget_range, 
+    label_visibility="collapsed", 
+    format="$%d",
+    help="Drag to adjust price range, or leave as-is to use your profile budget preference"
+)
 
-with maincol:
-    # Prepare preferences for filtering
-    preferences = {
-        'diet_type': diet_type,
-        'age_specific': age_specific,
-        'protein_pref': protein_pref,
-        'price_range': price_range
-    }
-    
-    # Get filtered and sorted recommendations
-    filtered_products = get_filtered_recommendations(user_profile, preferences)
-    
-    if len(filtered_products) == 0:
-        st.warning("No products match your current filters. Try adjusting your price range or preferences.")
+# Show current budget preference
+budget_category = get_budget_category()
+texture_prefs = get_texture_preferences()
+
+st.markdown(f"""
+<div style="background: rgba(255, 140, 66, 0.05); padding: 1rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #FF8C42;">
+    <p style="margin: 0; color: #666666; font-size: 0.9rem;">
+        <strong>Using preferences from your profile:</strong><br>
+        💰 Budget: {user_profile.get('budget_preference', 'Mid-Range ($15-30)')}<br>
+        🥄 Textures: {', '.join(texture_prefs) if texture_prefs else 'No specific preference'}<br>
+        🍗 Flavors: {', '.join(user_profile.get('favorite_flavors', [])) if user_profile.get('favorite_flavors') else 'No specific preference'}
+    </p>
+</div>
+""", unsafe_allow_html=True)
+
+# Check if user is using custom price range
+using_custom_range = price_range != default_budget_range
+custom_range = price_range if using_custom_range else None
+
+# Get filtered and sorted recommendations
+filtered_products = get_filtered_recommendations(user_profile, custom_range)
+
+if len(filtered_products) == 0:
+    st.warning("No products match your current filters. Try adjusting your price range.")
+else:
+    # Top Recommendations section
+    st.markdown('<div class="section-header">Top Recommendations</div>', unsafe_allow_html=True)
+    recommendation_subtitle = f'Based on {user_profile["pet_name"]}\'s profile'
+    if using_custom_range:
+        recommendation_subtitle += f' and custom price range (${price_range[0]}-${price_range[1]})'
     else:
-        # Top Recommendations section
-        st.markdown('<div class="section-header">Top Recommendations</div>', unsafe_allow_html=True)
-        st.markdown(f'<p style="color: #666666; margin-bottom: 2rem;">Based on {user_profile["pet_name"]}\'s profile and your preferences</p>', unsafe_allow_html=True)
+        recommendation_subtitle += f' and budget preference ({user_profile.get("budget_preference", "Mid-Range")})'
+    
+    st.markdown(f'<p style="color: #666666; margin-bottom: 2rem;">{recommendation_subtitle}</p>', unsafe_allow_html=True)
+    
+    # Display top 3 recommendations
+    top_recommendations = filtered_products[:3]
+    for i, product in enumerate(top_recommendations):
+        col1, col2 = st.columns([1, 2])
         
-        # Display top 3 recommendations
-        top_recommendations = filtered_products[:3]
-        for i, product in enumerate(top_recommendations):
-            col1, col2 = st.columns([1, 2])
-            
-            with col1:
-                st.image(product["image"], use_container_width=True)
-            
-            with col2:
-                st.markdown(f"""
-                <div class="product-card">
-                    <div class="match-badge">{product["match_score"]}%</div>
-                    <div class="product-title">{product["name"]}</div>
-                    <div class="product-description">{product["description"]}</div>
-                    <div class="product-price">${product["price"]}</div>
-                    <div class="product-rating">
-                        {"⭐" * int(product["rating"])}{"<span style='color:#DDDDDD'>☆</span>" * (5-int(product["rating"]))}
-                        <span class="rating-count">({product["reviews"]} reviews)</span>
+        with col1:
+            st.image(product["image"], use_container_width=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class="product-card">
+                <div class="match-badge">{product["match_score"]}%</div>
+                <div class="product-title">{product["name"]}</div>
+                <div class="product-description">{product["description"]}</div>
+                <div class="product-details">
+                    <div class="product-detail-row">
+                        <span class="product-detail-label">Texture:</span>
+                        <span class="product-detail-value">{product["texture"]}</span>
                     </div>
-                    <div class="product-tags">
-                        {" ".join([f'<span class="product-tag">{tag}</span>' for tag in product["tags"]])}
+                    <div class="product-detail-row">
+                        <span class="product-detail-label">Budget Category:</span>
+                        <span class="product-detail-value">{product["budget_category"].title()}</span>
+                    </div>
+                    <div class="product-detail-row">
+                        <span class="product-detail-label">Primary Flavors:</span>
+                        <span class="product-detail-value">{', '.join(product["flavors"])}</span>
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
-                
-                if st.button(f"Add to Cart", key=f"cart_{i}", use_container_width=True):
-                    st.success(f"Added {product['name']} to cart!")
+                <div class="product-price">${product["price"]}</div>
+                <div class="product-rating">
+                    {"⭐" * int(product["rating"])}{"<span style='color:#DDDDDD'>☆</span>" * (5-int(product["rating"]))}
+                    <span class="rating-count">({product["reviews"]} reviews)</span>
+                </div>
+                <div class="product-tags">
+                    {" ".join([f'<span class="product-tag">{tag}</span>' for tag in product["tags"]])}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button(f"Add to Cart", key=f"cart_{i}", use_container_width=True):
+                st.success(f"Added {product['name']} to cart!")
+    
+    # Also Recommended section
+    if len(filtered_products) > 3:
+        st.markdown('<div class="section-header">Also Recommended</div>', unsafe_allow_html=True)
+        st.markdown('<p style="color: #666666; margin-bottom: 2rem;">Other great options that match your preferences</p>', unsafe_allow_html=True)
         
-        # Also Recommended section
-        if len(filtered_products) > 3:
-            st.markdown('<div class="section-header">Also Recommended</div>', unsafe_allow_html=True)
-            st.markdown('<p style="color: #666666; margin-bottom: 2rem;">Other great options that match your preferences</p>', unsafe_allow_html=True)
-            
-            # Display remaining recommendations in a grid
-            remaining_products = filtered_products[3:]
-            
-            # Display in rows of 2
-            for i in range(0, len(remaining_products), 2):
-                cols = st.columns(2)
-                for j, col in enumerate(cols):
-                    if i + j < len(remaining_products):
-                        product = remaining_products[i + j]
-                        with col:
-                            st.markdown(f"""
-                            <div class="product-card">
-                                <div class="match-badge">{product["match_score"]}%</div>
-                                <div style="margin-bottom: 1.5rem;">
-                                    <img src="data:image/png;base64," width="100%" alt="{product["name"]}" style="border-radius: 12px;">
+        # Display remaining recommendations in a grid
+        remaining_products = filtered_products[3:]
+        
+        # Display in rows of 2
+        for i in range(0, len(remaining_products), 2):
+            cols = st.columns(2)
+            for j, col in enumerate(cols):
+                if i + j < len(remaining_products):
+                    product = remaining_products[i + j]
+                    with col:
+                        st.image(product["image"], use_container_width=True)
+                        st.markdown(f"""
+                        <div class="product-card">
+                            <div class="match-badge">{product["match_score"]}%</div>
+                            <div class="product-title">{product["name"]}</div>
+                            <div class="product-description">{product["description"]}</div>
+                            <div class="product-details">
+                                <div class="product-detail-row">
+                                    <span class="product-detail-label">Texture:</span>
+                                    <span class="product-detail-value">{product["texture"]}</span>
                                 </div>
-                                <div class="product-title">{product["name"]}</div>
-                                <div class="product-description">{product["description"]}</div>
-                                <div class="product-price">${product["price"]}</div>
-                                <div class="product-rating">
-                                    {"⭐" * int(product["rating"])}{"<span style='color:#DDDDDD'>☆</span>" * (5-int(product["rating"]))}
-                                    <span class="rating-count">({product["reviews"]} reviews)</span>
+                                <div class="product-detail-row">
+                                    <span class="product-detail-label">Budget:</span>
+                                    <span class="product-detail-value">{product["budget_category"].title()}</span>
                                 </div>
-                                <div class="product-tags">
-                                    {" ".join([f'<span class="product-tag">{tag}</span>' for tag in product["tags"]])}
+                                <div class="product-detail-row">
+                                    <span class="product-detail-label">Flavors:</span>
+                                    <span class="product-detail-value">{', '.join(product["flavors"])}</span>
                                 </div>
                             </div>
-                            """, unsafe_allow_html=True)
-                            
-                            if st.button(f"Add to Cart", key=f"cart_additional_{i+j}", use_container_width=True):
-                                st.success(f"Added {product['name']} to cart!")
+                            <div class="product-price">${product["price"]}</div>
+                            <div class="product-rating">
+                                {"⭐" * int(product["rating"])}{"<span style='color:#DDDDDD'>☆</span>" * (5-int(product["rating"]))}
+                                <span class="rating-count">({product["reviews"]} reviews)</span>
+                            </div>
+                            <div class="product-tags">
+                                {" ".join([f'<span class="product-tag">{tag}</span>' for tag in product["tags"]])}
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        
+                        if st.button(f"Add to Cart", key=f"cart_additional_{i+j}", use_container_width=True):
+                            st.success(f"Added {product['name']} to cart!")
+
+# Show recommendation insights
+st.markdown('<div class="section-header">Why These Recommendations?</div>', unsafe_allow_html=True)
+
+insights_col1, insights_col2 = st.columns(2)
+
+with insights_col1:
+    st.markdown("""
+    <div style="background: rgba(255, 140, 66, 0.05); padding: 1.5rem; border-radius: 15px; border-left: 4px solid #FF8C42;">
+        <h4 style="color: #FF8C42; margin-bottom: 1rem;">🎯 Match Factors</h4>
+        <ul style="color: #666666; line-height: 1.8; margin: 0; padding-left: 1.5rem;">
+            <li><strong>Age & Life Stage:</strong> Products suited for your cat's age</li>
+            <li><strong>Flavor Preferences:</strong> Matches your cat's favorite flavors</li>
+            <li><strong>Budget Range:</strong> Fits within your preferred budget</li>
+            <li><strong>Texture Preferences:</strong> Includes your cat's preferred textures</li>
+            <li><strong>Health Considerations:</strong> Addresses any health conditions</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+with insights_col2:
+    st.markdown("""
+    <div style="background: rgba(255, 140, 66, 0.05); padding: 1.5rem; border-radius: 15px; border-left: 4px solid #FF8C42;">
+        <h4 style="color: #FF8C42; margin-bottom: 1rem;">💡 Personalization Tips</h4>
+        <ul style="color: #666666; line-height: 1.8; margin: 0; padding-left: 1.5rem;">
+            <li>Update your cat's profile for better matches</li>
+            <li>Try different texture preferences</li>
+            <li>Adjust budget settings for more options</li>
+            <li>Add health conditions for specialized recommendations</li>
+            <li>Rate products to improve future suggestions</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Debug info (can be removed in production)
-if st.checkbox("Show Filter Results"):
-    st.write(f"Showing {len(filtered_products)} products matching your criteria")
-    st.write(f"Price range: ${price_range[0]} - ${price_range[1]}")
-    st.write(f"Diet type: {diet_type}")
-    st.write(f"Age category: {age_specific}")
+if st.checkbox("Show Recommendation Details"):
+    st.write(f"**Showing {len(filtered_products)} products matching your criteria**")
+    st.write(f"**Budget Category:** {budget_category}")
+    st.write(f"**Budget Range:** ${default_budget_range[0]} - ${default_budget_range[1]}")
+    if using_custom_range:
+        st.write(f"**Custom Price Range:** ${price_range[0]} - ${price_range[1]}")
+    st.write(f"**Texture Preferences:** {texture_prefs if texture_prefs else 'None specified'}")
+    st.write(f"**Flavor Preferences:** {user_profile.get('favorite_flavors', [])}")
+    st.write(f"**Health Conditions:** {user_profile.get('health_conditions', [])}")
 
 # Footer
 st.markdown("""

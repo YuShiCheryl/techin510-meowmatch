@@ -639,12 +639,13 @@ st.session_state.form_data['health_conditions'] = new_conditions
 st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Diet Preferences Section
+# Diet Preferences Section (包含Texture)
 st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
 st.markdown('<div class="section-header"><h2 class="section-title">Diet Preferences</h2></div>', unsafe_allow_html=True)
 st.markdown('<div class="section-content">', unsafe_allow_html=True)
 
-diet_col1, diet_col2 = st.columns(2)
+# 创建三列布局
+diet_col1, diet_col2, diet_col3 = st.columns(3)
 
 with diet_col1:
     st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Favorite Flavors</p>', unsafe_allow_html=True)
@@ -666,6 +667,34 @@ with diet_col1:
     st.session_state.form_data['allergies'] = new_allergies
 
 with diet_col2:
+    st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Preferred Textures</p>', unsafe_allow_html=True)
+    
+    # Texture options
+    texture_options = [
+        "Pate",
+        "Gravy", 
+        "Shreds",
+        "Chunks",
+        "Broth",
+        "Flakes",
+        "Minced",
+        "Mousse"
+    ]
+    
+    # Get current texture preferences from form data
+    current_textures = st.session_state.form_data.get('texture_preferences', [])
+    
+    # Create multiselect for texture preferences
+    new_textures = st.multiselect(
+        "",
+        texture_options,
+        default=current_textures,
+        label_visibility="collapsed",
+        help="Select multiple textures your cat enjoys"
+    )
+    st.session_state.form_data['texture_preferences'] = new_textures
+
+with diet_col3:
     st.markdown('<p style="font-weight: 600; margin-bottom: 0.5rem;">Activity Level</p>', unsafe_allow_html=True)
     activity_options = ["Very Low", "Low", "Moderate", "High", "Very High"]
     
@@ -697,6 +726,65 @@ with diet_col2:
         label_visibility="collapsed"
     )
     st.session_state.form_data['special_notes'] = new_notes
+
+# Show texture descriptions if any are selected
+if new_textures:
+    st.markdown('<div style="margin-top: 1.5rem; padding: 1rem; background-color: #FFF8F3; border-radius: 8px; border-left: 4px solid #FF8C42;">', unsafe_allow_html=True)
+    st.markdown('<p style="font-weight: 600; color: #FF8C42; margin-bottom: 0.5rem;">Selected Textures:</p>', unsafe_allow_html=True)
+    
+    # Texture descriptions
+    texture_descriptions = {
+        "Pate": "Smooth, spreadable texture",
+        "Gravy": "Chunks in rich, savory sauce", 
+        "Shreds": "Tender shredded pieces",
+        "Chunks": "Hearty, bite-sized pieces",
+        "Broth": "Light, soupy consistency",
+        "Flakes": "Delicate, flaky texture",
+        "Minced": "Finely chopped small pieces",
+        "Mousse": "Light, airy, whipped texture"
+    }
+    
+    for texture in new_textures:
+        st.markdown(f'<p style="margin: 0.2rem 0; color: #666666;"><strong>{texture}:</strong> {texture_descriptions[texture]}</p>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Budget Preferences Section (移到最后)
+st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
+st.markdown('<div class="section-header"><h2 class="section-title">Budget Preferences</h2></div>', unsafe_allow_html=True)
+st.markdown('<div class="section-content">', unsafe_allow_html=True)
+
+st.markdown('<p style="font-weight: 600; margin-bottom: 1rem; color: #666666;">Select your preferred budget range for cat food:</p>', unsafe_allow_html=True)
+
+# Budget options
+budget_options = ["Budget-Friendly ($5-15)", "Mid-Range ($15-30)", "Premium ($30-50)", "Luxury ($50+)", "No Preference"]
+
+# Get current budget from form data
+current_budget = st.session_state.form_data.get('budget_preference', 'Mid-Range ($15-30)')
+if not current_budget or current_budget not in budget_options:
+    current_budget = "Mid-Range ($15-30)"  # 默认值
+
+current_budget_index = budget_options.index(current_budget)
+
+new_budget = st.selectbox(
+    "Budget Range",
+    budget_options,
+    index=current_budget_index
+)
+st.session_state.form_data['budget_preference'] = new_budget
+
+# Add budget description
+budget_descriptions = {
+    "Budget-Friendly ($5-15)": "Great value options without compromising on nutrition",
+    "Mid-Range ($15-30)": "Balanced quality and price with good nutritional content", 
+    "Premium ($30-50)": "High-quality ingredients with specialized formulations",
+    "Luxury ($50+)": "Top-tier premium brands with the finest ingredients",
+    "No Preference": "Show me all options regardless of price"
+}
+
+st.markdown(f'<p style="color: #666666; font-style: italic; margin-top: 0.5rem;">{budget_descriptions[new_budget]}</p>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
