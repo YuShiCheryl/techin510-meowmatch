@@ -21,27 +21,113 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Create placeholder images using PIL
+# Create placeholder images using PIL (keeping as fallback)
 def create_placeholder_image(width, height, color):
     img = Image.new('RGB', (width, height), color)
     return img
 
-# Create sample images
-hero_image = create_placeholder_image(800, 400, '#FFE5D4')     # 浅橙色
-product_image1 = create_placeholder_image(300, 300, '#FFE5D4') # 浅橙色
-product_image2 = create_placeholder_image(300, 300, '#FFEAD6') # 更浅的橙色
-product_image3 = create_placeholder_image(300, 300, '#FFF0E6') # 极浅橙色
+# Create sample images (fallback)
+hero_image = create_placeholder_image(800, 400, '#FFE5D4')
 
-# Sample cat food data
-sample_food_data = {
-    'Name': ['Royal Canin Indoor', 'Hills Science Diet', 'Purina Pro Plan', 'Blue Buffalo'],
-    'Protein': ['32%', '30%', '34%', '36%'],
-    'Fat': ['15%', '16%', '14%', '15%'],
-    'Fiber': ['4.5%', '4%', '3%', '4%'],
-    'Price': ['$45.99', '$42.99', '$39.99', '$44.99']
-}
+# Real product data from CSV - 统一使用ZIWI Peak品牌
+recommended_products = [
+    {
+        "name": "ZIWI Peak Lamb Recipe",
+        "price": "$55.44",
+        "image_path": "data/images/products/ZIWI Peak Lamb Recipe.jpg",
+        "rating": 4.2,
+        "reviews": 704
+    },
+    {
+        "name": "ZIWI Peak Chicken Recipe",
+        "price": "$55.44",
+        "image_path": "data/images/products/ZIWI Peak Chicken Recipe.jpg",
+        "rating": 4.6,
+        "reviews": 76
+    },
+    {
+        "name": "ZIWI Peak Beef Recipe",
+        "price": "$55.44",
+        "image_path": "data/images/products/ZIWI Peak Beef Recipe.jpg",
+        "rating": 4.9,
+        "reviews": 1212
+    }
+]
 
-# Add custom CSS for styling
+popular_products = [
+    {
+        "name": "Fancy Feast Gourmet Naturals Beef Recipe",
+        "price": "$10.37",
+        "image_path": "data/images/products/Fancy Feast Gourmet Naturals Beef Recipe.jpg",
+        "rating": 4.3,
+        "reviews": 876
+    },
+    {
+        "name": "Fancy Feast Gourmet Naturals White Meat Chicken Recipe",
+        "price": "$11.53",
+        "image_path": "data/images/products/Fancy Feast Gourmet Naturals White Meat Chicken Recipe.jpg",
+        "rating": 4.5,
+        "reviews": 1156
+    },
+    {
+        "name": "Fancy Feast Gourmet Naturals Wild Alaskan Salmon Recipe",
+        "price": "$12.60",
+        "image_path": "data/images/products/Fancy Feast Gourmet Naturals Wild Alaskan Salmon Recipe.jpg",
+        "rating": 4.7,
+        "reviews": 923
+    }
+]
+
+new_arrivals = [
+    {
+        "name": "Tiki Cat After Dark Chicken Recipe",
+        "price": "$27.12",
+        "image_path": "data/images/products/Tiki Cat After Dark Chicken Recipe.jpg",
+        "rating": 4.2,
+        "reviews": 338,
+        "is_new": True
+    },
+    {
+        "name": "Tiki Cat After Dark Pate Duck & Chicken Liver Recipe",
+        "price": "$25.80",
+        "image_path": "data/images/products/Tiki Cat After Dark Pate Duck & Chicken Liver Recipe.jpg",
+        "rating": 4.2,
+        "reviews": 120,
+        "is_new": True
+    },
+    {
+        "name": "Tiki Cat Luau Wild Salmon",
+        "price": "$26.32",
+        "image_path": "data/images/products/Tiki Cat Luau Wild Salmon.jpg",
+        "rating": 4.1,
+        "reviews": 993,
+        "is_new": True
+    }
+]
+
+# Helper function to generate star rating
+def generate_star_rating(rating, reviews):
+    full_stars = int(rating)
+    has_half_star = rating - full_stars >= 0.5
+    empty_stars = 5 - full_stars - (1 if has_half_star else 0)
+    
+    stars = "⭐" * full_stars
+    if has_half_star:
+        stars += "⭐"  # Using full star for half star as well for simplicity
+    if empty_stars > 0:
+        stars += f"<span style='color:#DDDDDD'>{'☆' * empty_stars}</span>"
+    
+    return f"{stars} ({reviews})"
+
+# Function to safely load image
+def load_product_image(image_path, fallback_color='#FFE5D4'):
+    try:
+        return image_path
+    except:
+        # Return placeholder if image fails to load
+        return create_placeholder_image(300, 300, fallback_color)
+
+# Add custom CSS for styling (keeping all the original CSS)
 st.markdown("""
 <style>
     /* Base styles */
@@ -303,7 +389,7 @@ st.markdown("""
         font-weight: 400;
     }
     
-    /* Product card styling */
+    /* Product card styling - 回到原版 */
     .product-card {
         background: #FFFFFF;
         padding: 1.8rem;
@@ -340,12 +426,37 @@ st.markdown("""
         transform-origin: left;
     }
     
-    .product-image {
+    /* 新的固定高度图片容器 - 用HTML img标签 */
+    .product-image-fixed {
         border-radius: 12px;
-        margin-bottom: 1.5rem;
+        margin: 0 auto 1.5rem auto;  /* 水平居中 */
         overflow: hidden;
         box-shadow: 0 5px 15px rgba(255, 140, 66, 0.1);
         transition: all 0.4s ease;
+        height: 200px;
+        width: fit-content;  /* 容器宽度适应内容 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #FFFFFF;
+        text-align: center;
+    }
+    
+    .product-image-fixed img {
+        max-height: 200px;
+        max-width: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        margin: 0 auto;
+        display: block;
+    }
+    
+    .product-card:hover .product-image-fixed {
+        transform: scale(1.03);
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.03);
     }
     
     .product-card:hover .product-image {
@@ -559,11 +670,11 @@ with col1:
 
 with col2:
     st.markdown('<div class="hero-image">', unsafe_allow_html=True)
-    st.image(hero_image, use_container_width=True)
+    st.image("assets/cat.png", use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Feature Buttons - 改为Streamlit按钮但保持原有样式
+# Feature Buttons
 st.markdown('<div class="feature-buttons fade-in">', unsafe_allow_html=True)
 
 feature_col1, feature_col2, feature_col3 = st.columns(3, gap="large")
@@ -578,8 +689,6 @@ with feature_col2:
     st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
     if st.button("Compare Products", key="compare_btn", use_container_width=True):
         st.switch_page("pages/3_Compare.py")
-    st.markdown('</div>', unsafe_allow_html=True)
-
 with feature_col3:
     st.markdown('<div class="feature-button-streamlit">', unsafe_allow_html=True)
     if st.button("Custom Recommendations", key="recommend_btn", use_container_width=True):
@@ -594,132 +703,58 @@ with st.container():
     st.markdown('<div class="section-container fade-in">', unsafe_allow_html=True)
     rec_col1, rec_col2, rec_col3 = st.columns(3)
     
-    with rec_col1:
-        st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image1, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown("""
-        <div class="product-card">
-            <div class="product-title">Organic Chicken & Berries</div>
-            <div class="rating">⭐⭐⭐⭐⭐ (128)</div>
-            <div class="product-price">$24.99</div>
-            <button class="cart-button">Add to Cart</button>
-        </div>
-        """, unsafe_allow_html=True)
+    for idx, product in enumerate(recommended_products):
+        with [rec_col1, rec_col2, rec_col3][idx]:
+            st.markdown('<div class="product-image">', unsafe_allow_html=True)
+            st.image(product["image_path"], width=300)  # 固定宽度，不用use_container_width
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(f"""
+            <div class="product-card">
+                <div class="product-title">{product["name"]}</div>
+                <div class="rating">{generate_star_rating(product["rating"], product["reviews"])}</div>
+                <div class="product-price">{product["price"]}</div>
+                <button class="cart-button">Add to Cart</button>
+            </div>
+            """, unsafe_allow_html=True)
         
-    with rec_col2:
-        st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image2, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown("""
-        <div class="product-card">
-            <div class="product-title">Mixed Veggie Feast</div>
-            <div class="rating">⭐⭐⭐⭐<span style="color:#DDDDDD">☆</span> (94)</div>
-            <div class="product-price">$22.99</div>
-            <button class="cart-button">Add to Cart</button>
-        </div>
-        """, unsafe_allow_html=True)
-        
-    with rec_col3:
-        st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product_image3, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown("""
-        <div class="product-card">
-            <div class="product-title">Grain-Free Fish Mix</div>
-            <div class="rating">⭐⭐⭐⭐⭐ (156)</div>
-            <div class="product-price">$26.99</div>
-            <button class="cart-button">Add to Cart</button>
-        </div>
-        """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Popular Products Section
 st.markdown('<h2 class="section-header fade-in">Popular Products</h2>', unsafe_allow_html=True)
 
-# Sample popular products data
-popular_products = [
-    {
-        "name": "Purina Pro Plan",
-        "price": "$27.99",
-        "image": product_image1,
-        "rating": 4.8,
-        "reviews": 1250
-    },
-    {
-        "name": "Orijen Cat & Kitten",
-        "price": "$39.99",
-        "image": product_image2,
-        "rating": 4.9,
-        "reviews": 980
-    },
-    {
-        "name": "Acana Wild Coast",
-        "price": "$35.99",
-        "image": product_image3,
-        "rating": 4.7,
-        "reviews": 850
-    }
-]
-
-# Display popular products in a grid
 pop_cols = st.columns(3)
 for idx, product in enumerate(popular_products):
     with pop_cols[idx]:
-        st.markdown('<div class="product-card fade-in">', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product["image"], use_container_width=True)
+        st.image(product["image_path"], width=300)  # 固定宽度，不用use_container_width
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f"""
-        <div class="product-title">{product['name']}</div>
-        <div class="rating">{"⭐" * int(product['rating'])}{"<span style='color:#DDDDDD'>☆</span>" * (5-int(product['rating']))} ({product['reviews']})</div>
-        <div class="product-price">{product['price']}</div>
+        <div class="product-card">
+            <div class="product-title">{product["name"]}</div>
+            <div class="rating">{generate_star_rating(product["rating"], product["reviews"])}</div>
+            <div class="product-price">{product["price"]}</div>
+            <button class="cart-button">Add to Cart</button>
+        </div>
         """, unsafe_allow_html=True)
-        st.markdown('<button class="cart-button">Add to Cart</button>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
 # New Arrivals Section
 st.markdown('<h2 class="section-header fade-in">New Arrivals</h2>', unsafe_allow_html=True)
 
-# Sample new arrivals data
-new_arrivals = [
-    {
-        "name": "Wellness Complete Health",
-        "price": "$28.99",
-        "image": product_image2,
-        "is_new": True
-    },
-    {
-        "name": "Instinct Raw Boost",
-        "price": "$34.99",
-        "image": product_image3,
-        "is_new": True
-    },
-    {
-        "name": "Merrick Backcountry",
-        "price": "$31.99",
-        "image": product_image1,
-        "is_new": True
-    }
-]
-
-# Display new arrivals in a grid
 new_cols = st.columns(3)
 for idx, product in enumerate(new_arrivals):
     with new_cols[idx]:
-        st.markdown('<div class="product-card fade-in">', unsafe_allow_html=True)
-        if product["is_new"]:
-            st.markdown('<span class="badge">New</span>', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product["image"], use_container_width=True)
+        st.image(product["image_path"], width=300)  # 固定宽度，不用use_container_width
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f"""
-        <div class="product-title">{product['name']}</div>
-        <div class="rating">⭐⭐⭐⭐⭐ (New)</div>
-        <div class="product-price">{product['price']}</div>
+        <div class="product-card">
+            {"<span class='badge'>New</span>" if product.get('is_new') else ""}
+            <div class="product-title">{product["name"]}</div>
+            <div class="rating">{generate_star_rating(product["rating"], product["reviews"])}</div>
+            <div class="product-price">{product["price"]}</div>
+            <button class="cart-button">Add to Cart</button>
+        </div>
         """, unsafe_allow_html=True)
-        st.markdown('<button class="cart-button">Add to Cart</button>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
 # Why Choose Us Section
 st.markdown('<h2 class="section-header fade-in">Why Choose MeowMatch</h2>', unsafe_allow_html=True)

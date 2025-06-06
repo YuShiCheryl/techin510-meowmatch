@@ -1,0 +1,6 @@
+name,food_type,texture,price_per_kg,protein_content,fat_content,carb_content,moisture_content,calories_per_100g,ingredients,protein_sources,special_features,aafco_compliant
+Premium Chicken Pate,wet,pate,120,0.55,0.25,0.05,0.80,95,"chicken, chicken liver, water, vitamins, minerals",chicken,"grain_free, limited_ingredients",true
+Turkey & Rice Dry Food,dry,chunks,80,0.32,0.15,0.35,0.10,380,"turkey, rice, chicken meal, vitamins, minerals","turkey, chicken",none,true
+Salmon & Tuna Wet Food,wet,shredded,150,0.60,0.30,0.03,0.82,100,"salmon, tuna, water, vitamins, minerals","salmon, tuna","grain_free, high_protein",true
+Limited Ingredient Duck Formula,dry,chunks,200,0.35,0.18,0.30,0.12,360,"duck, duck meal, peas, vitamins, minerals",duck,"limited_ingredients, hydrolyzed_protein",true
+Senior Cat Chicken & Rice,wet,pate,130,0.45,0.20,0.08,0.78,90,"chicken, rice, water, vitamins, minerals",chicken,"senior, sensitive_stomach",true

@@ -16,10 +16,12 @@ def init_session_state():
             'activity_level': 'Moderate',
             'favorite_flavors': [],
             'allergies': [],
-            'health_conditions': [],  # New field for health conditions
+            'health_conditions': [],  # Health conditions
             'special_notes': '',
             'profile_image': None,  # PIL Image object
-            'profile_image_base64': None  # Base64 string for display
+            'profile_image_base64': None,  # Base64 string for display
+            'texture_preferences': [],  # New field for texture preferences
+            'budget_preference': 'Mid-Range ($15-30)'  # New field for budget preference
         }
     
     # User preferences for recommendations
@@ -98,6 +100,22 @@ def get_pet_display_info():
         if len(profile['favorite_flavors']) > 2:
             flavor_text += f" +{len(profile['favorite_flavors']) - 2} more"
         tags.append(f"Likes {flavor_text}")
+    
+    # Texture preferences tag
+    if profile.get('texture_preferences'):
+        if len(profile['texture_preferences']) == 1:
+            tags.append(f"Prefers {profile['texture_preferences'][0]}")
+        elif len(profile['texture_preferences']) > 1:
+            tags.append(f"Likes {len(profile['texture_preferences'])} Textures")
+    
+    # Budget preference tag
+    if profile.get('budget_preference'):
+        budget = profile['budget_preference']
+        if budget != 'No Preference':
+            # Extract just the price range from budget string
+            if '($' in budget:
+                price_range = budget.split('(')[1].split(')')[0]
+                tags.append(f"Budget: {price_range}")
     
     return {
         'name': profile['pet_name'],
@@ -178,6 +196,48 @@ def get_profile_avatar_html():
             </a>
         </div>
         """
+
+def get_budget_range():
+    """Get numeric budget range from budget preference"""
+    profile = get_user_profile()
+    budget_pref = profile.get('budget_preference', 'Mid-Range ($15-30)')
+    
+    # Map budget preferences to numeric ranges
+    budget_mapping = {
+        'Budget-Friendly ($5-15)': (5, 15),
+        'Mid-Range ($15-30)': (15, 30),
+        'Premium ($30-50)': (30, 50),
+        'Luxury ($50+)': (50, 999),
+        'No Preference': (0, 999)
+    }
+    
+    return budget_mapping.get(budget_pref, (15, 30))
+
+def get_texture_preferences():
+    """Get texture preferences as a list"""
+    profile = get_user_profile()
+    return profile.get('texture_preferences', [])
+
+def has_texture_preference(texture):
+    """Check if user has a specific texture preference"""
+    textures = get_texture_preferences()
+    return texture.lower() in [t.lower() for t in textures]
+
+def get_budget_category():
+    """Get budget category as string"""
+    profile = get_user_profile()
+    budget_pref = profile.get('budget_preference', 'Mid-Range ($15-30)')
+    
+    if 'Budget-Friendly' in budget_pref:
+        return 'budget'
+    elif 'Mid-Range' in budget_pref:
+        return 'mid-range'
+    elif 'Premium' in budget_pref:
+        return 'premium'
+    elif 'Luxury' in budget_pref:
+        return 'luxury'
+    else:
+        return 'all'
 
 def save_profile_data():
     """Save profile data (placeholder for future database integration)"""
