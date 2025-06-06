@@ -7,6 +7,8 @@ from utils.session_utils import (
     get_profile_avatar_html, get_budget_range, get_texture_preferences, 
     has_texture_preference, get_budget_category
 )
+from recommendation.recommender import CatFoodRecommender
+from pathlib import Path
 
 # Set page configuration
 st.set_page_config(
@@ -27,6 +29,15 @@ st.markdown("""
 
 # Initialize session state
 init_session_state()
+
+# Initialize recommender
+recommender = CatFoodRecommender()
+if not recommender.load_data():
+    st.error("Failed to load data")
+    st.stop()
+if not recommender.preprocess_data():
+    st.error("Failed to preprocess data")
+    st.stop()
 
 # Create placeholder images using PIL
 def create_placeholder_image(width, height, color):
@@ -893,7 +904,54 @@ if st.checkbox("Show Recommendation Details"):
 
 # Footer
 st.markdown("""
-<div class="footer">
-    <p>© 2024 MeowMatch | All rights reserved | Made with ❤️ for cats everywhere</p>
+<div class="footer fade-in">
+    <p>© 2025 MeowMatch | All rights reserved | Purr-fect nutrition, purr-fect love</p>
 </div>
 """, unsafe_allow_html=True)
+
+if st.session_state.get('show_recommendations', False):
+    st.markdown('<div class="section-title">Recommended for You</div>', unsafe_allow_html=True)
+    
+    # 获取用户偏好
+    preferences = {
+        'food_type': st.session_state.get('food_type', 'wet'),
+        'protein_content': st.session_state.get('protein_preference', 0.4),
+        'fat_content': st.session_state.get('fat_preference', 0.2),
+        'carb_content': st.session_state.get('carb_preference', 0.1),
+        'fiber_content': st.session_state.get('fiber_preference', 0.05),
+        'moisture_content': st.session_state.get('moisture_preference', 0.8),
+        'price_per_oz': st.session_state.get('price_preference', 0.5),
+        'special_features': st.session_state.get('special_features', [])
+    }
+    
+    # 获取推荐
+    recommendations = recommender.get_recommendations(preferences, top_n=3)
+    
+    # 创建三列布局
+    rec_col1, rec_col2, rec_col3 = st.columns(3)
+    
+    # 显示推荐产品
+    for idx, product in enumerate(recommendations):
+        with [rec_col1, rec_col2, rec_col3][idx]:
+            st.markdown('<div class="product-card">', unsafe_allow_html=True)
+            st.markdown('<div class="product-image">', unsafe_allow_html=True)
+            try:
+                image_path = product["image_path"]
+                if image_path and Path(image_path).exists():
+                    st.image(image_path, use_container_width=True)
+                else:
+                    st.error(f"Image not found: {image_path}")
+            except Exception as e:
+                st.error(f"Error loading image: {str(e)}")
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(f"""
+                <div class="product-title">{product["name"]}</div>
+                <div class="product-price">${float(str(product["price_per_oz"]).replace('$', '')):.2f}/oz</div>
+                <div class="product-description">
+                    Protein: {float(product["protein_content"]):.1%}<br>
+                    Fat: {float(product["fat_content"]):.1%}<br>
+                    Carbs: {float(product["carb_content"]):.1%}
+                </div>
+                <button class="cart-button">Add to Cart</button>
+            """, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)

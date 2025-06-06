@@ -3,6 +3,8 @@ from PIL import Image
 import numpy as np
 import pandas as pd
 from utils.session_utils import init_session_state, get_user_profile, get_pet_display_info, get_profile_avatar_html
+from recommendation.recommender import CatFoodRecommender
+import os
 
 # Set page configuration
 st.set_page_config(
@@ -656,6 +658,17 @@ st.markdown("""
 # Initialize session state and display dynamic avatar
 init_session_state()
 st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
+
+# Initialize recommender
+print(f"Current working directory: {os.getcwd()}")  # 打印当前工作目录
+
+recommender = CatFoodRecommender()  # 不需要指定路径，使用默认路径
+if not recommender.load_data():
+    st.error("Failed to load data. Please check the console for error messages.")
+    st.stop()
+if not recommender.preprocess_data():
+    st.error("Failed to preprocess data. Please check the console for error messages.")
+    st.stop()
 
 # Hero Section
 col1, col2 = st.columns([1, 1])
