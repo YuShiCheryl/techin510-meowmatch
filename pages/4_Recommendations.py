@@ -1059,7 +1059,7 @@ else:
         col1, col2 = st.columns([1, 2])
         
         with col1:
-            st.image(product["image"], use_container_width=True)
+            st.image(product["image"], width=300)
         
         with col2:
             st.markdown(f"""
@@ -1110,7 +1110,7 @@ else:
                 if i + j < len(remaining_products):
                     product = remaining_products[i + j]
                     with col:
-                        st.image(product["image"], use_container_width=True)
+                        st.image(product["image"], width=300)
                         st.markdown(f"""
                         <div class="product-card">
                             <div class="match-badge">{product["match_score"]}%</div>

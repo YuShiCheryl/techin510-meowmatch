@@ -612,9 +612,7 @@ if compare_button or True:  # Always show for demo, in production use just compa
     product_col1, product_col2 = st.columns(2, gap="large")
     
     with product_col1:
-        st.markdown('<div class="product-card">', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product1_data["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-title">{product1}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-rating">{"⭐" * int(product1_data["rating"])}{"<span style=\'color:#DDDDDD\'>☆</span>" * (5-int(product1_data["rating"]))} ({product1_data["reviews"]})</div>', unsafe_allow_html=True)
@@ -628,9 +626,7 @@ if compare_button or True:  # Always show for demo, in production use just compa
         st.markdown('</div>', unsafe_allow_html=True)
         
     with product_col2:
-        st.markdown('<div class="product-card">', unsafe_allow_html=True)
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
-        st.image(product2_data["image"], use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-title">{product2}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-rating">{"⭐" * int(product2_data["rating"])}{"<span style=\'color:#DDDDDD\'>☆</span>" * (5-int(product2_data["rating"]))} ({product2_data["reviews"]})</div>', unsafe_allow_html=True)

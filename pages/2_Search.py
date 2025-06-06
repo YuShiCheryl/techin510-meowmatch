@@ -498,8 +498,8 @@ with col1:
 
 with col2:
     st.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.markdown('<div class="filter-title">Filter by Taste</div>', unsafe_allow_html=True)
-    taste = st.selectbox('', ['All Tastes', 'Sweet', 'Sour', 'Bitter', 'Salty', 'Umami'])
+    st.markdown('<div class="filter-title">Filter by Texture</div>', unsafe_allow_html=True)
+    texture = st.selectbox('', ['All Textures', 'Pate', 'Gravy', 'Broth', 'Shreds', 'Chunks', 'Pellets'])
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Additional filters (expandable)
@@ -526,7 +526,7 @@ search_btn = st.button('Search')
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Display active filters if any
-if ingredient or taste != 'All Tastes' or (age != 'All Ages' and age) or health or price_range != (20, 50):
+if ingredient or texture != 'All Textures' or (age != 'All Ages' and age) or health or price_range != (20, 50):
     st.markdown('<div class="filter-chips fade-in">', unsafe_allow_html=True)
     
     if ingredient:
@@ -537,10 +537,10 @@ if ingredient or taste != 'All Tastes' or (age != 'All Ages' and age) or health 
         </div>
         """, unsafe_allow_html=True)
     
-    if taste != 'All Tastes':
+    if texture != 'All Textures':
         st.markdown(f"""
         <div class="filter-chip">
-            Taste: {taste}
+            Texture: {texture}
             <span class="chip-remove">×</span>
         </div>
         """, unsafe_allow_html=True)
@@ -575,37 +575,435 @@ if ingredient or taste != 'All Tastes' or (age != 'All Ages' and age) or health 
 st.markdown('<div class="results-container">', unsafe_allow_html=True)
 
 # Results header
-if ingredient or taste != 'All Tastes' or (age != 'All Ages' and age) or health or price_range != (20, 50):
+if ingredient or texture != 'All Textures' or (age != 'All Ages' and age) or health or price_range != (20, 50):
     st.markdown('<div class="results-title">Search Results</div>', unsafe_allow_html=True)
     
     # Sample product data - this would come from your database in a real app
     sample_products = [
         {
-            "name": "Premium Chicken Recipe",
-            "description": "A balanced meal with real chicken as the first ingredient",
-            "price": "$24.99",
-            "image": product_image1,
-            "taste": "Umami",
-            "ingredients": "Chicken, Brown Rice, Carrots, Peas",
-            "search_term": "Chicken"
+            "name": "ZIWI Peak Lamb Recipe",
+            "image": "data/images/products/ZIWI Peak Lamb Recipe.jpg",
+            "price": 55.44,
+            "price_per_oz": 0.71,
+            "oz": 78,
+            "food_type": "wet",
+            "protein_content": 0.43,
+            "fat_content": 0.31,
+            "moisture_content": 0.745,
+            "kcalories_per_oz": 37.69,
+            "protein_sources": "Lamb Recipe",
+            "ingredients": "Lamb, Lamb Lung, Lamb Kidney, Lamb Liver, Chickpeas, Lamb Tripe, Lamb Heart, New Zealand Green Mussel",
+            "description": "Premium wet food with lamb as main protein source and high moisture content.",
+            "match_score": 96,
+            "rating": 4.9,
+            "reviews": 234,
+            "tags": ["Premium", "High Protein", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult", "Senior"],
+            "flavors": ["Lamb"],
+            "diet_type": "All Types",
+            "texture": "Pate",
+            "budget_category": "luxury"
         },
         {
-            "name": "Ocean Fish & Vegetable Mix",
-            "description": "Wild-caught fish with a blend of nutritious vegetables",
-            "price": "$26.99",
-            "image": product_image2,
-            "taste": "Salty",
-            "ingredients": "Salmon, Cod, Spinach, Sweet Potatoes",
-            "search_term": "Fish"
+            "name": "ZIWI Peak Chicken Recipe",
+            "image": "data/images/products/ZIWI Peak Chicken Recipe.jpg",
+            "price": 55.44,
+            "price_per_oz": 0.71,
+            "oz": 78,
+            "food_type": "wet",
+            "protein_content": 0.46,
+            "fat_content": 0.31,
+            "moisture_content": 0.74,
+            "kcalories_per_oz": 37.69,
+            "protein_sources": "Chicken Recipe",
+            "ingredients": "Chicken, Chicken Liver, Chicken Heart, Chick Peas, New Zealand Green Mussel, Chicken Bone, Dried Kelp",
+            "description": "Premium wet food with chicken as main protein source and high moisture content.",
+            "match_score": 94,
+            "rating": 4.8,
+            "reviews": 198,
+            "tags": ["Premium", "High Protein", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult", "Kitten"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Pate",
+            "budget_category": "luxury"
         },
         {
-            "name": "Grain-Free Turkey Formula",
-            "description": "Grain-free recipe ideal for cats with sensitive digestion",
-            "price": "$29.99",
-            "image": product_image3,
-            "taste": "Umami",
-            "ingredients": "Turkey, Potato, Green Beans, Cranberries",
-            "search_term": "Turkey"
+            "name": "ZIWI Peak Beef Recipe",
+            "image": "data/images/products/ZIWI Peak Beef Recipe.jpg",
+            "price": 55.44,
+            "price_per_oz": 0.71,
+            "oz": 78,
+            "food_type": "wet",
+            "protein_content": 0.45,
+            "fat_content": 0.29,
+            "moisture_content": 0.755,
+            "kcalories_per_oz": 35.54,
+            "protein_sources": "Beef Recipe",
+            "ingredients": "Beef, Beef Lung, Beef Kidney, Beef Tripe, Beef Liver, Chickpeas, New Zealand Green Mussel, Beef Bone",
+            "description": "Premium wet food with beef as main protein source and high moisture content.",
+            "match_score": 91,
+            "rating": 4.7,
+            "reviews": 156,
+            "tags": ["Premium", "High Protein", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Beef"],
+            "diet_type": "All Types",
+            "texture": "Pate",
+            "budget_category": "luxury"
+        },
+        {
+            "name": "ZIWI Peak Rabbit Lamb Recipe",
+            "image": "data/images/products/ZIWI Peak Rabbit Lamb Recipe.jpg",
+            "price": 76.72,
+            "price_per_oz": 0.98,
+            "oz": 78,
+            "food_type": "wet",
+            "protein_content": 0.54,
+            "fat_content": 0.21,
+            "moisture_content": 0.76,
+            "kcalories_per_oz": 31.23,
+            "protein_sources": "Rabbit & Lamb",
+            "ingredients": "Rabbit Meat, Lamb, Lamb Lung, Lamb Liver, Chickpea, Lamb Kidney, Hare Meat, Lamb Tripe, Lamb Heart",
+            "description": "Ultra-premium wet food with rabbit and lamb, ideal for sensitive digestion.",
+            "match_score": 88,
+            "rating": 4.9,
+            "reviews": 89,
+            "tags": ["Ultra Premium", "Very High Protein", "Sensitive Digestion", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Rabbit", "Lamb"],
+            "diet_type": "Sensitive Digestion",
+            "texture": "Pate",
+            "budget_category": "luxury"
+        },
+        {
+            "name": "Tiki Cat After Dark Chicken Recipe",
+            "image": "data/images/products/Tiki Cat After Dark Chicken Recipe.jpg",
+            "price": 27.12,
+            "price_per_oz": 0.57,
+            "oz": 48,
+            "food_type": "wet",
+            "protein_content": 0.17,
+            "fat_content": 0.02,
+            "moisture_content": 0.8,
+            "kcalories_per_oz": 18.75,
+            "protein_sources": "Chicken Recipe",
+            "ingredients": "Chicken, Chicken Broth, Sunflower Oil, Natural Flavor, Tricalcium Phosphate, Potassium Chloride",
+            "description": "Natural wet food with real chicken and very high moisture content.",
+            "match_score": 85,
+            "rating": 4.6,
+            "reviews": 423,
+            "tags": ["Natural", "High Moisture", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Chunks",
+            "budget_category": "premium"
+        },
+        {
+            "name": "Tiki Cat Luau Wild Salmon",
+            "image": "data/images/products/Tiki Cat Luau Wild Salmon.jpg",
+            "price": 26.32,
+            "price_per_oz": 0.55,
+            "oz": 48,
+            "food_type": "wet",
+            "protein_content": 0.15,
+            "fat_content": 0.01,
+            "moisture_content": 0.83,
+            "kcalories_per_oz": 16.25,
+            "protein_sources": "Wild Salmon",
+            "ingredients": "Salmon, Fish Broth, Sunflower Oil, Natural Flavor, Tricalcium Phosphate, Potassium Chloride",
+            "description": "Wild salmon recipe with extremely high moisture content for optimal hydration.",
+            "match_score": 82,
+            "rating": 4.5,
+            "reviews": 367,
+            "tags": ["Wild Caught", "Very High Moisture", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Fish"],
+            "diet_type": "All Types",
+            "texture": "Chunks",
+            "budget_category": "premium"
+        },
+        {
+            "name": "Purina ONE Beef Recipe Pate",
+            "image": "data/images/products/Purina ONE Beef Recipe Pate.jpg",
+            "price": 23.85,
+            "price_per_oz": 0.33,
+            "oz": 72,
+            "food_type": "wet",
+            "protein_content": 0.11,
+            "fat_content": 0.05,
+            "moisture_content": 0.78,
+            "kcalories_per_oz": 29.17,
+            "protein_sources": "Beef",
+            "ingredients": "Beef, Beef Broth, Liver, Meat By-Products, Wheat Gluten, Artificial and Natural Flavors",
+            "description": "Affordable beef pate with good moisture content for everyday feeding.",
+            "match_score": 78,
+            "rating": 4.2,
+            "reviews": 512,
+            "tags": ["Affordable", "High Moisture", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Beef"],
+            "diet_type": "All Types",
+            "texture": "Pate",
+            "budget_category": "mid-range"
+        },
+        {
+            "name": "Purina ONE Natural Chicken in Gravy",
+            "image": "data/images/products/Purina ONE Natural Chicken in Gravy.jpg",
+            "price": 22.73,
+            "price_per_oz": 0.32,
+            "oz": 72,
+            "food_type": "wet",
+            "protein_content": 0.12,
+            "fat_content": 0.02,
+            "moisture_content": 0.82,
+            "kcalories_per_oz": 22.92,
+            "protein_sources": "Chicken",
+            "ingredients": "Chicken, Chicken Broth, Liver, Wheat Gluten, Meat By-Products, Modified Corn Starch",
+            "description": "Natural chicken in gravy with very high moisture content for hydration.",
+            "match_score": 75,
+            "rating": 4.1,
+            "reviews": 678,
+            "tags": ["Natural", "Very High Moisture", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Gravy",
+            "budget_category": "mid-range"
+        },
+        {
+            "name": "Nacho Cage Free Chicken Recipe",
+            "image": "data/images/products/Nacho Cage Free Chicken Recipe.jpg",
+            "price": 18.99,
+            "price_per_oz": 0.26,
+            "oz": 72,
+            "food_type": "wet",
+            "protein_content": 0.10,
+            "fat_content": 0.06,
+            "moisture_content": 0.82,
+            "kcalories_per_oz": 27.08,
+            "protein_sources": "Chicken",
+            "ingredients": "Chicken, Chicken Broth, Natural Flavor, Guar Gum, Potassium Chloride, Salt",
+            "description": "Cage-free chicken with high moisture content, budget-friendly option.",
+            "match_score": 73,
+            "rating": 4.0,
+            "reviews": 445,
+            "tags": ["Cage Free", "High Moisture", "Budget Friendly", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Chunks",
+            "budget_category": "budget"
+        },
+        {
+            "name": "Nacho Sustainably Caught Salmon Recipe",
+            "image": "data/images/products/Nacho Sustainably Caught Salmon Recipe.jpg",
+            "price": 18.99,
+            "price_per_oz": 0.26,
+            "oz": 72,
+            "food_type": "wet",
+            "protein_content": 0.11,
+            "fat_content": 0.04,
+            "moisture_content": 0.83,
+            "kcalories_per_oz": 25.0,
+            "protein_sources": "Salmon",
+            "ingredients": "Salmon, Fish Broth, Natural Flavor, Guar Gum, Potassium Chloride, Salt",
+            "description": "Sustainably caught salmon with very high moisture content, budget-friendly.",
+            "match_score": 70,
+            "rating": 4.1,
+            "reviews": 356,
+            "tags": ["Sustainable", "Very High Moisture", "Budget Friendly", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Fish"],
+            "diet_type": "All Types",
+            "texture": "Chunks",
+            "budget_category": "budget"
+        },
+        {
+            "name": "Fancy Feast Gourmet Naturals Beef Recipe",
+            "image": "data/images/products/Fancy Feast Gourmet Naturals Beef Recipe.jpg",
+            "price": 10.37,
+            "price_per_oz": 0.14,
+            "oz": 72,
+            "food_type": "wet",
+            "protein_content": 0.08,
+            "fat_content": 0.05,
+            "moisture_content": 0.78,
+            "kcalories_per_oz": 29.17,
+            "protein_sources": "Beef",
+            "ingredients": "Beef, Beef Broth, Liver, Wheat Gluten, Meat By-Products, Natural Flavors",
+            "description": "Budget-friendly beef recipe with good moisture content for everyday feeding.",
+            "match_score": 68,
+            "rating": 4.0,
+            "reviews": 892,
+            "tags": ["Budget Friendly", "Gourmet", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Beef"],
+            "diet_type": "All Types",
+            "texture": "Pate",
+            "budget_category": "budget"
+        },
+        {
+            "name": "Fancy Feast Gourmet Naturals White Meat Chicken Recipe",
+            "image": "data/images/products/Fancy Feast Gourmet Naturals White Meat Chicken Recipe.jpg",
+            "price": 11.53,
+            "price_per_oz": 0.16,
+            "oz": 72,
+            "food_type": "wet",
+            "protein_content": 0.12,
+            "fat_content": 0.02,
+            "moisture_content": 0.82,
+            "kcalories_per_oz": 22.92,
+            "protein_sources": "Chicken",
+            "ingredients": "Chicken, Chicken Broth, Liver, Wheat Gluten, Natural Flavors, Vitamins, Minerals",
+            "description": "White meat chicken with very high moisture content, affordable gourmet option.",
+            "match_score": 65,
+            "rating": 4.1,
+            "reviews": 734,
+            "tags": ["White Meat", "Very High Moisture", "Budget Friendly", "Wet Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Pate",
+            "budget_category": "budget"
+        },
+        {
+            "name": "Diamond Maintenance Formula Adult Dry Cat Food",
+            "image": "data/images/products/Diamond Maintenance Formula Adult Dry Cat Food.jpg",
+            "price": 38.99,
+            "price_per_oz": 0.61,
+            "oz": 64,
+            "food_type": "dry",
+            "protein_content": 0.32,
+            "fat_content": 0.12,
+            "moisture_content": 0.10,
+            "kcalories_per_oz": 120.0,
+            "protein_sources": "Chicken",
+            "ingredients": "Chicken Meal, Ground White Rice, Chicken Fat, Beet Pulp, Natural Flavor",
+            "description": "Complete adult dry food with balanced nutrition for everyday feeding.",
+            "match_score": 60,
+            "rating": 4.2,
+            "reviews": 423,
+            "tags": ["Complete Nutrition", "Adult Formula", "Dry Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Pellets",
+            "budget_category": "mid-range"
+        },
+        {
+            "name": "Iams ProActive Health Original with Chicken Dry Cat Food",
+            "image": "data/images/products/Iams ProActive Health Original with Chicken Dry Cat Food.jpg",
+            "price": 33.99,
+            "price_per_oz": 0.53,
+            "oz": 64,
+            "food_type": "dry",
+            "protein_content": 0.32,
+            "fat_content": 0.13,
+            "moisture_content": 0.10,
+            "kcalories_per_oz": 115.0,
+            "protein_sources": "Chicken",
+            "ingredients": "Chicken, Chicken By-Product Meal, Corn Meal, Ground Whole Grain Sorghum, Chicken Fat",
+            "description": "ProActive health formula with chicken for immune system support.",
+            "match_score": 58,
+            "rating": 4.1,
+            "reviews": 567,
+            "tags": ["Immune Support", "ProActive Health", "Dry Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Pellets",
+            "budget_category": "mid-range"
+        },
+        {
+            "name": "Wellness Complete Health Deboned Chicken Dry Cat Food",
+            "image": "data/images/products/Wellness Complete Health Deboned Chicken Dry Cat Food.jpg",
+            "price": 32.29,
+            "price_per_oz": 0.50,
+            "oz": 64,
+            "food_type": "dry",
+            "protein_content": 0.34,
+            "fat_content": 0.12,
+            "moisture_content": 0.10,
+            "kcalories_per_oz": 110.0,
+            "protein_sources": "Chicken",
+            "ingredients": "Deboned Chicken, Chicken Meal, Ground Brown Rice, Chicken Fat, Tomato Pomace",
+            "description": "Natural dry food with deboned chicken and wholesome ingredients.",
+            "match_score": 55,
+            "rating": 4.3,
+            "reviews": 345,
+            "tags": ["Natural", "Deboned Chicken", "Complete Health", "Dry Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Pellets",
+            "budget_category": "premium"
+        },
+        {
+            "name": "Instinct Original Real Chicken Recipe Dry Cat Food",
+            "image": "data/images/products/Instinct Original Real Chicken Recipe Dry Cat Food.jpg",
+            "price": 40.00,
+            "price_per_oz": 0.63,
+            "oz": 64,
+            "food_type": "dry",
+            "protein_content": 0.38,
+            "fat_content": 0.18,
+            "moisture_content": 0.10,
+            "kcalories_per_oz": 125.0,
+            "protein_sources": "Chicken",
+            "ingredients": "Chicken, Chicken Meal, Tapioca, Chicken Fat, Ground Flaxseed, Natural Flavor",
+            "description": "High-protein dry food with real chicken as the first ingredient.",
+            "match_score": 52,
+            "rating": 4.4,
+            "reviews": 278,
+            "tags": ["High Protein", "Real Chicken", "Natural", "Dry Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Chicken"],
+            "diet_type": "All Types",
+            "texture": "Pellets",
+            "budget_category": "premium"
+        },
+        {
+            "name": "ORIJEN Regional Red Dry Cat Food",
+            "image": "data/images/products/ORIJEN Regional Red Dry Cat Food.jpg",
+            "price": 72.99,
+            "price_per_oz": 1.14,
+            "oz": 64,
+            "food_type": "dry",
+            "protein_content": 0.38,
+            "fat_content": 0.18,
+            "moisture_content": 0.10,
+            "kcalories_per_oz": 130.0,
+            "protein_sources": "Regional Red",
+            "ingredients": "Deboned Beef, Deboned Wild Boar, Deboned Lamb, Mackerel Meal, Lamb Meal, Beef Meal",
+            "description": "Ultra-premium dry food with regional red meat proteins for carnivore nutrition.",
+            "match_score": 50,
+            "rating": 4.6,
+            "reviews": 189,
+            "tags": ["Ultra Premium", "Regional Red", "High Protein", "Dry Food"],
+            "suitable_breeds": ["All Breeds"],
+            "age_range": ["Adult"],
+            "flavors": ["Beef", "Lamb"],
+            "diet_type": "High Protein",
+            "texture": "Pellets",
+            "budget_category": "luxury"
         }
     ]
     
@@ -618,9 +1016,9 @@ if ingredient or taste != 'All Tastes' or (age != 'All Ages' and age) or health 
         for product in sample_products:
             if ingredient_lower in product["ingredients"].lower() or ingredient_lower in product["name"].lower():
                 filtered_products.append(product)
-    elif taste != 'All Tastes':
+    elif texture != 'All Textures':
         for product in sample_products:
-            if product["taste"] == taste:
+            if product["texture"].lower() == texture.lower():
                 filtered_products.append(product)
     else:
         filtered_products = sample_products
@@ -638,15 +1036,12 @@ if ingredient or taste != 'All Tastes' or (age != 'All Ages' and age) or health 
             st.markdown(f"""
             <div class="product-card fade-in">
                 <div class="product-info">
-                    <div class="product-image">
-                        <img src="data:image/png;base64,{product_image1}" width="120">
-                    </div>
                     <div class="product-details">
                         <div class="product-title">{product["name"]}</div>
                         <div class="product-description">{product["description"]}</div>
-                        <div class="product-taste">{product["taste"]}</div>
+                        <div class="product-taste">{product["texture"]}</div>
                         <div class="product-ingredients"><strong>Ingredients:</strong> {highlighted_ingredients}</div>
-                        <div class="product-price">{product["price"]}</div>
+                        <div class="product-price">${product["price"]:.2f} (${product["price_per_oz"]:.2f}/oz)</div>
                         <button class="cart-button">Add to Cart</button>
                     </div>
                 </div>
