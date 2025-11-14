@@ -615,7 +615,10 @@ if compare_button or True:  # Always show for demo, in production use just compa
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-title">{product1}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="product-rating">{"⭐" * int(product1_data["rating"])}{"<span style=\'color:#DDDDDD\'>☆</span>" * (5-int(product1_data["rating"]))} ({product1_data["reviews"]})</div>', unsafe_allow_html=True)
+        # Fix f-string syntax error by extracting HTML with backslash
+        empty_star_span = "<span style='color:#DDDDDD'>☆</span>"
+        rating_html = f'<div class="product-rating">{"⭐" * int(product1_data["rating"])}{empty_star_span * (5-int(product1_data["rating"]))} ({product1_data["reviews"]})</div>'
+        st.markdown(rating_html, unsafe_allow_html=True)
         st.markdown(f'<div class="product-price">{product1_data["price"]}</div>', unsafe_allow_html=True)
         
         # Suitable for badges
@@ -629,7 +632,10 @@ if compare_button or True:  # Always show for demo, in production use just compa
         st.markdown('<div class="product-image">', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="product-title">{product2}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="product-rating">{"⭐" * int(product2_data["rating"])}{"<span style=\'color:#DDDDDD\'>☆</span>" * (5-int(product2_data["rating"]))} ({product2_data["reviews"]})</div>', unsafe_allow_html=True)
+        # Fix f-string syntax error by extracting HTML with backslash
+        empty_star_span = "<span style='color:#DDDDDD'>☆</span>"
+        rating_html = f'<div class="product-rating">{"⭐" * int(product2_data["rating"])}{empty_star_span * (5-int(product2_data["rating"]))} ({product2_data["reviews"]})</div>'
+        st.markdown(rating_html, unsafe_allow_html=True)
         st.markdown(f'<div class="product-price">{product2_data["price"]}</div>', unsafe_allow_html=True)
         
         # Suitable for badges

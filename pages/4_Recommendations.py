@@ -1191,6 +1191,6 @@ if st.checkbox("Show Recommendation Details"):
 # Footer
 st.markdown("""
 <div class="footer">
-    <p>© 2024 MeowMatch | All rights reserved | Made with ❤️ for cats everywhere</p>
+    <p>© 2025 MeowMatch | All rights reserved | Purr-fect nutrition, purr-fect love</p>
 </div>
 """, unsafe_allow_html=True)
