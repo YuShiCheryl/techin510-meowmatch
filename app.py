@@ -659,16 +659,22 @@ st.markdown("""
 init_session_state()
 st.markdown(get_profile_avatar_html(), unsafe_allow_html=True)
 
-# Initialize recommender
-print(f"Current working directory: {os.getcwd()}")  # 打印当前工作目录
-
-recommender = CatFoodRecommender()  # 不需要指定路径，使用默认路径
-if not recommender.load_data():
-    st.error("Failed to load data. Please check the console for error messages.")
-    st.stop()
-if not recommender.preprocess_data():
-    st.error("Failed to preprocess data. Please check the console for error messages.")
-    st.stop()
+# Initialize recommender (optional - only for future use)
+# Note: Homepage doesn't actually use the recommender, so we make it optional
+# to prevent deployment issues on Streamlit Cloud
+try:
+    print(f"Current working directory: {os.getcwd()}")
+    recommender = CatFoodRecommender()
+    if recommender.load_data():
+        recommender.preprocess_data()
+        print("Data loaded successfully for recommender system")
+    else:
+        print("Warning: Could not load data file. Homepage will still work without recommender.")
+        recommender = None
+except Exception as e:
+    print(f"Warning: Error initializing recommender: {str(e)}")
+    print("Homepage will continue without recommender system.")
+    recommender = None
 
 # Hero Section
 col1, col2 = st.columns([1, 1])
